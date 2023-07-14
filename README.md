@@ -101,13 +101,25 @@ THEN I ....
   
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)]
 
-### Copyright © 2023 [Sonam](https://github.com/), [Evelyn](https://github.com/), [Dandar](https://github.com/) & [JP](https://github.com/)
+### Copyright © 2023 [Team Alumni Book](https://github.com/sonam-git/MEARN_Alumni_Book).All Rights Reserved.
 ```md
-Any individual who obtains a copy of the software and its associated documentation files (referred to as the "Software") is granted permission, without any cost, to use, copy, modify, merge, publish, distribute, sublicense, and/or sell the Software. There are no restrictions on dealing with the Software, including the aforementioned rights. This permission is also extended to those individuals to whom the Software is provided. However, it is essential that the copyright notice and this permission notice are included in all copies or significant portions of the Software.
+Any individual who obtains a copy of the software and its associated documentation files 
+(referred to as the "Software") is granted permission, without any cost, to use, copy, modify, 
+merge, publish, distribute, sublicense, and/or sell the Software. There are no restrictions on 
+dealing with the Software, including the aforementioned rights. This permission is also extended 
+to those individuals to whom the Software is provided. However, it is essential that the copyright
+ notice and this permission notice are included in all copies or significant portions of the Software.
 
-The Software is provided on an "as is" basis, without any warranty of any kind, whether expressed or implied. This includes, but is not limited to, warranties of merchantability, fitness for a particular purpose, and non-infringement. Under no circumstances shall the authors or copyright holders be held liable for any claim, damages, or other liabilities arising from the use of the Software, regardless of whether it is an action of contract, tort, or any other legal theory.
+The Software is provided on an "as is" basis, without any warranty of any kind, whether expressed or implied. 
+This includes, but is not limited to, warranties of merchantability, fitness for a particular purpose, and 
+non-infringement. Under no circumstances shall the authors or copyright holders be held liable for any claim, 
+damages, or other liabilities arising from the use of the Software, regardless of whether it is an action of 
+contract, tort, or any other legal theory.
 
-In summary, this permission grants the freedom to use, modify, distribute, and sell the Software without charge. However, it is crucial to include the copyright notice and permission statement when distributing the Software. It is also important to note that the Software is provided without warranties, and the authors or copyright holders bear no responsibility for any claims or damages that may arise from its use.
+In summary, this permission grants the freedom to use, modify, distribute, and sell the Software without charge. 
+However, it is crucial to include the copyright notice and permission statement when distributing the Software. 
+It is also important to note that the Software is provided without warranties, and the authors or copyright holders 
+bear no responsibility for any claims or damages that may arise from its use.
 ```
 
 ## Team Members
@@ -118,4 +130,4 @@ In summary, this permission grants the freedom to use, modify, distribute, and s
 * Dandar Ganbold -----------  [Github](https://github.com/Daganbold)
 
 
-© 2023 Team Alumni Book. Confidential and Proprietary. All Rights Reserved.
+ 
