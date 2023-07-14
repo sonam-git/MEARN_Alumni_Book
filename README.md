@@ -1,4 +1,4 @@
-# MEARN_Alumni_Book
+# MEARN_Alumni_Book (Final Project 2023)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -110,9 +110,12 @@ The Software is provided on an "as is" basis, without any warranty of any kind, 
 In summary, this permission grants the freedom to use, modify, distribute, and sell the Software without charge. However, it is crucial to include the copyright notice and permission statement when distributing the Software. It is also important to note that the Software is provided without warranties, and the authors or copyright holders bear no responsibility for any claims or damages that may arise from its use.
 ```
 
-## Author
+## Team Members
+* Sonam J Sherpa ----------- [Github](https://github.com/sonam-git)
+* Evelyn Montes Sobal ------- [Github](https://github.com/EvelynMS1)
+* JP Padilla ------------------ [Github](https://github.com/jayP308)
+* Jared Pelaez  --------------- [Github](https://github.com/jaredpel)
+* Dandar Ganbold -----------  [Github](https://github.com/Daganbold)
 
-Follow me on Github at [Sonam](https://github.com/), [Evelyn](https://github.com/),[JP](https://github.com/) [Jared Pelaez](https://github.com/) & [Dandar](https://github.com/). Additional questions or concerns? feel free to contact us.
 
-
-© 2023 [Sonam](https://github.com/), [Evelyn](https://github.com/),[JP](https://github.com/),[Jared Pelaez](https://github.com/) & [Dandar](https://github.com/). Confidential and Proprietary. All Rights Reserved.
+© 2023 Team Alumni Book. Confidential and Proprietary. All Rights Reserved.
