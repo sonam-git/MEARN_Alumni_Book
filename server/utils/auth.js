@@ -1,3 +1,4 @@
+// import necessary packages
 const jwt = require('jsonwebtoken');
 
 const secret = 'mysecretssshhhhhhh';
