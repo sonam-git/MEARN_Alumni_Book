@@ -1,3 +1,4 @@
+// import necessary packages
 const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
