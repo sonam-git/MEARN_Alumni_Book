@@ -1,4 +1,4 @@
-# Final-Project
+# MEARN_Alumni_Book
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -20,8 +20,6 @@
 # Overview
 
 ## The Challenge:
-
-## The Challenge
 
 
 ## Assigned User Story:
@@ -113,7 +111,7 @@ In summary, this permission grants the freedom to use, modify, distribute, and s
 
 ## Author
 
-Follow me on Github at [Sonam](https://github.com/), [Evelyn](https://github.com/),[JP](https://github.com/) & [Dandar](https://github.com/). Additional questions or concerns? feel free to contact us.
+Follow me on Github at [Sonam](https://github.com/), [Evelyn](https://github.com/),[JP](https://github.com/) [Jared Pelaez](https://github.com/) & [Dandar](https://github.com/). Additional questions or concerns? feel free to contact us.
 
 
-© 2023 [Sonam](https://github.com/), [Evelyn](https://github.com/),[JP](https://github.com/) & [Dandar](https://github.com/). Confidential and Proprietary. All Rights Reserved.
+© 2023 [Sonam](https://github.com/), [Evelyn](https://github.com/),[JP](https://github.com/),[Jared Pelaez](https://github.com/) & [Dandar](https://github.com/). Confidential and Proprietary. All Rights Reserved.
