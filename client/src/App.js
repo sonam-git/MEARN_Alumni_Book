@@ -1,5 +1,5 @@
 import React from "react";
-import { Navbar, Footer } from './components';
+import { Signup } from './components';
 import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
   bottomNavigation: {
@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   return (
     <div className="App">
-      <Navbar/>
+      <Signup/>
     </div>
   );
 }
