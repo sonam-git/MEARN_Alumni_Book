@@ -8,6 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import headerImage from '../images/light-coding-background.jpg';
 import Login from './Login';
+import Signup from './Signup';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,13 +29,21 @@ const useStyles = makeStyles((theme) => ({
 
 export const Navbar = () => {
   const classes = useStyles();
-  const [value, setValue] = useState(false);
+  const [value, setValue] = useState('one');
   const [showLogin, setShowLogin] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
 
   const handleShowLogin = (event) => {
     event.preventDefault();
     setShowLogin(true);
-}
+    setShowSignup(false)
+  }
+
+  const handleShowSignup = (event) => {
+    event.preventDefault();
+    setShowSignup(true);
+    setShowLogin(false);
+  }
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -76,8 +85,7 @@ export const Navbar = () => {
             aria-label="wrapped label tabs example"
             TabIndicatorProps={{
               style: {
-                backgroundColor: value === "two" ? "#434642" : "#434642",
-                color: value === "two" ? "green" : "blue",
+                backgroundColor: value === "one" ? "#434642" : "#434642",
               },
             }}
           >
@@ -88,7 +96,8 @@ export const Navbar = () => {
               fontFamily: 'monospace',
               fontSize: "20px",
             }}/>
-            <Tab value="three" label="Sign Up" 
+            <Tab value="three" label="Sign Up"
+            onClick={handleShowSignup} 
             style={{
               color: 'black',
               fontFamily: 'monospace',
@@ -98,6 +107,7 @@ export const Navbar = () => {
         </Toolbar>
       </AppBar>
       {showLogin && <Login />}
+      {showSignup && <Signup />}
     </div>
   );
 };

@@ -1,10 +1,9 @@
-import React, {useState} from 'react';
+import React , {useState, useEffect} from 'react';
 import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
 import GlobalStyles from '@mui/joy/GlobalStyles';
 import CssBaseline from '@mui/joy/CssBaseline';
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
-import Checkbox from '@mui/joy/Checkbox';
 import FormControl from '@mui/joy/FormControl';
 import FormLabel, { formLabelClasses } from '@mui/joy/FormLabel';
 import IconButton from '@mui/joy/IconButton';
@@ -15,7 +14,11 @@ import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import DarkModePicture from '../images/darkmode-pic.webp';
 import LightModePicture from '../images/lightmode-pic.jpg';
-import Signup from './Signup';
+import Login from './Login';
+
+
+
+
 
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
@@ -48,17 +51,19 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
   );
 };
 
- export const Login = () => {
-    const [showSignup, setShowSignup] = useState(false)
-
-    const handleShowSignup = (event) => {
-        event.preventDefault();
-        setShowSignup(true);
+ export const Signup = () => {
+ 
+    const [showLogin, setShowLogin] = useState(false);
+  
+    const handleShowLogin = (event) => {
+      event.preventDefault();
+      setShowLogin(true);
     }
-
-    if(showSignup){
-        return(<Signup/>)
+  
+    if (showLogin) {
+      return <Login />;
     }
+  
 
   return (
     <CssVarsProvider
@@ -161,10 +166,10 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
           >
             <div>
               <Typography component="h1" fontSize="xl2" fontWeight="lg">
-                Sign In Here!
+                Sign Up Here!
               </Typography>
               <Typography level="body2" sx={{ my: 1, mb: 3 }}>
-                Welcome back User!
+                Welcome New User!
               </Typography>
             </div>
             <form
@@ -180,12 +185,33 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
               }}
             >
               <FormControl required>
+                <FormLabel>First Name</FormLabel>
+                <Input type="text" name="first-name" />
+              </FormControl>
+              <FormControl required>
+                <FormLabel>Last Name</FormLabel>
+                <Input type="text" name="last-name" />
+              </FormControl>
+              <FormControl required>
+                <FormLabel>Username</FormLabel>
+                <Input type="username" name="username" />
+              </FormControl>
+              <FormControl required>
                 <FormLabel>Email</FormLabel>
                 <Input type="email" name="email" />
               </FormControl>
               <FormControl required>
                 <FormLabel>Password</FormLabel>
                 <Input type="password" name="password" />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Upload Image</FormLabel>
+                <Input type="file" name="image" accept="image/*"
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }} />
               </FormControl>
               <Box
                 sx={{
@@ -194,16 +220,8 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
                   alignItems: 'center',
                 }}
               >
-                <Checkbox size="sm" label="Remember for 30 days" name="persistent" />
-                <Link fontSize="sm" href="#replace-with-a-link" fontWeight="lg">
-                  Forgot your password?
-                </Link>
-              </Box>
-              <Button type="submit" fullWidth>
-                Sign in
-              </Button>
               <Link fontSize="sm" href="#replace-with-a-link" fontWeight="lg"
-              onClick={handleShowSignup}
+              onClick={handleShowLogin}
               sx={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -211,8 +229,12 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
                 marginLeft: '45px',
               }}
               >
-                Don't Have An Account Yet? Click Here To Sign Up!
+                Already Have An Account? Click Here To Log In!
               </Link>
+              </Box>
+              <Button type="submit" fullWidth>
+                Sign in
+              </Button>
             </form>
           </Box>
           <Box component="footer" sx={{ py: 3 }}>
@@ -246,9 +268,9 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
           },
         })}
       />
-      {showSignup && <Signup/>}
+      {showLogin && <Login />}
     </CssVarsProvider>
   );
 }
 
-export default Login;
+export default Signup;
