@@ -1,35 +1,37 @@
 import React from 'react';
-import { 
-    BottomNavigation, 
-    BottomNavigationAction 
-} from '@material-ui/core';
-import {
-    Archive , 
-    Favorite, 
-    Restore
-} from '@material-ui/icons';
+import { makeStyles } from '@material-ui/core/styles';
+import { BottomNavigation, BottomNavigationAction } from '@material-ui/core';
+import { Archive, Favorite, Restore } from '@material-ui/icons';
 import headerImage from '../images/light-coding-background.jpg';
 
-export const Footer = () => {
-  const [value, setValue] = React.useState(0);
- 
-  return (
-        <BottomNavigation
-          showLabels
-          value={value}
-          style={{
-           background: `url(${headerImage})`
-        }}
-          onChange={(event, newValue) => {
-            setValue(newValue);
-          }}
-        >
-          <BottomNavigationAction label="Recents" icon={<Restore />} />
-          <BottomNavigationAction label="Favorites" icon={<Favorite />} />
-          <BottomNavigationAction label="Archive" icon={<Archive />} />
-        </BottomNavigation>
-     
-  );
-}
+const useStyles = makeStyles((theme) => ({
+  bottomNavigation: {
+    position: 'fixed',
+    bottom: 0,
+    width: '100vw',
+    background: `url(${headerImage})`,
+    backgroundSize: "cover"
+  },
+}));
 
-export default Footer
+export const Footer = () => {
+  const classes = useStyles();
+  const [value, setValue] = React.useState(false);
+
+  return (
+    <BottomNavigation
+      showLabels
+      value={value}
+      className={classes.bottomNavigation}
+      onChange={(event, newValue) => {
+        setValue(newValue);
+      }}
+    >
+      <BottomNavigationAction label="Recents" icon={<Restore />} />
+      <BottomNavigationAction label="Favorites" icon={<Favorite />} />
+      <BottomNavigationAction label="Archive" icon={<Archive />} />
+    </BottomNavigation>
+  );
+};
+
+export default Footer;
