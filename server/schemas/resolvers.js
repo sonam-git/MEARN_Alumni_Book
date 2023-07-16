@@ -26,7 +26,7 @@ const resolvers = {
     //returns the logged-in user if authenticated,
     me: async (parent, context) => {
       if (context.user) {
-        return User.findOne({ _id: context.user._id }).populate("thoughts");
+        return User.findOne({ _id: context.user._id }).populate("posts");
       }
       throw new AuthenticationError("You need to be logged in!");
     },
@@ -37,7 +37,7 @@ const resolvers = {
     // creates a new user with the provided information
     addUser: async (
       parent,
-      { firstname, lastname, username, email, password, image }
+      { firstname, lastname, username, email, password }
     ) => {
       const user = await User.create({
         firstname,
@@ -45,7 +45,6 @@ const resolvers = {
         username,
         email,
         password,
-        image,
       });
 
       // signs a token for authentication, and returns the token and user.
@@ -141,6 +140,17 @@ const resolvers = {
       throw new AuthenticationError("You need to be logged in!");
     },
   },
+  User: {
+    // Resolve the 'image' field to return the image URL or path
+    image: (parent) => {
+      // Modify this logic based on your image storage setup
+      if (parent.image) {
+        return `../images/${parent.image}`;
+      }
+      return null;
+    },
+  },
+  
 };
 // export module
 module.exports = resolvers;

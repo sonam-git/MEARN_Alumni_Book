@@ -12,7 +12,6 @@ import CardCover from '@mui/joy/CardCover';
 import articleOneImage from '../images/article-one.webp';
 import articleTwoImage from '../images/article-two.jpeg';
 import articleThreeImage from '../images/article-three.jpg';
-import importanceImage from '../images/importance.jpg';
 import opportunitiesImage from '../images/opportunities.jpg';
 import successImage from '../images/success.jpg';
 

@@ -38,7 +38,7 @@ export const ADD_USER = gql`
     $username: String!
     $email: String!
     $password: String!
-    $image: String
+    $image: Upload
   ) {
     addUser(
       firstname: $firstname
