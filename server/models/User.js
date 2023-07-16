@@ -31,16 +31,20 @@ const userSchema = new Schema({
     required: true,
     minlength: 5,
   },
-  image: {
-    type: String, //  image file name or URL should be store as a string
-    required: true,
-  },
+  // image: {
+  //   type: String, //  image file name or URL should be store as a string
+  //   required: true,
+  // },
   posts: [
     {
       type: Schema.Types.ObjectId,
       ref: 'Post',
     },
   ],
+  friends:[{
+    type: Schema.Types.ObjectId,
+      ref: 'User',
+  }]
 });
 // middleware function is defined to execute before saving a user document.
 userSchema.pre('save', async function (next) {

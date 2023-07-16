@@ -1,36 +1,5 @@
 import { gql } from '@apollo/client';
 
-// login user mutation
-export const LOGIN = gql`
-  mutation login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      token
-      user {
-        _id
-        firstname
-        lastname
-        username
-        email
-        password
-        image
-        posts {
-          _id
-          postText
-          postAuthor
-          createdAt
-          comments {
-            _id
-            commentText
-            commentAuthor
-            createdAt
-          }
-        }
-      }
-    }
-  }
-`;
-
-// add user mutation
 export const ADD_USER = gql`
   mutation addUser(
     $firstname: String!
@@ -38,7 +7,6 @@ export const ADD_USER = gql`
     $username: String!
     $email: String!
     $password: String!
-    $image: Upload
   ) {
     addUser(
       firstname: $firstname
@@ -46,35 +14,64 @@ export const ADD_USER = gql`
       username: $username
       email: $email
       password: $password
-      image: $image
     ) {
       token
       user {
         _id
-        firstname
-        lastname
         username
-        email
-        password
-        image
-        posts {
-          _id
-          postText
-          postAuthor
-          createdAt
-          comments {
-            _id
-            commentText
-            commentAuthor
-            createdAt
-          }
-        }
       }
     }
   }
 `;
 
-// add post mutation
+export const LOGIN = gql`
+  mutation login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      token
+      user {
+        _id
+        username
+      }
+    }
+  }
+`;
+
+export const ADD_FRIEND = gql`
+  mutation addFriend($userId: ID!, $friendId: ID!) {
+    addFriend(userId: $userId, friendId: $friendId) {
+      _id
+      firstname
+      lastname
+      username
+      email
+      image
+      posts {
+        _id
+        postText
+        postAuthor
+        createdAt
+        comments {
+          commentText
+          commentAuthor
+          createdAt
+        }
+        likes {
+          username
+          createdAt
+        }
+      }
+      friends {
+        _id
+        firstname
+        lastname
+        username
+        email
+        image
+      }
+    }
+  }
+`;
+
 export const ADD_POST = gql`
   mutation addPost($postText: String!) {
     addPost(postText: $postText) {
@@ -83,16 +80,18 @@ export const ADD_POST = gql`
       postAuthor
       createdAt
       comments {
-        _id
         commentText
         commentAuthor
+        createdAt
+      }
+      likes {
+        username
         createdAt
       }
     }
   }
 `;
 
-// add comment mutation
 export const ADD_COMMENT = gql`
   mutation addComment($postId: ID!, $commentText: String!) {
     addComment(postId: $postId, commentText: $commentText) {
@@ -101,15 +100,18 @@ export const ADD_COMMENT = gql`
       postAuthor
       createdAt
       comments {
-        _id
         commentText
         commentAuthor
+        createdAt
+      }
+      likes {
+        username
         createdAt
       }
     }
   }
 `;
-// remove post mutation
+
 export const REMOVE_POST = gql`
   mutation removePost($postId: ID!) {
     removePost(postId: $postId) {
@@ -118,16 +120,18 @@ export const REMOVE_POST = gql`
       postAuthor
       createdAt
       comments {
-        _id
         commentText
         commentAuthor
+        createdAt
+      }
+      likes {
+        username
         createdAt
       }
     }
   }
 `;
 
-// remove comment mutation
 export const REMOVE_COMMENT = gql`
   mutation removeComment($postId: ID!, $commentId: ID!) {
     removeComment(postId: $postId, commentId: $commentId) {
@@ -136,9 +140,32 @@ export const REMOVE_COMMENT = gql`
       postAuthor
       createdAt
       comments {
-        _id
         commentText
         commentAuthor
+        createdAt
+      }
+      likes {
+        username
+        createdAt
+      }
+    }
+  }
+`;
+
+export const LIKE_POST = gql`
+  mutation likePost($postId: ID!) {
+    likePost(postId: $postId) {
+      _id
+      postText
+      postAuthor
+      createdAt
+      comments {
+        commentText
+        commentAuthor
+        createdAt
+      }
+      likes {
+        username
         createdAt
       }
     }

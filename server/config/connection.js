@@ -9,7 +9,8 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log("db connected");
-  });
+    console.log("Connected to MongoDB");
+  })
+  .catch(err => console.error('Failed to connect to MongoDB:', err));;
 // export module
 module.exports = mongoose.connection;

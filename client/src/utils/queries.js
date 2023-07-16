@@ -1,8 +1,7 @@
 import { gql } from '@apollo/client';
 
-// user query
 export const GET_USERS = gql`
-  query {
+  query getUsers {
     users {
       _id
       firstname
@@ -16,17 +15,27 @@ export const GET_USERS = gql`
         postAuthor
         createdAt
         comments {
-          _id
           commentText
           commentAuthor
           createdAt
         }
+        likes {
+          username
+          createdAt
+        }
+      }
+      friends {
+        _id
+        firstname
+        lastname
+        username
+        email
+        image
       }
     }
   }
 `;
 
-// single user query
 export const GET_USER = gql`
   query getUser($username: String!) {
     user(username: $username) {
@@ -42,17 +51,27 @@ export const GET_USER = gql`
         postAuthor
         createdAt
         comments {
-          _id
           commentText
           commentAuthor
           createdAt
         }
+        likes {
+          username
+          createdAt
+        }
+      }
+      friends {
+        _id
+        firstname
+        lastname
+        username
+        email
+        image
       }
     }
   }
 `;
 
-// posts query
 export const GET_POSTS = gql`
   query getPosts($username: String) {
     posts(username: $username) {
@@ -61,16 +80,18 @@ export const GET_POSTS = gql`
       postAuthor
       createdAt
       comments {
-        _id
         commentText
         commentAuthor
+        createdAt
+      }
+      likes {
+        username
         createdAt
       }
     }
   }
 `;
 
-// single post query
 export const GET_POST = gql`
   query getPost($postId: ID!) {
     post(postId: $postId) {
@@ -79,18 +100,20 @@ export const GET_POST = gql`
       postAuthor
       createdAt
       comments {
-        _id
         commentText
         commentAuthor
+        createdAt
+      }
+      likes {
+        username
         createdAt
       }
     }
   }
 `;
 
-// logged in user query
 export const GET_ME = gql`
-  query {
+  query getMe {
     me {
       _id
       firstname
@@ -104,11 +127,22 @@ export const GET_ME = gql`
         postAuthor
         createdAt
         comments {
-          _id
           commentText
           commentAuthor
           createdAt
         }
+        likes {
+          username
+          createdAt
+        }
+      }
+      friends {
+        _id
+        firstname
+        lastname
+        username
+        email
+        image
       }
     }
   }

@@ -8,11 +8,11 @@ const resolvers = {
   Query: {
     // returns all users, populating the posts field
     users: async () => {
-      return User.find().populate("posts");
+      return User.find().populate("posts").populate('friends');
     },
     // finds a single user by their username, populating the posts field.
     user: async (parent, { username }) => {
-      return User.findOne({ username }).populate("posts");
+      return User.findOne({ username }).populate("posts").populate('friends');
     },
     // returns posts, either for a specific user
     posts: async (parent, { username }) => {
@@ -37,20 +37,35 @@ const resolvers = {
     // creates a new user with the provided information
     addUser: async (
       parent,
-      { firstname, lastname, username, email, password }
+      { firstname, lastname, username, email, password}
     ) => {
       const user = await User.create({
         firstname,
         lastname,
         username,
         email,
-        password,
+        password
       });
 
       // signs a token for authentication, and returns the token and user.
       const token = signToken(user);
       return { token, user };
     },
+    // add friend to your friend list
+    addFriend: async (_, { userId, friendId }) => {
+      const user = await User.findById(userId);
+      const friend = await User.findById(friendId);
+    
+      if (!user || !friend) {
+        throw new Error('User or friend not found');
+      }
+    
+      user.friends.addToSet(friendId);
+      await user.save();
+    
+      return user;
+    },
+    
     //finds a user by their email
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
@@ -139,18 +154,58 @@ const resolvers = {
       }
       throw new AuthenticationError("You need to be logged in!");
     },
-  },
-  User: {
-    // Resolve the 'image' field to return the image URL or path
-    image: (parent) => {
-      // Modify this logic based on your image storage setup
-      if (parent.image) {
-        return `../images/${parent.image}`;
+
+    // count the like for the post
+    likePost: async (_, { postId }, { user }) => {
+      if (!user) {
+        throw new Error('Not authenticated');
       }
-      return null;
+
+      const post = await Post.findById(postId);
+
+      if (!post) {
+        throw new Error('Post not found');
+      }
+
+      const existingLike = post.likes.find((like) => like.username === user.username);
+
+      if (existingLike) {
+        post.likes = post.likes.filter((like) => like.username !== user.username);
+      } else {
+        post.likes.push({
+          username: user.username,
+          createdAt: new Date().toISOString(),
+        });
+      }
+
+      await post.save();
+
+      return post;
     },
   },
+  
   
 };
 // export module
 module.exports = resolvers;
+
+
+/* 
+
+{
+  "data": {
+    "users": [
+      {
+        "username": "sjsherpa",
+        "_id": "64b1709ecd7e6fe9efb3de50"
+      },
+      {
+        "username": "johndoe",
+        "_id": "64b478a14b2b30db9e4af9dc"
+      }
+    ]
+  }
+}
+
+
+*/
