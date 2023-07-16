@@ -53,20 +53,38 @@ export function Profile() {
         <Grid item xs={4}>
           <Box>Education</Box>
         </Grid>
-        {/* skills box */}
+        {/* skills box  left of second row */}
+        <Grid item xs={4}>
+          <Box
+            sx={{
+              width: 300,
+              height: 300,
+              backgroundColor: "primary.dark",
+              "&:hover": {
+                backgroundColor: "primary.main",
+                opacity: [0.9, 0.8, 0.7],
+              },
+            }}
+          >
+            <Typography sx={{ flex: 1 }}>Skills Box</Typography>
+          </Box>
+        </Grid>
+        {/* right box on second row */}
+        <Grid item xs={8}>
         <Box
-          sx={{
-            width: 300,
-            height: 300,
-            backgroundColor: "primary.dark",
-            "&:hover": {
-              backgroundColor: "primary.main",
-              opacity: [0.9, 0.8, 0.7],
-            },
-          }}
-        >
-          <Typography sx={{ flex: 1 }}>Skills Box</Typography>
-        </Box>
+            sx={{
+              width: 300,
+              height: 300,
+              backgroundColor: "primary.dark",
+              "&:hover": {
+                backgroundColor: "primary.main",
+                opacity: [0.9, 0.8, 0.7],
+              },
+            }}
+          >
+            <Typography sx={{ flex: 1 }}>Profile Bio</Typography>
+          </Box>
+        </Grid>
       </Grid>
     </Sheet>
   );
