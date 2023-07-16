@@ -3,7 +3,7 @@ import Avatar from "@mui/material/Avatar";
 import flowerImage from "../images/galactic-flower.png";
 import Sheet from "@mui/joy/Sheet";
 import Box from "@mui/joy/Box";
-
+import Grid from "@mui/material/Grid";
 import Typography from "@mui/joy/Typography";
 import { Container } from "@mui/material";
 
@@ -11,8 +11,9 @@ import { Container } from "@mui/material";
 export function Profile() {
   return (
     <Sheet>
-      <grid>
+      <Grid container spacing={2}>
         <Container>
+          {/* upper layer with profile pic */}
           <Box
             sx={{
               width: 300,
@@ -24,7 +25,7 @@ export function Profile() {
               },
             }}
           >
-            Holy sheet!
+            User Avatar
             <Avatar
               sx={{ display: "flex", alignItems: "center" }}
               alt="A beautiful flower of pink color within a glass bubble shapped casing"
@@ -32,7 +33,27 @@ export function Profile() {
             />
           </Box>
         </Container>
-
+        {/* first layer */}
+        <Grid item xs={8}>
+          <Box
+            sx={{
+              width: 300,
+              height: 300,
+              backgroundColor: "primary.dark",
+              "&:hover": {
+                backgroundColor: "primary.main",
+                opacity: [0.9, 0.8, 0.7],
+              },
+            }}
+          >
+            <Typography sx={{ flex: 1 }}>Profile Bio</Typography>
+          </Box>
+        </Grid>
+        {/* education right box of layout */}
+        <Grid item xs={4}>
+          <Box>Education</Box>
+        </Grid>
+        {/* skills box */}
         <Box
           sx={{
             width: 300,
@@ -44,9 +65,9 @@ export function Profile() {
             },
           }}
         >
-          <Typography sx={{ flex: 1 }}>Example Profile 2</Typography>
+          <Typography sx={{ flex: 1 }}>Skills Box</Typography>
         </Box>
-      </grid>
+      </Grid>
     </Sheet>
   );
 }
