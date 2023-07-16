@@ -12,27 +12,37 @@ export function Profile() {
   return (
     <Sheet>
       <Grid container spacing={2}>
-        <Container>
-          {/* upper layer with profile pic */}
-          <Box
-            sx={{
-              width: 300,
-              height: 300,
-              backgroundColor: "primary.dark",
-              "&:hover": {
-                backgroundColor: "primary.main",
-                opacity: [0.9, 0.8, 0.7],
-              },
-            }}
-          >
-            User Avatar
-            <Avatar
-              sx={{ display: "flex", alignItems: "center" }}
-              alt="A beautiful flower of pink color within a glass bubble shapped casing"
-              src={flowerImage}
-            />
-          </Box>
-        </Container>
+        <Grid item xs={12}>
+          <Container>
+            {/* upper layer with profile pic */}
+            <Box
+              sx={{
+                width: 300,
+                height: 300,
+                backgroundColor: "primary.dark",
+                "&:hover": {
+                  backgroundColor: "primary.main",
+                  opacity: [0.9, 0.8, 0.7],
+                },
+              }}
+            >
+              {/* adding input field for name field */}
+              <TextField item xs={4}
+                id="outlined-multiline-flexible"
+                label="Multiline"
+                multiline
+                maxRows={4}
+              />
+              User Avatar
+              <Avatar item xs={8}
+                sx={{ display: "flex", alignItems: "center" }}
+                alt="A beautiful flower of pink color within a glass bubble shapped casing"
+                src={flowerImage}
+              />
+            </Box>
+          </Container>
+        </Grid>
+
         {/* first layer */}
         <Grid item xs={8}>
           <Box
@@ -71,7 +81,7 @@ export function Profile() {
         </Grid>
         {/* right box on second row */}
         <Grid item xs={8}>
-        <Box
+          <Box
             sx={{
               width: 300,
               height: 300,
@@ -82,7 +92,7 @@ export function Profile() {
               },
             }}
           >
-            <Typography sx={{ flex: 1 }}>Profile Bio</Typography>
+            <Typography sx={{ flex: 1 }}>Work Experience</Typography>
           </Box>
         </Grid>
       </Grid>
