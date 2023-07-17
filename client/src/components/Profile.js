@@ -37,7 +37,6 @@ export function Profile() {
                 multiline
                 maxRows={4}
               />
-              User Avatar
               <Avatar
                 item
                 xs={8}
@@ -62,7 +61,7 @@ export function Profile() {
               },
             }}
           >
-            <Typography sx={{ flex: 1 }}>Profile Bio</Typography>
+            <Typography sx={{ flex: 1 }}>Create Post</Typography>
 
             <TextField
               item
@@ -75,46 +74,12 @@ export function Profile() {
         </Grid>
         {/* education right box of layout */}
         <Grid item xs={8}>
-          <Box>Education</Box>
-          <TextField id="outlined-basic" label="Education" variant="outlined" />
-        </Grid>
-        {/* skills box  left of second row */}
-        <Grid item xs={4}>
-          <Box
-            sx={{
-              width: 300,
-              height: 300,
-              backgroundColor: "primary.dark",
-              "&:hover": {
-                backgroundColor: "primary.main",
-                opacity: [0.9, 0.8, 0.7],
-              },
-            }}
-          >
-            <Typography sx={{ flex: 1 }}>Skills Box</Typography>
-            <ButtonGroup variant="contained" aria-label="outlined button group">
-              <Button>Communication</Button>
-              <Button>Leadership</Button>
-              <Button>Emotional Intelligence</Button>
-            </ButtonGroup>
-          </Box>
-        </Grid>
-        {/* right box on second row */}
-        <Grid item xs={8}>
-          <Box
-            sx={{
-              width: 300,
-              height: 300,
-              backgroundColor: "primary.dark",
-              "&:hover": {
-                backgroundColor: "primary.main",
-                opacity: [0.9, 0.8, 0.7],
-              },
-            }}
-          >
-            <Typography sx={{ flex: 1 }}>Work Experience</Typography>
-            <TextField id="outlined-basic" variant="outlined" />
-          </Box>
+          <Box>Friends</Box>
+          <TextField
+            id="outlined-basic"
+            label="Friend List"
+            variant="outlined"
+          />
         </Grid>
       </Grid>
     </Sheet>
