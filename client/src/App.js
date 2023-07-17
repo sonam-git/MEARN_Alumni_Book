@@ -9,8 +9,8 @@ import {
 import { setContext } from "@apollo/client/link/context";
 import Home from "./pages/Home";
 <<<<<<< HEAD
-import Dashboard from "./components/Dashboard";
-import { Profile } from "./components/Profile";
+import Dashboard from "./components";
+import { Profile } from "./pagess/Profile";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 =======
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
