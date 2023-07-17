@@ -16,11 +16,14 @@ import DarkModePicture from '../assets/images/darkmode-pic.webp';
 import LightModePicture from '../assets/images/lightmode-pic.jpg';
 import Logo from '../assets/images/AB_Logo.png';
 import Login from './Login';
+import { ADD_USER } from '../utils/mutations';
+import Auth from '../utils/auth';
+import { useMutation } from '@apollo/client';
 
 
 
 
-
+// allows toggling between light and dark modes. 
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = React.useState(false);
@@ -52,20 +55,47 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
   );
 };
 
+// sign up functional component
  export const Signup = () => {
- 
+//  state variable
     const [showLogin, setShowLogin] = useState(false);
-  
+    const [formState, setFormState] = useState({ email: '', password: '' });
+    const [addUser] = useMutation(ADD_USER);
+
+    const handleFormSubmit = async (event) => {
+      event.preventDefault();
+      const mutationResponse = await addUser({
+        variables: {
+          firstname: formState.firstname,
+          lastname: formState.lastname,
+          username: formState.username,
+          email: formState.email,
+          password: formState.password,
+        },
+      });
+      const token = mutationResponse.data.addUser.token;
+      Auth.login(token);
+    };
+
+    const handleChange = (event) => {
+      const { name, value } = event.target;
+      setFormState({
+        ...formState,
+        [name]: value,
+      });
+    };
+
+// to control whether to show the login component or not
     const handleShowLogin = (event) => {
       event.preventDefault();
       setShowLogin(true);
     }
-  
+  // returns login component
     if (showLogin) {
       return <Login />;
     }
   
-
+// return signup component
   return (
     <CssVarsProvider
       defaultMode="dark"
@@ -156,38 +186,56 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
               </Typography>
             </div>
             <form
-              onSubmit={(event) => {
-                event.preventDefault();
-                const formElements = event.currentTarget.elements;
-                const data = {
-                  email: formElements.email.value,
-                  password: formElements.password.value,
-                  persistent: formElements.persistent.checked,
-                };
-                alert(JSON.stringify(data, null, 2));
-              }}
+             onSubmit={handleFormSubmit}
             >
               <FormControl required>
                 <FormLabel>First Name</FormLabel>
-                <Input type="text" name="first-name" />
+                <Input 
+                placeholder="First"
+                name="firstname"
+                type="firstname"
+                id="firstname"
+                onChange={handleChange}
+                />
               </FormControl>
               <FormControl required>
                 <FormLabel>Last Name</FormLabel>
-                <Input type="text" name="last-name" />
+                <Input 
+                placeholder="First"
+                name="lastname"
+                type="lastname"
+                id="lastname"
+                onChange={handleChange}
+                 />
               </FormControl>
               <FormControl required>
                 <FormLabel>Username</FormLabel>
-                <Input type="username" name="username" />
+                <Input 
+                placeholder="Username"
+                name="username"
+                type="username"
+                id="username"
+                onChange={handleChange}
+                />
               </FormControl>
               <FormControl required>
                 <FormLabel>Email</FormLabel>
-                <Input type="email" name="email" />
+                <Input placeholder="Email"
+                name="email"
+                type="email"
+                id="email"
+                onChange={handleChange}/>
               </FormControl>
               <FormControl required>
                 <FormLabel>Password</FormLabel>
-                <Input type="password" name="password" />
+                <Input 
+                placeholder="Password"
+                name="password"
+                type="password"
+                id="fpassword"
+                onChange={handleChange}/>
               </FormControl>
-              <FormControl>
+              {/* <FormControl>
                 <FormLabel>Upload Image</FormLabel>
                 <Input type="file" name="image" accept="image/*"
                 sx={{
@@ -195,7 +243,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }} />
-              </FormControl>
+              </FormControl> */}
               <Box
                 sx={{
                   display: 'flex',
@@ -255,5 +303,5 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
     </CssVarsProvider>
   );
 }
-
+// export signup
 export default Signup;

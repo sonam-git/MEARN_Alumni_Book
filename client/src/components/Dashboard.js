@@ -40,6 +40,7 @@ import Menu from '../containers/Menu';
 import Layout from '../containers/Layout';
 import { Connect, Explore } from '../components';
 
+
 function ColorSchemeToggle() {
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = React.useState(false);
@@ -68,7 +69,7 @@ function ColorSchemeToggle() {
   );
 }
 
-export const Dashboard = () => {
+const Dashboard = () => {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 

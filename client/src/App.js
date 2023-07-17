@@ -8,9 +8,18 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import Home from "./pages/Home";
+<<<<<<< HEAD
 import Dashboard from "./components/Dashboard";
 import { Profile } from "./components/Profile";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+=======
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// import { Dashboard } from '@material-ui/icons';
+import  Dashboard  from './components/Dashboard';
+
+
+
+>>>>>>> 71604bc (update signup form functionality, and remove extra export within dashboard component)
 
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
@@ -48,7 +57,9 @@ function App() {
     <ApolloProvider client={client}>
       <Router>
         <>
+       
           <Routes>
+<<<<<<< HEAD
             <Route path="/" element={<Home />} />
           </Routes>
           <Routes>
@@ -56,6 +67,16 @@ function App() {
           </Routes>
           <Routes>
             <Route path="/Profile" element={<Profile/>}/>
+=======
+            <Route
+              path='/'
+              element={<Home/>}
+            />
+               <Route
+              path='/dashboard'
+              element={<Dashboard/>}
+            />
+>>>>>>> 71604bc (update signup form functionality, and remove extra export within dashboard component)
           </Routes>
         </>
       </Router>
