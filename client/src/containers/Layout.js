@@ -2,6 +2,7 @@ import React from 'react';
 import Box from '@mui/joy/Box';
 import Sheet from '@mui/joy/Sheet';
 
+// root component of the layout.
 function Root(props) {
   return (
     <Box
@@ -22,7 +23,7 @@ function Root(props) {
     />
   );
 }
-
+// provides styling for the header elements
 function Header(props) {
   return (
     <Box
@@ -50,7 +51,7 @@ function Header(props) {
     />
   );
 }
-
+// provides styling for the navigation elements,
 function SideNav(props) {
   return (
     <Box
@@ -73,7 +74,7 @@ function SideNav(props) {
     />
   );
 }
-
+// provides styling for the side pane elements,
 function SidePane(props) {
   return (
     <Box
@@ -94,7 +95,7 @@ function SidePane(props) {
     />
   );
 }
-
+// provides styling for the main content elements,
 function Main(props) {
   return (
     <Box
@@ -105,7 +106,7 @@ function Main(props) {
     />
   );
 }
-
+// for mobile or overlay menus. 
 function SideDrawer({
   onClose,
   ...props

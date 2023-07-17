@@ -1,4 +1,4 @@
-import React , {useState, useEffect} from 'react';
+import React , {useState} from 'react';
 import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
 import GlobalStyles from '@mui/joy/GlobalStyles';
 import CssBaseline from '@mui/joy/CssBaseline';
@@ -12,8 +12,9 @@ import Input from '@mui/joy/Input';
 import Typography from '@mui/joy/Typography';
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
-import DarkModePicture from '../images/darkmode-pic.webp';
-import LightModePicture from '../images/lightmode-pic.jpg';
+import DarkModePicture from '../assets/images/darkmode-pic.webp';
+import LightModePicture from '../assets/images/lightmode-pic.jpg';
+import Logo from '../assets/images/AB_Logo.png';
 import Login from './Login';
 
 
@@ -119,26 +120,8 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
               justifyContent: 'space-between',
             }}
           >
-            <Typography
-              fontWeight="lg"
-              startDecorator={
-                <Box
-                  component="span"
-                  sx={{
-                    width: 24,
-                    height: 24,
-                    background: (theme) =>
-                      `linear-gradient(45deg, ${theme.vars.palette.primary.solidBg}, ${theme.vars.palette.primary.solidBg} 30%, ${theme.vars.palette.primary.softBg})`,
-                    borderRadius: '50%',
-                    boxShadow: (theme) => theme.shadow.md,
-                    '--joy-shadowChannel': (theme) =>
-                      theme.vars.palette.primary.mainChannel,
-                  }}
-                />
-              }
-            >
-              Welcome
-            </Typography>
+          {/* Logo */}
+          <img src={Logo} alt="Logo" width={250} height={150} />
             <ColorSchemeToggle />
           </Box>
           <Box
@@ -233,7 +216,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
               </Link>
               </Box>
               <Button type="submit" fullWidth>
-                Sign in
+                Sign Up
               </Button>
             </form>
           </Box>

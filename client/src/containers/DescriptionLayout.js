@@ -4,6 +4,7 @@ import Box from '@mui/joy/Box';
 import Container from '@mui/joy/Container';
 import { typographyClasses } from '@mui/joy/Typography';
 
+// create a layout component with two sides
 export default function TwoSidedLayout({ children, reversed, image, video }) {
   return (
     <Container
@@ -43,6 +44,7 @@ export default function TwoSidedLayout({ children, reversed, image, video }) {
         })}
       >
         <div>
+          
           <iframe
             width="550"
             height="465"
