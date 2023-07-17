@@ -40,6 +40,12 @@ const postSchema = new Schema({
       },
     },
   ],
+  likes: [
+    {
+      username: String,
+      createdAt: String
+    }
+  ],
 });
 
 const Post = model('Post', postSchema);

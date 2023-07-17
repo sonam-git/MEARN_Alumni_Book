@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { BottomNavigation, BottomNavigationAction } from '@material-ui/core';
 import { Archive, Favorite, Restore } from '@material-ui/icons';
-import headerImage from '../images/light-coding-background.jpg';
+import headerImage from '../assets/images/light-coding-background.jpg';
 
 const useStyles = makeStyles((theme) => ({
   bottomNavigation: {
