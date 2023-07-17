@@ -8,8 +8,8 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import Home from "./pages/Home";
-import { Profile } from "./pagess/Profile";
-import Dashboard from "./components";
+import Profile from "./components/Profile";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import { Dashboard } from '@material-ui/icons';
 import Dashboard from "./components/Dashboard";
