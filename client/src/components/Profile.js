@@ -6,7 +6,9 @@ import Box from "@mui/joy/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/joy/Typography";
 import { Container } from "@mui/material";
-
+import TextField from "@mui/material/TextField";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Button from "@mui/material/Button";
 //Displaying user avatar //variable for uploaded file of user
 export function Profile() {
   return (
@@ -27,14 +29,18 @@ export function Profile() {
               }}
             >
               {/* adding input field for name field */}
-              <TextField item xs={4}
+              <TextField
+                item
+                xs={4}
                 id="outlined-multiline-flexible"
-                label="Multiline"
+                label="Name"
                 multiline
                 maxRows={4}
               />
               User Avatar
-              <Avatar item xs={8}
+              <Avatar
+                item
+                xs={8}
                 sx={{ display: "flex", alignItems: "center" }}
                 alt="A beautiful flower of pink color within a glass bubble shapped casing"
                 src={flowerImage}
@@ -44,7 +50,7 @@ export function Profile() {
         </Grid>
 
         {/* first layer */}
-        <Grid item xs={8}>
+        <Grid item xs={4}>
           <Box
             sx={{
               width: 300,
@@ -57,11 +63,20 @@ export function Profile() {
             }}
           >
             <Typography sx={{ flex: 1 }}>Profile Bio</Typography>
+
+            <TextField
+              item
+              xs={4}
+              id="outlined-multiline-flexible"
+              multiline
+              maxRows={4}
+            />
           </Box>
         </Grid>
         {/* education right box of layout */}
-        <Grid item xs={4}>
+        <Grid item xs={8}>
           <Box>Education</Box>
+          <TextField id="outlined-basic" label="Education" variant="outlined" />
         </Grid>
         {/* skills box  left of second row */}
         <Grid item xs={4}>
@@ -77,6 +92,11 @@ export function Profile() {
             }}
           >
             <Typography sx={{ flex: 1 }}>Skills Box</Typography>
+            <ButtonGroup variant="contained" aria-label="outlined button group">
+              <Button>Communication</Button>
+              <Button>Leadership</Button>
+              <Button>Emotional Intelligence</Button>
+            </ButtonGroup>
           </Box>
         </Grid>
         {/* right box on second row */}
@@ -93,6 +113,7 @@ export function Profile() {
             }}
           >
             <Typography sx={{ flex: 1 }}>Work Experience</Typography>
+            <TextField id="outlined-basic" variant="outlined" />
           </Box>
         </Grid>
       </Grid>
