@@ -36,6 +36,13 @@ const client = new ApolloClient({
 });
 
 
+/*############## NOTE FOR TEAM MEMBERS ################################ : 
+The purpose of the provided code ABOVE is to configure the Apollo Client to handle 
+authentication with a JWT (JSON Web Token) in GraphQL requests. Please do not update this code.
+Add your page or component as needed within the <Router> and <Routes>. The set up below within the function
+App is one of the requirements
+Thank you ##############################################################*/
+
 
 function App() {
   return (
