@@ -9,11 +9,11 @@ import Card from '@mui/joy/Card';
 import CardOverflow from '@mui/joy/CardOverflow';
 import CardCover from '@mui/joy/CardCover';
 
-import articleOneImage from '../images/article-one.webp';
-import articleTwoImage from '../images/article-two.jpeg';
-import articleThreeImage from '../images/article-three.jpg';
-import opportunitiesImage from '../images/opportunities.jpg';
-import successImage from '../images/success.jpg';
+import articleOneImage from '../assets/images/article-one.webp';
+import articleTwoImage from '../assets/images/article-two.jpeg';
+import articleThreeImage from '../assets/images/article-three.jpg';
+import opportunitiesImage from '../assets/images/opportunities.jpg';
+import successImage from '../assets/images/success.jpg';
 
 export const Explore = () => {
   return (
@@ -120,7 +120,7 @@ export const Explore = () => {
                       },
                 }}
                 >
-                  <a href="https://www.news-herald.com/2023/04/11/alumni-should-have-active-role-in-inspiring-current-hs-sports-programs-opinion/" target="_blank" rel="noopener noreferrer"></a>
+                  <a href="https://www.news-herald.com/2023/04/11/alumni-should-have-active-role-in-inspiring-current-hs-sports-programs-opinion/" target="_blank" rel="noopener noreferrer">click</a>
                 </CardCover>
                 </AspectRatio>
               </CardOverflow>
@@ -156,7 +156,7 @@ export const Explore = () => {
                       },
                 }}
                 >
-                  <a href="https://www.jamesgmartin.center/2023/05/undoing-diversity-equity-and-inclusion-requires-alumni-effort/" target="_blank" rel="noopener noreferrer"></a>
+                  <a href="https://www.jamesgmartin.center/2023/05/undoing-diversity-equity-and-inclusion-requires-alumni-effort/" target="_blank" rel="noopener noreferrer">click</a>
                 </CardCover>
                 </AspectRatio>
               </CardOverflow>
@@ -193,10 +193,8 @@ export const Explore = () => {
                 }}
                 >
                   <a href="https://www.bu.edu/articles/2023/5-tips-for-life-after-college-a-guide-to-living-life-as-an-alumni/" target="_blank" rel="noopener noreferrer"
-                  style={{
-                    
-                  }}
-                  ></a>
+                 
+                  > click</a>
                 </CardCover>
                 </AspectRatio>
               </CardOverflow>

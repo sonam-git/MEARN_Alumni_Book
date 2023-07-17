@@ -6,7 +6,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import headerImage from '../images/light-coding-background.jpg';
+import headerImage from '../assets/images/light-coding-background.jpg';
 import Login from './Login';
 import Signup from './Signup';
 
