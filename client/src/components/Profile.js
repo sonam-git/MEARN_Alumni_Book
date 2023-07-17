@@ -1,6 +1,6 @@
 import React from "react";
 import Avatar from "@mui/material/Avatar";
-import flowerImage from "../images/galactic-flower.png";
+import flowerImage from "../assets/images/galactic-flower.png";
 import Sheet from "@mui/joy/Sheet";
 import Box from "@mui/joy/Box";
 import Grid from "@mui/material/Grid";
