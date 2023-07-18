@@ -1,4 +1,4 @@
-# MEARN_Alumni_Book
+# MEARN_Alumni_Book (Final Project 2023)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -25,14 +25,30 @@ just a test push
 
 ## Assigned User Story:
 ```
-I want to be able.....
+As a user, I want a social media app where I can connect with my friends, upload my profile image, 
+add posts, view my friends' posts, like their posts, and comment on their posts. This will allow me
+to stay connected with my friends and engage with their content.
+
 ```
 
 ## Acceptance Criteria:
 ```
-Given a ....
-WHEN I ...
-THEN I ....
+Given that I am a new user, I want to register myself by providing my first name, last name, 
+username, email, password, and profile image.
+Given that I am a registered user, I want to log in to the app by providing my email and password.
+Given that I am logged in, I want to be able to add a new post with a caption and an optional 
+image attachment.
+Given that I am logged in, I want to be able to view the posts of my friends in my news feed.
+Given that I am logged in, I want to be able to like a post from my friends.
+Given that I am logged in, I want to be able to comment on a post from my friends.
+Given that I am logged in, I want to be able to add a friend to my friend list by searching for 
+their username or email.
+Given that I am logged in, I want to be able to remove a friend from my friend list.
+Given that I am logged in, I want to be able to edit or delete a post that I have added.
+Given that I am logged in, I want to be able to add a comment to a post.
+Given that I am logged in, I want to be able to remove a comment that I have added.
+Given that I am logged in, I want to be able to like a comment or post.
+Given that I am logged in, I want to be able to update my profile image.
 ```
 
 ## GIF:
@@ -101,18 +117,33 @@ THEN I ....
   
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)]
 
-### Copyright © 2023 [Sonam](https://github.com/), [Evelyn](https://github.com/), [Dandar](https://github.com/) & [JP](https://github.com/)
+### Copyright © 2023 [Team Alumni Book](https://github.com/sonam-git/MEARN_Alumni_Book).All Rights Reserved.
 ```md
-Any individual who obtains a copy of the software and its associated documentation files (referred to as the "Software") is granted permission, without any cost, to use, copy, modify, merge, publish, distribute, sublicense, and/or sell the Software. There are no restrictions on dealing with the Software, including the aforementioned rights. This permission is also extended to those individuals to whom the Software is provided. However, it is essential that the copyright notice and this permission notice are included in all copies or significant portions of the Software.
+Any individual who obtains a copy of the software and its associated documentation files 
+(referred to as the "Software") is granted permission, without any cost, to use, copy, modify, 
+merge, publish, distribute, sublicense, and/or sell the Software. There are no restrictions on 
+dealing with the Software, including the aforementioned rights. This permission is also extended 
+to those individuals to whom the Software is provided. However, it is essential that the copyright
+ notice and this permission notice are included in all copies or significant portions of the Software.
 
-The Software is provided on an "as is" basis, without any warranty of any kind, whether expressed or implied. This includes, but is not limited to, warranties of merchantability, fitness for a particular purpose, and non-infringement. Under no circumstances shall the authors or copyright holders be held liable for any claim, damages, or other liabilities arising from the use of the Software, regardless of whether it is an action of contract, tort, or any other legal theory.
+The Software is provided on an "as is" basis, without any warranty of any kind, whether expressed or implied. 
+This includes, but is not limited to, warranties of merchantability, fitness for a particular purpose, and 
+non-infringement. Under no circumstances shall the authors or copyright holders be held liable for any claim, 
+damages, or other liabilities arising from the use of the Software, regardless of whether it is an action of 
+contract, tort, or any other legal theory.
 
-In summary, this permission grants the freedom to use, modify, distribute, and sell the Software without charge. However, it is crucial to include the copyright notice and permission statement when distributing the Software. It is also important to note that the Software is provided without warranties, and the authors or copyright holders bear no responsibility for any claims or damages that may arise from its use.
+In summary, this permission grants the freedom to use, modify, distribute, and sell the Software without charge. 
+However, it is crucial to include the copyright notice and permission statement when distributing the Software. 
+It is also important to note that the Software is provided without warranties, and the authors or copyright holders 
+bear no responsibility for any claims or damages that may arise from its use.
 ```
 
-## Author
+## Team Members
+* Sonam J Sherpa ----------- [Github](https://github.com/sonam-git)
+* Evelyn Montes Sobal ------- [Github](https://github.com/EvelynMS1)
+* JP Padilla ------------------ [Github](https://github.com/jayP308)
+* Jared Pelaez  --------------- [Github](https://github.com/jaredpel)
+* Dandar Ganbold -----------  [Github](https://github.com/Daganbold)
 
-Follow me on Github at [Sonam](https://github.com/), [Evelyn](https://github.com/),[JP](https://github.com/) [Jared Pelaez](https://github.com/) & [Dandar](https://github.com/). Additional questions or concerns? feel free to contact us.
 
-
-© 2023 [Sonam](https://github.com/), [Evelyn](https://github.com/),[JP](https://github.com/),[Jared Pelaez](https://github.com/) & [Dandar](https://github.com/). Confidential and Proprietary. All Rights Reserved.
+ 
