@@ -15,6 +15,7 @@ import ListItemButton from '@mui/joy/ListItemButton';
 import ListItemContent from '@mui/joy/ListItemContent';
 import ListSubheader from '@mui/joy/ListSubheader';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
+import Login from './Login';
 
 
 
@@ -38,7 +39,8 @@ import ViewCompactAltIcon from '@mui/icons-material/ViewCompactAlt';
 import filesTheme from '../containers/Theme';
 import Menu from '../containers/Menu';
 import Layout from '../containers/Layout';
-import { Connect, Explore } from '../components';
+import Connect from './Connect';
+import Explore from './Explore';
 
 
 function ColorSchemeToggle() {
@@ -70,6 +72,9 @@ function ColorSchemeToggle() {
 }
 
 const Dashboard = () => {
+
+  const [showLogin, setShowLogin] = useState(false);
+
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
@@ -78,6 +83,10 @@ const Dashboard = () => {
   
 
   const [selectedItem, setSelectedItem] = useState('explore');
+
+  const handleShowLogin = () => {
+    setShowLogin(true);
+  };
 
   const handleItemClick = (item) => {
     setSelectedItem(item);
@@ -99,6 +108,10 @@ const Dashboard = () => {
     event.preventDefault();
     setIsSheetOpen(true);
   };
+  // const handlePersonAddIconClick = (event) => {
+  //   event.preventDefault();
+  //   setIsSheetOpen(true);
+  // };
 
   const handleIsSheetClose = (event) => {
     event.preventDefault();
@@ -184,6 +197,7 @@ const Dashboard = () => {
               style={{
                 padding: '10px'
               }}
+              onClick={handleShowLogin} 
             >
               <HomeIcon 
               style={{
@@ -327,6 +341,9 @@ const Dashboard = () => {
 
         </Layout.Main>
 
+        {showLogin && <Login/>}
+        
+        </Layout.Main>
         {/* Right Side Profile View */}
          
         {isSheetOpen &&  ( 

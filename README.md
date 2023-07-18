@@ -25,14 +25,30 @@ just a test push
 
 ## Assigned User Story:
 ```
-I want to be able.....
+As a user, I want a social media app where I can connect with my friends, upload my profile image, 
+add posts, view my friends' posts, like their posts, and comment on their posts. This will allow me
+to stay connected with my friends and engage with their content.
+
 ```
 
 ## Acceptance Criteria:
 ```
-Given a ....
-WHEN I ...
-THEN I ....
+Given that I am a new user, I want to register myself by providing my first name, last name, 
+username, email, password, and profile image.
+Given that I am a registered user, I want to log in to the app by providing my email and password.
+Given that I am logged in, I want to be able to add a new post with a caption and an optional 
+image attachment.
+Given that I am logged in, I want to be able to view the posts of my friends in my news feed.
+Given that I am logged in, I want to be able to like a post from my friends.
+Given that I am logged in, I want to be able to comment on a post from my friends.
+Given that I am logged in, I want to be able to add a friend to my friend list by searching for 
+their username or email.
+Given that I am logged in, I want to be able to remove a friend from my friend list.
+Given that I am logged in, I want to be able to edit or delete a post that I have added.
+Given that I am logged in, I want to be able to add a comment to a post.
+Given that I am logged in, I want to be able to remove a comment that I have added.
+Given that I am logged in, I want to be able to like a comment or post.
+Given that I am logged in, I want to be able to update my profile image.
 ```
 
 ## GIF:

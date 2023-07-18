@@ -9,6 +9,8 @@ import FormControl from '@mui/joy/FormControl';
 import FormLabel, { formLabelClasses } from '@mui/joy/FormLabel';
 import IconButton from '@mui/joy/IconButton';
 import Link from '@mui/joy/Link';
+import HomeIcon from '@mui/icons-material/Home';
+// import Link from '@mui/joy/Link';
 import Input from '@mui/joy/Input';
 import Typography from '@mui/joy/Typography';
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
@@ -17,6 +19,12 @@ import DarkModePicture from '../assets/images/darkmode-pic.webp';
 import LightModePicture from '../assets/images/lightmode-pic.jpg';
 import Logo from '../assets/images/AB_Logo.png';
 import Signup from './Signup';
+import UserDashboard from '../pages/UserDashboard';
+import { useMutation } from '@apollo/client';
+import { LOGIN } from '../utils/mutations';
+import Auth from '../utils/auth';
+import { Link } from 'react-router-dom';
+import { Grid } from '@mui/material';
 
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
@@ -28,6 +36,9 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
     return <IconButton size="sm" variant="plain" color="neutral" disabled />;
   }
   return (
+    <div style={{ position: 'fixed', top: '100px', right: '10px' }}>
+    <Grid container spacing={1} alignItems="center">
+      <Grid item>
     <IconButton
       id="toggle-mode"
       size="sm"
@@ -40,12 +51,39 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
           setMode('dark');
         } else {
           setMode('light');
+        if (mode === "light") {
+          setMode("dark");
+        } else {
+          setMode("light");
         }
         onClick?.(event);
       }}
     >
       {mode === 'light' ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
     </IconButton>
+      {mode === "light" ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
+    </IconButton>
+    </Grid>
+    <Grid item>
+    <Link to="/"><IconButton
+              size="sm"
+              variant="outlined"
+              color="primary"
+              component="a"
+              style={{
+                padding: '10px'
+              }}
+            >
+              <HomeIcon 
+              style={{
+                marginRight: '5px'
+              }}
+              />
+              Home
+            </IconButton></Link>
+    </Grid>
+    </Grid>
+    </div>
   );
 };
 
@@ -59,6 +97,46 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
 
     if(showSignup){
         return(<Signup/>)
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [formState, setFormState] = useState({
+      email: '',
+      password: '',
+      persistent: false,
+    });
+    const [login, { error }] = useMutation(LOGIN);
+
+    const handleFormSubmit = async (event) => {
+      event.preventDefault();
+      try {
+        const mutationResponse = await login({
+          variables: { email: formState.email, password: formState.password , persistent: formState.persistent},
+        });
+        const token = mutationResponse.data.login.token;
+        Auth.login(token);
+        setIsLoggedIn(true);
+      } catch (e) {
+        console.log(e);
+      }
+      // Reset the form
+    setFormState({
+      email: '',
+      password: '',
+      persistent: false,
+    });
+    };
+
+    const handleChange = (event) => {
+      const { name, value, checked,type } = event.target;
+      const inputValue = type === 'checkbox' ? checked : value;
+      setFormState({
+        ...formState,
+        [name]:inputValue,
+      });
+    };
+
+    // if user is logged in the render dashboard 
+    if (isLoggedIn) {
+      return <UserDashboard />;
     }
 
   return (
@@ -147,6 +225,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
             <div>
               <Typography component="h1" fontSize="xl2" fontWeight="lg">
                 Sign In Here!
+                Log In Here!
               </Typography>
               <Typography level="body2" sx={{ my: 1, mb: 3 }}>
                 Welcome back User!
@@ -171,6 +250,26 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
               <FormControl required>
                 <FormLabel>Password</FormLabel>
                 <Input type="password" name="password" />
+            <form onSubmit={handleFormSubmit}>
+              <FormControl required>
+                <FormLabel htmlFor="email">Email</FormLabel>
+                <Input
+                 placeholder="youremail@test.com"
+                 name="email"
+                 type="email"
+                 id="email"
+                 onChange={handleChange} 
+                 />
+              </FormControl>
+              <FormControl required>
+                <FormLabel htmlFor="pwd">Password</FormLabel>
+                <Input 
+                placeholder="******"
+                name="password"
+                type="password"
+                id="pwd"
+                onChange={handleChange}
+                />
               </FormControl>
               <Box
                 sx={{
@@ -198,6 +297,26 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
               >
                 Don't Have An Account Yet? Click Here To Sign Up!
               </Link>
+              <Checkbox
+                size="sm"
+                label="Remember for 30 days"
+                name="persistent"
+                checked={formState.persistent}
+                onChange={handleChange}
+              />
+                {/* <Link fontSize="sm" href="#replace-with-a-link" fontWeight="lg">
+                  Forgot your password?
+                </Link> */}
+              </Box>
+              {error ? (
+          <div>
+            <p className="error-text">The provided credentials are incorrect</p>
+          </div>
+        ) : null}
+              <Button type="submit" fullWidth>
+                Log In
+              </Button>
+              <Link to="/signup"><Button fullWidth>← Go to Sign Up</Button></Link>
             </form>
           </Box>
           <Box component="footer" sx={{ py: 3 }}>

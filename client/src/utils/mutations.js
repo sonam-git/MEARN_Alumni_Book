@@ -152,6 +152,28 @@ export const REMOVE_COMMENT = gql`
   }
 `;
 
+<<<<<<< HEAD
+=======
+export const REMOVE_FRIEND = gql`
+  mutation RemoveFriend($friendId: ID!) {
+    removeFriend(friendId: $friendId) {
+      _id
+      firstname
+      lastname
+      username
+      email
+      friends {
+        _id
+        firstname
+        lastname
+        username
+        email
+      }
+    }
+  }
+`;
+
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
 export const LIKE_POST = gql`
   mutation likePost($postId: ID!) {
     likePost(postId: $postId) {

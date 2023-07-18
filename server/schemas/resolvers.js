@@ -1,5 +1,9 @@
 // import necessary packages
 const { AuthenticationError } = require("apollo-server-express");
+<<<<<<< HEAD
+=======
+const cloudinary = require('cloudinary').v2;
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
 const { User, Post } = require("../models");
 const { signToken } = require("../utils/auth");
 
@@ -24,7 +28,11 @@ const resolvers = {
       return Post.findOne({ _id: postId });
     },
     //returns the logged-in user if authenticated,
+<<<<<<< HEAD
     me: async (parent, context) => {
+=======
+    me: async (parent, _args, context) => {
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
       if (context.user) {
         return User.findOne({ _id: context.user._id }).populate("posts");
       }
@@ -34,19 +42,32 @@ const resolvers = {
 
   /************************* MUTATIONS *************************/
   Mutation: {
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
     // creates a new user with the provided information
     addUser: async (
       parent,
       { firstname, lastname, username, email, password}
     ) => {
+<<<<<<< HEAD
+=======
+      // Create the user with the provided information
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
       const user = await User.create({
         firstname,
         lastname,
         username,
         email,
+<<<<<<< HEAD
         password
       });
 
+=======
+        password,
+      });
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
       // signs a token for authentication, and returns the token and user.
       const token = signToken(user);
       return { token, user };
@@ -65,6 +86,29 @@ const resolvers = {
     
       return user;
     },
+<<<<<<< HEAD
+=======
+    // remove Friends 
+    removeFriend: async (_, { friendId }, context) => {
+      // Check if the user is authenticated
+      if (!context.user) {
+        throw new AuthenticationError('You must be logged in to remove a friend');
+      }
+
+      try {
+        // Find the current user and remove the friend by their ID
+        const user = await User.findByIdAndUpdate(
+          context.user._id,
+          { $pull: { friends: friendId } },
+          { new: true }
+        );
+
+        return user;
+      } catch (error) {
+        throw new Error('Failed to remove friend');
+      }
+    },
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
     
     //finds a user by their email
     login: async (parent, { email, password }) => {
@@ -184,7 +228,10 @@ const resolvers = {
     },
   },
   
+<<<<<<< HEAD
   
+=======
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
 };
 // export module
 module.exports = resolvers;
