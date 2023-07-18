@@ -101,7 +101,7 @@ export const Home = () => {
           >
             {/* Logo */}
             {/* <img src={Logo} alt="Logo" width={250} height={150} /> */}
-            <Typography component="h1" fontWeight="xl" fontFamily="fantasy" >
+            <Typography component="h1" fontWeight="xl" fontFamily="fantasy">
               Alumni Book
             </Typography>
             <ColorSchemeToggle />
@@ -133,17 +133,6 @@ export const Home = () => {
             <div style={{ display: "flex", justifyContent: "center" }}>
               <div style={{ textAlign: "center" }}>
                 <HeroImage />
-                <Typography
-                  variant="h1"
-                  component="h1"
-                  style={{
-                    fontWeight: "bold",
-                    fontSize: "2rem",
-                    color: "#333",
-                  }}
-                >
-                  Welcome to Alumni Book
-                </Typography>
               </div>
             </div>
             <Grid container spacing={2}>
@@ -217,6 +206,17 @@ const HeroImage = () => {
           }}
         />
       )}
+      <Typography
+        variant="h1"
+        component="h1"
+        style={{
+          fontWeight: "bold",
+          fontSize: "2rem",
+          color: mode === "light" ? "black" : "white",
+        }}
+      >
+        Welcome to Alumni Book
+      </Typography>
     </>
   );
 };
