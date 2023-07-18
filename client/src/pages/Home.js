@@ -11,9 +11,11 @@ import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import DarkModePicture from '../assets/images/darkmode-pic.webp';
 import LightModePicture from '../assets/images/lightmode-pic.jpg';
-import Logo from '../assets/images/AB_Logo.png';
+// import Logo from '../assets/images/AB_Logo.png';
 import { Link } from 'react-router-dom';
 import { Grid } from '@material-ui/core';
+import Hero from '../assets/images/AB_Logo2.png';
+// import HeroDark from '../assets/images/AB_Dark_logo.png'
 
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
@@ -49,7 +51,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
 };
 
  export const Home = () => {
-
+  
   return (
     <CssVarsProvider
       defaultMode="dark"
@@ -105,8 +107,10 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
           >
          
                {/* Logo */}
-          <img src={Logo} alt="Logo" width={250} height={150} />
-          
+          {/* <img src={Logo} alt="Logo" width={250} height={150} /> */}
+          <Typography component="h1" fontWeight="xl">
+              Alumni Book
+            </Typography>
             <ColorSchemeToggle />
           </Box>
           <Box
@@ -132,19 +136,42 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
               },
             }}
           >
-   <Grid container spacing={2}>
-      <Grid item xs={12} sm={6}>
-        <Link to="/login">
-          <Button fullWidth>← Login</Button>
-        </Link>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <div style={{ textAlign: 'center' }}>
+                <img
+                  src={Hero}
+                  alt="Alumni Book Logo"
+                  style={{
+                    width: '800px',
+                    height: '500px',
+                  }}
+                />
+             
+      {/* <img
+          src={Hero}
+          alt="Alumni Book Logo"
+          style={{
+            width: '800px',
+            height: '500px',
+          }}
+        /> */}
+        <Typography variant="h1" component="h1" style={{ fontWeight: 'bold', fontSize: '2rem', color: '#333' }}>
+          Welcome to Alumni Book
+        </Typography>
+      </div>
+    </div>
+    <Grid container spacing={2}>
+        <Grid item xs={12} sm={6}>
+          <Link to="/login">
+            <Button fullWidth>← Login</Button>
+          </Link>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Link to="/signup">
+            <Button fullWidth>← Sign Up</Button>
+          </Link>
+        </Grid>
       </Grid>
-      <Grid item xs={12} sm={6}>
-        <Link to="/signup">
-          <Button fullWidth>← Go to Sign Up</Button>
-        </Link>
-      </Grid>
-    </Grid>
-   
           </Box>
           <Box component="footer" sx={{ py: 3 }}>
             <Typography level="body3" textAlign="center">
