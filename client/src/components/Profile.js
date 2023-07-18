@@ -108,6 +108,25 @@ const RetrievingUserInfo = () =>{
 }
 
 
+
+
+//***** useQuery Display friends associated with the user in session   ******/
+// getMe the friends part 
+//decunstruct only the friends from this function
+const RetrievingUserFriends = () =>{
+  
+  //make query call 
+  const { loading, data,error } = useQuery(GET_ME);
+  if (loading) return "Loading...";
+
+  if (error) return `Error! ${error.message}`;
+
+  return <Layout grid>{JSON.stringify(data)}</Layout>;
+
+  //need to destructure and then place onto UI layout page 
+
+}
+
 //***** Function that will be used when taking account of the useState of UI *******//
 //***** Making a mutation to the backend for a comment adding to the mutation ADD_POST posts ******//
 //will be used for the input field of the textbox
@@ -162,22 +181,11 @@ const CreatingAPost = () =>{
   );
 }
 
-//***** useQuery Display friends associated with the user in session   ******/
-// getMe the friends part 
-//decunstruct only the friends from this function
-const RetrievingUserFriends = () =>{
-  
-  //make query call 
-  const { loading, data,error } = useQuery(GET_ME);
-  if (loading) return "Loading...";
 
-  if (error) return `Error! ${error.message}`;
+//*****Add functionality for when user in sesh clicks on a friend within profile we can see the clicked users profile ********//
+//based on the friend id we will use that id so that we can use the Query GET_USER with the id of friends 
+//then this will use all the same components used for user but for the users friends 
 
-  return <Layout grid>{JSON.stringify(data)}</Layout>;
-
-  //need to destructure and then place onto UI layout page 
-
-}
 
 
 //create component for query to obtain firstname  from user in sesh
