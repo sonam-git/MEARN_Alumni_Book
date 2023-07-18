@@ -9,6 +9,9 @@ import { Container } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@mui/material/Button";
+import { useState } from "react";
+import { useQuery } from "@apollo/client";
+
 //Displaying user avatar //variable for uploaded file of user
 export function Profile() {
   return (
@@ -85,5 +88,23 @@ export function Profile() {
     </Sheet>
   );
 }
+//create component for query to obtain firstname  from user in sesh
+//component using react any type of hook in this case useQuery
+
+//const functionname = (params)=>{
+  //use query hook assiged to variable 
+  //console.log  variable to see the hook useQuery
+  //data we can do anything with it 
+  //err is for validation
+
+
+// use state for the editing of the text fields 
+
+//name initial state from signup information in session 
+//connects to the user profiles on dashboard when is updated
+
+//posts initial state no text 
+//updates when user edits and saves it 
+
 
 export default Profile;

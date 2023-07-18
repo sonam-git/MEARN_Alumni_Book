@@ -120,7 +120,6 @@ export const GET_ME = gql`
       lastname
       username
       email
-      image
       posts {
         _id
         postText
@@ -147,3 +146,4 @@ export const GET_ME = gql`
     }
   }
 `;
+// image not added to the database query 

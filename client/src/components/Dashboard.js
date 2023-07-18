@@ -42,14 +42,7 @@ import { Connect, Explore } from "../components";
 //Importing query for users
 import { useQuery, gql } from '@apollo/client';
 
-const GET_USERS = gql`
-  query GetUsers {
-    users {
-      firstname
-      lastname
-    }
-  }
-`;
+
 
 function ColorSchemeToggle() {
   const { mode, setMode } = useColorScheme();
@@ -114,11 +107,6 @@ const Dashboard = () => {
     setIsSheetOpen(false);
   };
 
-  const { loading, error, data } = useQuery(GET_USERS);
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :</p>;
-
-  console.log(data);
 
   return (
     <CssVarsProvider disableTransitionOnChange theme={filesTheme}>
