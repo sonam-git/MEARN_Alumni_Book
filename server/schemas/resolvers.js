@@ -1,5 +1,9 @@
 // import necessary packages
 const { AuthenticationError } = require("apollo-server-express");
+<<<<<<< HEAD
+=======
+const cloudinary = require('cloudinary').v2;
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
 const { User, Post } = require("../models");
 const { signToken } = require("../utils/auth");
 
@@ -8,11 +12,19 @@ const resolvers = {
   Query: {
     // returns all users, populating the posts field
     users: async () => {
+<<<<<<< HEAD
       return User.find().populate("posts").populate("friends");
     },
     // finds a single user by their username, populating the posts field.
     user: async (parent, { username }) => {
       return User.findOne({ username }).populate("posts").populate("friends");
+=======
+      return User.find().populate("posts").populate('friends');
+    },
+    // finds a single user by their username, populating the posts field.
+    user: async (parent, { username }) => {
+      return User.findOne({ username }).populate("posts").populate('friends');
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
     },
     // returns posts, either for a specific user
     posts: async (parent, { username }) => {
@@ -34,11 +46,21 @@ const resolvers = {
 
   /************************* MUTATIONS *************************/
   Mutation: {
+<<<<<<< HEAD
     // creates a new user with the provided information
     addUser: async (
       parent,
       { firstname, lastname, username, email, password }
     ) => {
+=======
+    
+    // creates a new user with the provided information
+    addUser: async (
+      parent,
+      { firstname, lastname, username, email, password}
+    ) => {
+      // Create the user with the provided information
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
       const user = await User.create({
         firstname,
         lastname,
@@ -46,7 +68,10 @@ const resolvers = {
         email,
         password,
       });
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
       // signs a token for authentication, and returns the token and user.
       const token = signToken(user);
       return { token, user };
@@ -55,6 +80,7 @@ const resolvers = {
     addFriend: async (_, { userId, friendId }) => {
       const user = await User.findById(userId);
       const friend = await User.findById(friendId);
+<<<<<<< HEAD
 
       if (!user || !friend) {
         throw new Error("User or friend not found");
@@ -66,6 +92,39 @@ const resolvers = {
       return user;
     },
 
+=======
+    
+      if (!user || !friend) {
+        throw new Error('User or friend not found');
+      }
+    
+      user.friends.addToSet(friendId);
+      await user.save();
+    
+      return user;
+    },
+    // remove Friends 
+    removeFriend: async (_, { friendId }, context) => {
+      // Check if the user is authenticated
+      if (!context.user) {
+        throw new AuthenticationError('You must be logged in to remove a friend');
+      }
+
+      try {
+        // Find the current user and remove the friend by their ID
+        const user = await User.findByIdAndUpdate(
+          context.user._id,
+          { $pull: { friends: friendId } },
+          { new: true }
+        );
+
+        return user;
+      } catch (error) {
+        throw new Error('Failed to remove friend');
+      }
+    },
+    
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
     //finds a user by their email
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
@@ -158,12 +217,17 @@ const resolvers = {
     // count the like for the post
     likePost: async (_, { postId }, { user }) => {
       if (!user) {
+<<<<<<< HEAD
         throw new Error("Not authenticated");
+=======
+        throw new Error('Not authenticated');
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
       }
 
       const post = await Post.findById(postId);
 
       if (!post) {
+<<<<<<< HEAD
         throw new Error("Post not found");
       }
 
@@ -175,6 +239,15 @@ const resolvers = {
         post.likes = post.likes.filter(
           (like) => like.username !== user.username
         );
+=======
+        throw new Error('Post not found');
+      }
+
+      const existingLike = post.likes.find((like) => like.username === user.username);
+
+      if (existingLike) {
+        post.likes = post.likes.filter((like) => like.username !== user.username);
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
       } else {
         post.likes.push({
           username: user.username,
@@ -187,10 +260,18 @@ const resolvers = {
       return post;
     },
   },
+<<<<<<< HEAD
+=======
+  
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
 };
 // export module
 module.exports = resolvers;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
 /* 
 
 {
@@ -209,4 +290,8 @@ module.exports = resolvers;
 }
 
 
+<<<<<<< HEAD
 */
+=======
+*/
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2

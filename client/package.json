@@ -17,11 +17,15 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
+<<<<<<< HEAD
+=======
+    "axios": "^1.4.0",
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
     "graphql": "^16.7.1",
     "jwt-decode": "^3.1.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.14.1",
+    "react-router-dom": "^6.14.2",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, {useState} from "react";
+=======
+import React from "react";
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
 import AspectRatio from '@mui/joy/AspectRatio';
 import Box from '@mui/joy/Box';
 import Card from '@mui/joy/Card';
@@ -12,7 +16,11 @@ import ViewCompactAltIcon from '@mui/icons-material/ViewCompactAlt';
 // Icons import
 import PersonIcon from '@mui/icons-material/Person';
 
+<<<<<<< HEAD
 export const Connect = () => {
+=======
+const Connect = () => {
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
     return(
         <div>
             <Typography 
