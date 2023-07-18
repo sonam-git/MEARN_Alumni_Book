@@ -11,6 +11,7 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@mui/material/Button";
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
+import { GET_ME } from '../utils/queries';
 
 //Displaying user avatar //variable for uploaded file of user
 export function Profile() {
@@ -87,6 +88,20 @@ export function Profile() {
       </Grid>
     </Sheet>
   );
+}
+
+//******Function that will be used when taking account of the useState of UI*******
+//**making the useQuery to the backend* */
+const RetrievingUserInfo = () =>{
+  // const [name, setName] = useState('');
+  //make query call 
+  const { loading, data,error } = useQuery(GET_ME);
+  if (loading) return "Loading...";
+
+  if (error) return `Error! ${error.message}`;
+
+  return <Layout grid>{JSON.stringify(data)}</Layout>;
+
 }
 //create component for query to obtain firstname  from user in sesh
 //component using react any type of hook in this case useQuery
