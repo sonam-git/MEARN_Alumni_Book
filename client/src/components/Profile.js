@@ -108,8 +108,8 @@ const RetrievingUserInfo = () =>{
 }
 
 
-//**Function that will be used when taking account of the useState of UI**//
-//**Making a mutation to the backend for a comment adding to the mutation ADD_POST  posts**//
+//***** Function that will be used when taking account of the useState of UI *******//
+//***** Making a mutation to the backend for a comment adding to the mutation ADD_POST posts ******//
 //will be used for the input field of the textbox
 const CreatingAPost = () =>{
   //inital state is no posts makes call getMe for posts to check if there are any posts for user
@@ -162,7 +162,22 @@ const CreatingAPost = () =>{
   );
 }
 
+//***** useQuery Display friends associated with the user in session   ******/
+// getMe the friends part 
+//decunstruct only the friends from this function
+const RetrievingUserFriends = () =>{
+  
+  //make query call 
+  const { loading, data,error } = useQuery(GET_ME);
+  if (loading) return "Loading...";
 
+  if (error) return `Error! ${error.message}`;
+
+  return <Layout grid>{JSON.stringify(data)}</Layout>;
+
+  //need to destructure and then place onto UI layout page 
+
+}
 
 
 //create component for query to obtain firstname  from user in sesh
