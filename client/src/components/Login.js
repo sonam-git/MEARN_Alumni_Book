@@ -8,6 +8,7 @@ import Checkbox from '@mui/joy/Checkbox';
 import FormControl from '@mui/joy/FormControl';
 import FormLabel, { formLabelClasses } from '@mui/joy/FormLabel';
 import IconButton from '@mui/joy/IconButton';
+import HomeIcon from '@mui/icons-material/Home';
 // import Link from '@mui/joy/Link';
 import Input from '@mui/joy/Input';
 import Typography from '@mui/joy/Typography';
@@ -21,6 +22,7 @@ import { useMutation } from '@apollo/client';
 import { LOGIN } from '../utils/mutations';
 import Auth from '../utils/auth';
 import { Link } from 'react-router-dom';
+import { Grid } from '@mui/material';
 
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
@@ -32,6 +34,9 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
     return <IconButton size="sm" variant="plain" color="neutral" disabled />;
   }
   return (
+    <div style={{ position: 'fixed', top: '100px', right: '10px' }}>
+    <Grid container spacing={1} alignItems="center">
+      <Grid item>
     <IconButton
       id="toggle-mode"
       size="sm"
@@ -40,16 +45,37 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
       aria-label="toggle light/dark mode"
       {...props}
       onClick={(event) => {
-        if (mode === 'light') {
-          setMode('dark');
+        if (mode === "light") {
+          setMode("dark");
         } else {
-          setMode('light');
+          setMode("light");
         }
         onClick?.(event);
       }}
     >
-      {mode === 'light' ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
+      {mode === "light" ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
     </IconButton>
+    </Grid>
+    <Grid item>
+    <Link to="/"><IconButton
+              size="sm"
+              variant="outlined"
+              color="primary"
+              component="a"
+              style={{
+                padding: '10px'
+              }}
+            >
+              <HomeIcon 
+              style={{
+                marginRight: '5px'
+              }}
+              />
+              Home
+            </IconButton></Link>
+    </Grid>
+    </Grid>
+    </div>
   );
 };
 
@@ -222,9 +248,9 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
                 checked={formState.persistent}
                 onChange={handleChange}
               />
-                <Link fontSize="sm" href="#replace-with-a-link" fontWeight="lg">
+                {/* <Link fontSize="sm" href="#replace-with-a-link" fontWeight="lg">
                   Forgot your password?
-                </Link>
+                </Link> */}
               </Box>
               {error ? (
           <div>

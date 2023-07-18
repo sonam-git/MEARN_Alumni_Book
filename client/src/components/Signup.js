@@ -7,7 +7,7 @@ import Button from "@mui/joy/Button";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel, { formLabelClasses } from "@mui/joy/FormLabel";
 import IconButton from "@mui/joy/IconButton";
-// import Link from "@mui/joy/Link";
+import HomeIcon from '@mui/icons-material/Home';
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
@@ -19,18 +19,24 @@ import { ADD_USER } from "../utils/mutations";
 import Auth from "../utils/auth";
 import { useMutation } from "@apollo/client";
 import { Link } from 'react-router-dom';
+import { Grid } from "@mui/material";
+
 
 // allows toggling between light and dark modes.
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
-  const [mounted, setMounted] = React.useState(false);
+  const [mounted, setMounted] = useState(false);
   React.useEffect(() => {
     setMounted(true);
   }, []);
   if (!mounted) {
-    return <IconButton size="sm" variant="plain" color="neutral" disabled />;
+    return <IconButton size="sm" variant="plain" color="neutral" disabled />
+    ;
   }
   return (
+    <div style={{ position: 'fixed', top: '100px', right: '10px' }}>
+    <Grid container spacing={1} alignItems="center">
+      <Grid item>
     <IconButton
       id="toggle-mode"
       size="sm"
@@ -49,6 +55,27 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
     >
       {mode === "light" ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
     </IconButton>
+    </Grid>
+    <Grid item>
+    <Link to="/"><IconButton
+              size="sm"
+              variant="outlined"
+              color="primary"
+              component="a"
+              style={{
+                padding: '10px'
+              }}
+            >
+              <HomeIcon 
+              style={{
+                marginRight: '5px'
+              }}
+              />
+              Home
+            </IconButton></Link>
+    </Grid>
+    </Grid>
+    </div>
   );
 };
 
@@ -64,7 +91,7 @@ export const Signup = () => {
   image: null, 
  });
   const [addUser] = useMutation(ADD_USER);
-
+  
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     const mutationResponse = await addUser({
@@ -176,26 +203,28 @@ export const Signup = () => {
               </Typography>
             </div>
             <form onSubmit={handleFormSubmit}>
-              <FormControl required>
-                <FormLabel>First Name</FormLabel>
-                <Input
-                  placeholder="First"
-                  name="firstname"
-                  type="firstname"
-                  id="firstname"
-                  onChange={handleChange}
-                />
-              </FormControl>
-              <FormControl required>
-                <FormLabel>Last Name</FormLabel>
-                <Input
-                  placeholder="Last"
-                  name="lastname"
-                  type="lastname"
-                  id="lastname"
-                  onChange={handleChange}
-                />
-              </FormControl>
+            <div style={{ display: 'flex', columnGap: 3}}>
+  <FormControl required >
+    <FormLabel>First Name</FormLabel>
+    <Input
+      placeholder="First"
+      name="firstname"
+      type="firstname"
+      id="firstname"
+      onChange={handleChange}
+    />
+  </FormControl>
+  <FormControl required>
+    <FormLabel>Last Name</FormLabel>
+    <Input
+      placeholder="Last"
+      name="lastname"
+      type="lastname"
+      id="lastname"
+      onChange={handleChange}
+    />
+  </FormControl>
+</div>
               <FormControl required>
                 <FormLabel>Username</FormLabel>
                 <Input
