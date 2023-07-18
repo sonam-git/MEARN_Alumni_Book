@@ -1,7 +1,10 @@
 // import required packages
 const express = require('express');
 const path = require('path');
+<<<<<<< HEAD
+=======
 require('dotenv').config();
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
 //import apollo server
 const { ApolloServer } = require('apollo-server-express');
 // import typeDefs and resolvers
@@ -11,12 +14,18 @@ const { authMiddleware } = require('./utils/auth');
 //db connection
 const db = require('./config/connection');
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
 // initialize app
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
 // create a new instance of ApolloServer,
 const server = new ApolloServer({
   typeDefs,

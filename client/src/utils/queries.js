@@ -120,7 +120,10 @@ export const GET_ME = gql`
       lastname
       username
       email
+<<<<<<< HEAD
+=======
       image
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
       posts {
         _id
         postText
@@ -147,3 +150,7 @@ export const GET_ME = gql`
     }
   }
 `;
+<<<<<<< HEAD
+// image not added to the database query 
+=======
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2

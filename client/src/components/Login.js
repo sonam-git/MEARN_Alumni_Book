@@ -8,8 +8,12 @@ import Checkbox from '@mui/joy/Checkbox';
 import FormControl from '@mui/joy/FormControl';
 import FormLabel, { formLabelClasses } from '@mui/joy/FormLabel';
 import IconButton from '@mui/joy/IconButton';
+<<<<<<< HEAD
+import Link from '@mui/joy/Link';
+=======
 import HomeIcon from '@mui/icons-material/Home';
 // import Link from '@mui/joy/Link';
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
 import Input from '@mui/joy/Input';
 import Typography from '@mui/joy/Typography';
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
@@ -17,12 +21,16 @@ import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import DarkModePicture from '../assets/images/darkmode-pic.webp';
 import LightModePicture from '../assets/images/lightmode-pic.jpg';
 import Logo from '../assets/images/AB_Logo.png';
+<<<<<<< HEAD
+import Signup from './Signup';
+=======
 import UserDashboard from '../pages/UserDashboard';
 import { useMutation } from '@apollo/client';
 import { LOGIN } from '../utils/mutations';
 import Auth from '../utils/auth';
 import { Link } from 'react-router-dom';
 import { Grid } from '@mui/material';
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
 
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
@@ -34,9 +42,12 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
     return <IconButton size="sm" variant="plain" color="neutral" disabled />;
   }
   return (
+<<<<<<< HEAD
+=======
     <div style={{ position: 'fixed', top: '100px', right: '10px' }}>
     <Grid container spacing={1} alignItems="center">
       <Grid item>
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
     <IconButton
       id="toggle-mode"
       size="sm"
@@ -45,14 +56,25 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
       aria-label="toggle light/dark mode"
       {...props}
       onClick={(event) => {
+<<<<<<< HEAD
+        if (mode === 'light') {
+          setMode('dark');
+        } else {
+          setMode('light');
+=======
         if (mode === "light") {
           setMode("dark");
         } else {
           setMode("light");
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
         }
         onClick?.(event);
       }}
     >
+<<<<<<< HEAD
+      {mode === 'light' ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
+    </IconButton>
+=======
       {mode === "light" ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
     </IconButton>
     </Grid>
@@ -76,10 +98,22 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
     </Grid>
     </Grid>
     </div>
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
   );
 };
 
  export const Login = () => {
+<<<<<<< HEAD
+    const [showSignup, setShowSignup] = useState(false)
+
+    const handleShowSignup = (event) => {
+        event.preventDefault();
+        setShowSignup(true);
+    }
+
+    if(showSignup){
+        return(<Signup/>)
+=======
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [formState, setFormState] = useState({
       email: '',
@@ -120,6 +154,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
     // if user is logged in the render dashboard 
     if (isLoggedIn) {
       return <UserDashboard />;
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
     }
 
   return (
@@ -207,12 +242,37 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
           >
             <div>
               <Typography component="h1" fontSize="xl2" fontWeight="lg">
+<<<<<<< HEAD
+                Sign In Here!
+=======
                 Log In Here!
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
               </Typography>
               <Typography level="body2" sx={{ my: 1, mb: 3 }}>
                 Welcome back User!
               </Typography>
             </div>
+<<<<<<< HEAD
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                const formElements = event.currentTarget.elements;
+                const data = {
+                  email: formElements.email.value,
+                  password: formElements.password.value,
+                  persistent: formElements.persistent.checked,
+                };
+                alert(JSON.stringify(data, null, 2));
+              }}
+            >
+              <FormControl required>
+                <FormLabel>Email</FormLabel>
+                <Input type="email" name="email" />
+              </FormControl>
+              <FormControl required>
+                <FormLabel>Password</FormLabel>
+                <Input type="password" name="password" />
+=======
             <form onSubmit={handleFormSubmit}>
               <FormControl required>
                 <FormLabel htmlFor="email">Email</FormLabel>
@@ -233,6 +293,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
                 id="pwd"
                 onChange={handleChange}
                 />
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
               </FormControl>
               <Box
                 sx={{
@@ -241,6 +302,27 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
                   alignItems: 'center',
                 }}
               >
+<<<<<<< HEAD
+                <Checkbox size="sm" label="Remember for 30 days" name="persistent" />
+                <Link fontSize="sm" href="#replace-with-a-link" fontWeight="lg">
+                  Forgot your password?
+                </Link>
+              </Box>
+              <Button type="submit" fullWidth>
+                Log In
+              </Button>
+              <Link fontSize="sm" href="#replace-with-a-link" fontWeight="lg"
+              onClick={handleShowSignup}
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginLeft: '45px',
+              }}
+              >
+                Don't Have An Account Yet? Click Here To Sign Up!
+              </Link>
+=======
               <Checkbox
                 size="sm"
                 label="Remember for 30 days"
@@ -261,6 +343,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
                 Log In
               </Button>
               <Link to="/signup"><Button fullWidth>← Go to Sign Up</Button></Link>
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
             </form>
           </Box>
           <Box component="footer" sx={{ py: 3 }}>
@@ -294,6 +377,10 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
           },
         })}
       />
+<<<<<<< HEAD
+      {showSignup && <Signup/>}
+=======
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
     </CssVarsProvider>
   );
 }
