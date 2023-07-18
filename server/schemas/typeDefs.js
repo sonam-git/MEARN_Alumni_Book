@@ -2,12 +2,14 @@
 const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
+scalar Upload
 type User {
   _id: ID!
   firstname: String!
   lastname: String!
   username: String!
   email: String!
+  image: String
   posts: [Post]
   friends: [User]
 }
@@ -54,6 +56,7 @@ type Query {
     removePost(postId: ID!): Post
     removeComment(postId: ID!, commentId: ID!): Post
     likePost(postId: ID!): Post!
+    uploadImage(filename:String!): String!
   }
 `;
 

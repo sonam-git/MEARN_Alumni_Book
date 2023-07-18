@@ -1,6 +1,7 @@
 // import required packages
 const express = require('express');
 const path = require('path');
+require('dotenv').config();
 //import apollo server
 const { ApolloServer } = require('apollo-server-express');
 // import typeDefs and resolvers
@@ -10,9 +11,11 @@ const { authMiddleware } = require('./utils/auth');
 //db connection
 const db = require('./config/connection');
 
+
 // initialize app
 const app = express();
 const PORT = process.env.PORT || 3001;
+
 
 // create a new instance of ApolloServer,
 const server = new ApolloServer({

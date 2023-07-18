@@ -1,5 +1,6 @@
 // import necessary packages
 const { AuthenticationError } = require("apollo-server-express");
+const cloudinary = require('cloudinary').v2;
 const { User, Post } = require("../models");
 const { signToken } = require("../utils/auth");
 
@@ -24,7 +25,7 @@ const resolvers = {
       return Post.findOne({ _id: postId });
     },
     //returns the logged-in user if authenticated,
-    me: async (parent, context) => {
+    me: async (parent, _args, context) => {
       if (context.user) {
         return User.findOne({ _id: context.user._id }).populate("posts");
       }
@@ -37,14 +38,31 @@ const resolvers = {
     // creates a new user with the provided information
     addUser: async (
       parent,
-      { firstname, lastname, username, email, password}
+      { firstname, lastname, username, email, password, image}
     ) => {
+   // Upload the image to Cloudinary
+   const { createReadStream } = await image;
+   const stream = createReadStream();
+
+   const result = await new Promise((resolve, reject) => {
+     const cloudinaryStream = cloudinary.uploader.upload_stream(
+       { folder: 'user-profile-images' },
+       (error, result) => {
+         if (error) reject(error);
+         resolve(result);
+       }
+     );
+
+     stream.pipe(cloudinaryStream);
+   });
+      // Create the user with the provided information
       const user = await User.create({
         firstname,
         lastname,
         username,
         email,
-        password
+        password,
+        image: result.secure_url, // Save the secure URL of the uploaded image in the user document
       });
 
       // signs a token for authentication, and returns the token and user.
