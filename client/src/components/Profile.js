@@ -112,7 +112,54 @@ const RetrievingUserInfo = () =>{
 //**Making a mutation to the backend for a comment adding to the mutation ADD_POST  posts**//
 //will be used for the input field of the textbox
 const CreatingAPost = () =>{
+  //inital state is no posts makes call getMe for posts to check if there are any posts for user
   const [name, setName] = useState('');
+   const [addPost, { error }] = useMutation(ADD_POST);  
+   const handleFormSubmit = async (event) => {
+    event.preventDefault();
+
+    // Since mutation function is async, wrap in a `try...catch` to catch any network errors from throwing due to a failed request.
+    try {
+      // Execute mutation and pass in defined parameter data as variables
+      const { data } = await addPost({
+        variables: { postText, postAuthor, createdAt, comments, likes },
+      });
+//for updating the query of getme ask if itsw necessary to do this 
+      window.location.reload();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  return (
+    //for the text box for the post 
+    <div>
+      <h3>Add yourself to the list...</h3>
+      <form
+        className="flex-row justify-center justify-space-between-md align-center"
+        onSubmit={handleFormSubmit}
+      >
+        <div className="col-12 col-lg-9">
+          <input
+            placeholder="Add your profile name..."
+            value={name}
+            className="form-input w-100"
+            onChange={(event) => setName(event.target.value)}
+          />
+        </div>
+
+        <div className="col-12 col-lg-3">
+          <button className="btn btn-info btn-block py-3" type="submit">
+            Add Profile
+          </button>
+        </div>
+        {error && (
+          <div className="col-12 my-3 bg-danger text-white p-3">
+            Something went wrong...
+          </div>
+        )}
+      </form>
+    </div>
+  );
 }
 
 
