@@ -35,26 +35,12 @@ const resolvers = {
 
   /************************* MUTATIONS *************************/
   Mutation: {
+    
     // creates a new user with the provided information
     addUser: async (
       parent,
-      { firstname, lastname, username, email, password, image}
+      { firstname, lastname, username, email, password}
     ) => {
-   // Upload the image to Cloudinary
-   const { createReadStream } = await image;
-   const stream = createReadStream();
-
-   const result = await new Promise((resolve, reject) => {
-     const cloudinaryStream = cloudinary.uploader.upload_stream(
-       { folder: 'user-profile-images' },
-       (error, result) => {
-         if (error) reject(error);
-         resolve(result);
-       }
-     );
-
-     stream.pipe(cloudinaryStream);
-   });
       // Create the user with the provided information
       const user = await User.create({
         firstname,
@@ -62,9 +48,7 @@ const resolvers = {
         username,
         email,
         password,
-        image: result.secure_url, // Save the secure URL of the uploaded image in the user document
       });
-
       // signs a token for authentication, and returns the token and user.
       const token = signToken(user);
       return { token, user };

@@ -7,7 +7,7 @@ import Button from "@mui/joy/Button";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel, { formLabelClasses } from "@mui/joy/FormLabel";
 import IconButton from "@mui/joy/IconButton";
-import Link from "@mui/joy/Link";
+// import Link from "@mui/joy/Link";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
@@ -15,10 +15,10 @@ import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
 import DarkModePicture from "../assets/images/darkmode-pic.webp";
 import LightModePicture from "../assets/images/lightmode-pic.jpg";
 import Logo from "../assets/images/AB_Logo.png";
-import Login from "./Login";
 import { ADD_USER } from "../utils/mutations";
 import Auth from "../utils/auth";
 import { useMutation } from "@apollo/client";
+import { Link } from 'react-router-dom';
 
 // allows toggling between light and dark modes.
 const ColorSchemeToggle = ({ onClick, ...props }) => {
@@ -55,7 +55,6 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
 // sign up functional component
 export const Signup = () => {
   //  state variable
-  const [showLogin, setShowLogin] = useState(false);
   const [formState, setFormState] = useState({
   firstname: '',
   lastname: '',
@@ -75,6 +74,7 @@ export const Signup = () => {
         username: formState.username,
         email: formState.email,
         password: formState.password,
+        image: formState.image,
       },
     });
     const token = mutationResponse.data.addUser.token;
@@ -88,16 +88,6 @@ export const Signup = () => {
       [name]: value,
     });
   };
-
-  // to control whether to show the login component or not
-  const handleShowLogin = (event) => {
-    event.preventDefault();
-    setShowLogin(true);
-  };
-  // returns login component
-  if (showLogin) {
-    return <Login />;
-  }
 
   // return signup component
   return (
@@ -236,7 +226,7 @@ export const Signup = () => {
                   onChange={handleChange}
                 />
               </FormControl>
-              <FormControl>
+              {/* <FormControl>
                 <FormLabel>Upload Image</FormLabel>
                 <Input
                   type="file"
@@ -255,7 +245,7 @@ export const Signup = () => {
                     }));
                   }}
                 />
-              </FormControl>
+              </FormControl> */}
               <Box
                 sx={{
                   display: "flex",
@@ -263,24 +253,11 @@ export const Signup = () => {
                   alignItems: "center",
                 }}
               >
-                <Link
-                  fontSize="sm"
-                  href="#replace-with-a-link"
-                  fontWeight="lg"
-                  onClick={handleShowLogin}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginLeft: "45px",
-                  }}
-                >
-                  Already Have An Account? Click Here To Log In!
-                </Link>
               </Box>
               <Button type="submit" fullWidth>
                 Sign Up
               </Button>
+              <Link to="/login"><Button fullWidth>← Go to Login</Button></Link>
             </form>
           </Box>
           <Box component="footer" sx={{ py: 3 }}>
@@ -312,7 +289,6 @@ export const Signup = () => {
           },
         })}
       />
-      {showLogin && <Login />}
     </CssVarsProvider>
   );
 };

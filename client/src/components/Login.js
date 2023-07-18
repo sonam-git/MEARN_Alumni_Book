@@ -8,7 +8,7 @@ import Checkbox from '@mui/joy/Checkbox';
 import FormControl from '@mui/joy/FormControl';
 import FormLabel, { formLabelClasses } from '@mui/joy/FormLabel';
 import IconButton from '@mui/joy/IconButton';
-import Link from '@mui/joy/Link';
+// import Link from '@mui/joy/Link';
 import Input from '@mui/joy/Input';
 import Typography from '@mui/joy/Typography';
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
@@ -16,11 +16,11 @@ import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import DarkModePicture from '../assets/images/darkmode-pic.webp';
 import LightModePicture from '../assets/images/lightmode-pic.jpg';
 import Logo from '../assets/images/AB_Logo.png';
-import Signup from './Signup';
-import Dashboard from './Dashboard';
+import UserDashboard from '../pages/UserDashboard';
 import { useMutation } from '@apollo/client';
 import { LOGIN } from '../utils/mutations';
 import Auth from '../utils/auth';
+import { Link } from 'react-router-dom';
 
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
@@ -54,7 +54,6 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
 };
 
  export const Login = () => {
-    const [showSignup, setShowSignup] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [formState, setFormState] = useState({
       email: '',
@@ -92,18 +91,9 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
       });
     };
 
-   
-    const handleShowSignup = (event) => {
-        event.preventDefault();
-        setShowSignup(true);
-    }
-// if showSignup then render signup
-    if(showSignup){
-        return(<Signup/>)
-    }
     // if user is logged in the render dashboard 
     if (isLoggedIn) {
-      return <Dashboard />;
+      return <UserDashboard />;
     }
 
   return (
@@ -244,17 +234,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
               <Button type="submit" fullWidth>
                 Log In
               </Button>
-              <Link fontSize="sm" href="#replace-with-a-link" fontWeight="lg"
-              onClick={handleShowSignup}
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginLeft: '45px',
-              }}
-              >
-                Don't Have An Account Yet? Click Here To Sign Up!
-              </Link>
+              <Link to="/signup"><Button fullWidth>← Go to Sign Up</Button></Link>
             </form>
           </Box>
           <Box component="footer" sx={{ py: 3 }}>
@@ -288,7 +268,6 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
           },
         })}
       />
-      {showSignup && <Signup/>}
     </CssVarsProvider>
   );
 }
