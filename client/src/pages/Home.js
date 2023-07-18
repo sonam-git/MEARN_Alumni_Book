@@ -1,21 +1,21 @@
-import React from 'react';
-import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
-import GlobalStyles from '@mui/joy/GlobalStyles';
-import CssBaseline from '@mui/joy/CssBaseline';
-import Box from '@mui/joy/Box';
-import Button from '@mui/joy/Button';
-import IconButton from '@mui/joy/IconButton';
-import { formLabelClasses } from '@mui/joy/FormLabel';
-import Typography from '@mui/joy/Typography';
-import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
-import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
-import DarkModePicture from '../assets/images/darkmode-pic.webp';
-import LightModePicture from '../assets/images/lightmode-pic.jpg';
+import React from "react";
+import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
+import GlobalStyles from "@mui/joy/GlobalStyles";
+import CssBaseline from "@mui/joy/CssBaseline";
+import Box from "@mui/joy/Box";
+import Button from "@mui/joy/Button";
+import IconButton from "@mui/joy/IconButton";
+import { formLabelClasses } from "@mui/joy/FormLabel";
+import Typography from "@mui/joy/Typography";
+import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
+import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
+import DarkModePicture from "../assets/images/darkmode-pic.webp";
+import LightModePicture from "../assets/images/lightmode-pic.jpg";
 // import Logo from '../assets/images/AB_Logo.png';
-import { Link } from 'react-router-dom';
-import { Grid } from '@material-ui/core';
-import Hero from '../assets/images/AB_Logo2.png';
-// import HeroDark from '../assets/images/AB_Dark_logo.png'
+import { Link } from "react-router-dom";
+import { Grid } from "@material-ui/core";
+import Hero from "../assets/images/AB_Logo2.png";
+import HeroDark from "../assets/images/AB_Dark_logo.png";
 
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
@@ -35,64 +35,58 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
       aria-label="toggle light/dark mode"
       {...props}
       onClick={(event) => {
-        if (mode === 'light') {
-          setMode('dark');
+        if (mode === "light") {
+          setMode("dark");
         } else {
-          setMode('light');
+          setMode("light");
         }
         onClick?.(event);
       }}
     >
-      {mode === 'light' ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
+      {mode === "light" ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
     </IconButton>
-    
   );
-  
 };
 
- export const Home = () => {
-  
+export const Home = () => {
   return (
-    <CssVarsProvider
-      defaultMode="dark"
-      disableTransitionOnChange
-    >
+    <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
       <CssBaseline />
       <GlobalStyles
         styles={{
-          ':root': {
-            '--Collapsed-breakpoint': '1000px', // form will stretch when viewport is below `769px`
-            '--Cover-width': '40vw', // must be `vw` only
-            '--Form-maxWidth': '1150px',
-            '--Transition-duration': '0.4s', // set to `none` to disable transition
+          ":root": {
+            "--Collapsed-breakpoint": "1000px", // form will stretch when viewport is below `769px`
+            "--Cover-width": "40vw", // must be `vw` only
+            "--Form-maxWidth": "1150px",
+            "--Transition-duration": "0.4s", // set to `none` to disable transition
           },
         }}
       />
       <Box
         sx={(theme) => ({
           width:
-            'clamp(100vw - var(--Cover-width), (var(--Collapsed-breakpoint) - 100vw) * 999, 100vw)',
-          transition: 'width var(--Transition-duration)',
-          transitionDelay: 'calc(var(--Transition-duration) + 0.1s)',
-          position: 'relative',
+            "clamp(100vw - var(--Cover-width), (var(--Collapsed-breakpoint) - 100vw) * 999, 100vw)",
+          transition: "width var(--Transition-duration)",
+          transitionDelay: "calc(var(--Transition-duration) + 0.1s)",
+          position: "relative",
           zIndex: 1,
-          display: 'flex',
-          justifyContent: 'flex-end',
-          backdropFilter: 'blur(4px)',
-          backgroundColor: 'rgba(255 255 255 / 0.6)',
-          [theme.getColorSchemeSelector('dark')]: {
-            backgroundColor: 'rgba(19 19 24 / 0.4)',
+          display: "flex",
+          justifyContent: "flex-end",
+          backdropFilter: "blur(4px)",
+          backgroundColor: "rgba(255 255 255 / 0.6)",
+          [theme.getColorSchemeSelector("dark")]: {
+            backgroundColor: "rgba(19 19 24 / 0.4)",
           },
         })}
       >
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            minHeight: '100dvh',
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "100dvh",
             width:
-              'clamp(var(--Form-maxWidth), (var(--Collapsed-breakpoint) - 100vw) * 999, 100%)',
-            maxWidth: '100%',
+              "clamp(var(--Form-maxWidth), (var(--Collapsed-breakpoint) - 100vw) * 999, 100%)",
+            maxWidth: "100%",
             px: 2,
           }}
         >
@@ -100,15 +94,14 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
             component="header"
             sx={{
               py: 3,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
-         
-               {/* Logo */}
-          {/* <img src={Logo} alt="Logo" width={250} height={150} /> */}
-          <Typography component="h1" fontWeight="xl">
+            {/* Logo */}
+            {/* <img src={Logo} alt="Logo" width={250} height={150} /> */}
+            <Typography component="h1" fontWeight="xl" fontFamily="fantasy" >
               Alumni Book
             </Typography>
             <ColorSchemeToggle />
@@ -116,62 +109,55 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
           <Box
             component="main"
             sx={{
-              my: 'auto',
+              my: "auto",
               py: 2,
               pb: 5,
-              display: 'flex',
-              flexDirection: 'column',
+              display: "flex",
+              flexDirection: "column",
               gap: 2,
               width: 400,
-              maxWidth: '100%',
-              mx: 'auto',
-              borderRadius: 'sm',
-              '& form': {
-                display: 'flex',
-                flexDirection: 'column',
+              maxWidth: "100%",
+              mx: "auto",
+              borderRadius: "sm",
+              "& form": {
+                display: "flex",
+                flexDirection: "column",
                 gap: 2,
               },
               [`& .${formLabelClasses.asterisk}`]: {
-                visibility: 'hidden',
+                visibility: "hidden",
               },
             }}
           >
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <div style={{ textAlign: 'center' }}>
-                <img
-                  src={Hero}
-                  alt="Alumni Book Logo"
+            {/* Hero image display */}
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <div style={{ textAlign: "center" }}>
+                <HeroImage />
+                <Typography
+                  variant="h1"
+                  component="h1"
                   style={{
-                    width: '800px',
-                    height: '500px',
+                    fontWeight: "bold",
+                    fontSize: "2rem",
+                    color: "#333",
                   }}
-                />
-             
-      {/* <img
-          src={Hero}
-          alt="Alumni Book Logo"
-          style={{
-            width: '800px',
-            height: '500px',
-          }}
-        /> */}
-        <Typography variant="h1" component="h1" style={{ fontWeight: 'bold', fontSize: '2rem', color: '#333' }}>
-          Welcome to Alumni Book
-        </Typography>
-      </div>
-    </div>
-    <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
-          <Link to="/login">
-            <Button fullWidth>← Login</Button>
-          </Link>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Link to="/signup">
-            <Button fullWidth>← Sign Up</Button>
-          </Link>
-        </Grid>
-      </Grid>
+                >
+                  Welcome to Alumni Book
+                </Typography>
+              </div>
+            </div>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <Link to="/login">
+                  <Button fullWidth>← Login</Button>
+                </Link>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Link to="/signup">
+                  <Button fullWidth>← Sign Up</Button>
+                </Link>
+              </Grid>
+            </Grid>
           </Box>
           <Box component="footer" sx={{ py: 3 }}>
             <Typography level="body3" textAlign="center">
@@ -182,30 +168,57 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
       </Box>
       <Box
         sx={(theme) => ({
-          height: '100%',
-          position: 'fixed',
+          height: "100%",
+          position: "fixed",
           right: 0,
           top: 0,
           bottom: 0,
-           // Set the left value to "unset"
-          left: 'clamp(0px, (100vw - var(--Collapsed-breakpoint)) * 999, 100vw - var(--Cover-width))',
+          // Set the left value to "unset"
+          left: "clamp(0px, (100vw - var(--Collapsed-breakpoint)) * 999, 100vw - var(--Cover-width))",
           transition:
-            'background-image var(--Transition-duration), right var(--Transition-duration) !important',
-          transitionDelay: 'calc(var(--Transition-duration) + 0.1s)',
-          backgroundColor: 'background.level1',
-          backgroundSize: 'cover',
-          backgroundPosition: 'right center', // Update the background position
-          backgroundRepeat: 'no-repeat',
-          backgroundImage:
-          `url(${LightModePicture})`,
-          [theme.getColorSchemeSelector('dark')]: {
-            backgroundImage:
-            `url(${DarkModePicture})`,
+            "background-image var(--Transition-duration), right var(--Transition-duration) !important",
+          transitionDelay: "calc(var(--Transition-duration) + 0.1s)",
+          backgroundColor: "background.level1",
+          backgroundSize: "cover",
+          backgroundPosition: "right center", // Update the background position
+          backgroundRepeat: "no-repeat",
+          backgroundImage: `url(${LightModePicture})`,
+          [theme.getColorSchemeSelector("dark")]: {
+            backgroundImage: `url(${DarkModePicture})`,
           },
         })}
       />
     </CssVarsProvider>
   );
-}
+};
+
+// Function to Display Hero image/ Logo depending on the light or dark mode
+const HeroImage = () => {
+  const { mode } = useColorScheme();
+
+  return (
+    <>
+      {mode === "light" ? (
+        <img
+          src={HeroDark}
+          alt="Alumni Book Logo"
+          style={{
+            width: "800px",
+            height: "500px",
+          }}
+        />
+      ) : (
+        <img
+          src={Hero}
+          alt="Alumni Book Logo"
+          style={{
+            width: "800px",
+            height: "500px",
+          }}
+        />
+      )}
+    </>
+  );
+};
 
 export default Home;
