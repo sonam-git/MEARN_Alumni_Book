@@ -20,12 +20,7 @@ import Auth from "../utils/auth";
 import { useMutation } from "@apollo/client";
 import { Link } from 'react-router-dom';
 import { Grid } from "@mui/material";
-<<<<<<< HEAD
-=======
 
-
-
->>>>>>> 6af3e4a (update UI)
 // allows toggling between light and dark modes.
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
@@ -71,7 +66,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
                 padding: '10px'
               }}
             >
-              <HomeIcon
+              <HomeIcon 
               style={{
                 marginRight: '5px'
               }}
@@ -82,6 +77,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
     </div>
   );
 };
+
 // sign up functional component
 export const Signup = () => {
   //  state variable
@@ -91,13 +87,30 @@ export const Signup = () => {
   username: '',
   email: '',
   password: '',
-  image: null,
+  image: null, 
  });
-  const [addUser] = useMutation(ADD_USER);
-<<<<<<< HEAD
-=======
 
->>>>>>> 6af3e4a (update UI)
+  const [addUser, {error, data}] = useMutation(ADD_USER);
+  
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const { data } = await addUser({
+        variables: {...formState},
+      });
+
+      const token = data.addUser.token;
+      Auth.login(token);
+    } catch (error) {
+      console.log(error);
+    }
+   
+  };
+
+=======
+  const [addUser] = useMutation(ADD_USER);
+
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -113,11 +126,7 @@ export const Signup = () => {
     });
     const token = mutationResponse.data.addUser.token;
     Auth.login(token);
-<<<<<<< HEAD
-  };
-=======
 
-  
     // Reset the form
     setFormState({
       firstname: '',
@@ -132,7 +141,7 @@ export const Signup = () => {
   }
 };
 
->>>>>>> 6af3e4a (update UI)
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormState({
@@ -140,18 +149,18 @@ export const Signup = () => {
       [name]: value,
     });
   };
+
   // return signup component
   return (
-  
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
       <CssBaseline />
       <GlobalStyles
         styles={{
           ":root": {
-            "--Collapsed-breakpoint": "1000px", // form will stretch when viewport is below 769px
-            "--Cover-width": "40vw", // must be vw only
+            "--Collapsed-breakpoint": "1000px", // form will stretch when viewport is below `769px`
+            "--Cover-width": "40vw", // must be `vw` only
             "--Form-maxWidth": "1150px",
-            "--Transition-duration": "0.4s", // set to none to disable transition
+            "--Transition-duration": "0.4s", // set to `none` to disable transition
           },
         }}
       />
@@ -214,7 +223,7 @@ export const Signup = () => {
                 flexDirection: "column",
                 gap: 2,
               },
-              '& .${formLabelClasses.asterisk}': {
+              [`& .${formLabelClasses.asterisk}`]: {
                 visibility: "hidden",
               },
             }}
@@ -227,6 +236,89 @@ export const Signup = () => {
                 Welcome New User!
               </Typography>
             </div>
+
+
+            {/* Signup Form */}
+            { data ? (
+              <p>
+              Sign Up Success!
+              </p>
+            ) : (
+              <form onSubmit={handleFormSubmit}>
+              <div style={{ display: 'flex', columnGap: 3}}>
+                  <FormControl required >
+                    <FormLabel>First Name</FormLabel>
+                    <Input
+                      placeholder="First"
+                      name="firstname"
+                      type="firstname"
+                      id="firstname"
+                      onChange={handleChange}
+                    />
+                  </FormControl>
+                  <FormControl required>
+                    <FormLabel>Last Name</FormLabel>
+                    <Input
+                      placeholder="Last"
+                      name="lastname"
+                      type="lastname"
+                      id="lastname"
+                      onChange={handleChange}
+                    />
+                  </FormControl>
+                </div>
+                <FormControl required>
+                  <FormLabel>Username</FormLabel>
+                  <Input
+                    placeholder="Username"
+                    name="username"
+                    type="username"
+                    id="username"
+                    onChange={handleChange}
+                  />
+                </FormControl>
+                <FormControl required>
+                  <FormLabel>Email</FormLabel>
+                  <Input
+                    placeholder="Email"
+                    name="email"
+                    type="email"
+                    id="email"
+                    onChange={handleChange}
+                  />
+                </FormControl>
+                <FormControl required>
+                  <FormLabel>Password</FormLabel>
+                  <Input
+                    placeholder="Password"
+                    name="password"
+                    type="password"
+                    id="fpassword"
+                    onChange={handleChange}
+                  />
+                </FormControl>
+                {/* <FormControl>
+                  <FormLabel>Upload Image</FormLabel>
+                  <Input
+                    type="file"
+                    name="image"
+                    accept="image/*"
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}
+                    onChange={(event) => {
+                      const file = event.target.files[0];
+                      setFormState((prevState) => ({
+                        ...prevState,
+                        image: file,
+                      }));
+                    }}
+                  />
+                </FormControl> */}
+                <Box
+
             <form onSubmit={handleFormSubmit}>
             <div style={{ display: 'flex', columnGap: 3}}>
   <FormControl required >
@@ -287,32 +379,25 @@ export const Signup = () => {
                   name="image"
                   accept="image/*"
                   sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
                   }}
-                  onChange={(event) => {
-                    const file = event.target.files[0];
-                    setFormState((prevState) => ({
-                      ...prevState,
-                      image: file,
-                    }));
-                  }}
-                />
-              </FormControl> */}
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-              </Box>
-              <Button type="submit" fullWidth>
-                Sign Up
-              </Button>
-              <Link to="/login"><Button fullWidth>← Go to Login</Button></Link>
-            </form>
+                >
+                </Box>
+                <Button type="submit" fullWidth>
+                  Sign Up
+                </Button>
+                <Link to="/login"><Button fullWidth>← Go to Login</Button></Link>
+              </form>
+            )}
+
+            {error && (
+              <div className="my-3 p-3 bg-danger text-white">
+                {'Username/Email Already Taken. Please Try Again!'}
+              </div>
+            )}
+
           </Box>
           <Box component="footer" sx={{ py: 3 }}>
             <Typography level="body3" textAlign="center">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -28,6 +28,7 @@ import { LOGIN } from "../utils/mutations";
 import Auth from "../utils/auth";
 import { Link } from "react-router-dom";
 import { Grid } from "@mui/material";
+import Signup from "./Signup";
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = React.useState(false);
@@ -88,6 +89,54 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
     </div>
   );
 };
+export const Login = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [formState, setFormState] = useState({
+    email: "",
+    password: "",
+    persistent: false,
+  });
+
+  const [login, { error, data }] = useMutation(LOGIN);
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const mutationResponse = await login({
+        variables: { 
+          email: formState.email, 
+          password: formState.password , 
+          persistent: formState.persistent},
+      });
+      const token = mutationResponse.data.login.token;
+      Auth.login(token);
+      setIsLoggedIn(true);
+    } catch (error) {
+      console.log(error);
+       // Reset the form
+       setFormState({
+        email: '',
+        password: '',
+        persistent: true,
+      });
+    }
+    
+  };
+
+  const handleChange = (event) => {
+    const { name, value, checked, type } = event.target;
+    const inputValue = type === "checkbox" ? checked : value;
+    setFormState({
+      ...formState,
+      [name]: inputValue,
+    });
+  };
+  
+  // if user is logged in the render dashboard
+  if (isLoggedIn) {
+    return <UserDashboard />;
+  }
+
 
  export const Login = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -131,6 +180,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
     if (isLoggedIn) {
       return <UserDashboard />;
     }
+
 
   return (
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
@@ -219,7 +269,10 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
                 Welcome back User!
               </Typography>
             </div>
-            <form onSubmit={handleFormSubmit}>
+            { data ? (
+              <p>Login Success! </p>
+            ) : (
+              <form onSubmit={handleFormSubmit}>
               <FormControl required>
                 <FormLabel htmlFor="email">Email</FormLabel>
                 <Input
@@ -227,6 +280,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
                   name="email"
                   type="email"
                   id="email"
+                  value={formState.email}
                   onChange={handleChange}
                 />
               </FormControl>
@@ -237,6 +291,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
                   name="password"
                   type="password"
                   id="pwd"
+                  value={formState.password}
                   onChange={handleChange}
                 />
               </FormControl>
@@ -258,13 +313,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
                   Forgot your password?
                 </Link> */}
               </Box>
-              {error ? (
-                <div>
-                  <p className="error-text">
-                    The provided credentials are incorrect
-                  </p>
-                </div>
-              ) : null}
+
               <Button type="submit" fullWidth>
                 Log In
               </Button>
@@ -272,6 +321,15 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
                 <Button fullWidth>← Go to Sign Up</Button>
               </Link>
             </form>
+            )}
+
+            {error ? (
+                <div>
+                  <p className="error-text">
+                    The provided credentials are incorrect
+                  </p>
+                </div>
+              ) : null}
           </Box>
           <Box component="footer" sx={{ py: 3 }}>
             <Typography level="body3" textAlign="center">

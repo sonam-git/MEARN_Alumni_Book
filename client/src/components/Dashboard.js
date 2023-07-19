@@ -38,6 +38,7 @@ import Menu from '../containers/Menu';
 import Layout from '../containers/Layout';
 import Connect from './Connect';
 import Explore from './Explore';
+import Auth from '../utils/auth'
 
 function ColorSchemeToggle() {
   const { mode, setMode } = useColorScheme();
@@ -69,11 +70,9 @@ function ColorSchemeToggle() {
 
 const Dashboard = () => {
 
-<<<<<<< HEAD
 
   const [showLogin, setShowLogin] = useState(false);
-=======
->>>>>>> 6af3e4a (update UI)
+
 
 
   const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -85,7 +84,15 @@ const Dashboard = () => {
 
   const [selectedItem, setSelectedItem] = useState('explore');
 
-  
+
+  const handleLogout = (event) => {
+    event.preventDefault();
+    Auth.logout();
+  }
+
+  const handleShowLogin = () => {
+    setShowLogin(true);
+  };
 
   const handleItemClick = (item) => {
     setSelectedItem(item);
@@ -244,6 +251,7 @@ const Dashboard = () => {
               style={{
                 padding: '10px'
               }}
+              onClick={handleLogout}
             >
               <LogoutIcon
               style={{
@@ -427,7 +435,6 @@ const Dashboard = () => {
             </Box>
           </Sheet>
         )}
-
       
         
         {/* Main Page */}
@@ -436,8 +443,8 @@ const Dashboard = () => {
         {showConnect && <Connect/>}
         {showExplore && <Explore/>}
         </Layout.Main>
+
         {/* Right Side Profile View */}
-         
         {isSheetOpen &&  ( 
         <Sheet
           sx={{
