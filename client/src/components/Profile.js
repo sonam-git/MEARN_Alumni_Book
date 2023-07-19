@@ -7,7 +7,7 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/joy/Typography";
 import { Container } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import ButtonGroup from "@mui/material/ButtonGroup";
+// import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@mui/material/Button";
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
@@ -25,7 +25,7 @@ import { ADD_POST } from "../utils/mutations";
 export function Profile() {
   const { loading, data, error } = useQuery(GET_ME);
   const [name, setName] = useState("");
-  const [addPost, { error }] = useMutation(ADD_POST);
+  const [addPost, { error:addPostError }] = useMutation(ADD_POST);
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -34,8 +34,9 @@ export function Profile() {
     try {
       // Execute mutation and pass in defined parameter data as variables
       const { data } = await addPost({
-        variables: { postText, postAuthor, createdAt, comments, likes },
-      });
+        variables: { postText},
+      }); 
+      //postAuthor, createdAt, comments, likes 
       //for updating the query of getme ask if itsw necessary to do this
       window.location.reload();
     } catch (err) {
