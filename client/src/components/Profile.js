@@ -42,7 +42,8 @@ export function Profile() {
     friendsDisplay = <h1>No Friends at the moment</h1>;
   }
   
-  //
+  //useMutation for hook mutation 
+  
   return (
     <Sheet>
       <Grid container spacing={2}>
