@@ -16,6 +16,12 @@ import { GET_ME } from '../utils/queries';
 
 //Displaying user avatar //variable for uploaded file of user
 export function Profile() {
+  const { loading, data, error } = useQuery(GET_ME);
+  if (loading) return "Loading...";
+
+  if (error) return `Error! ${error.message}`;
+  console.log(data);
+  //use data as props 
   return (
     <Sheet>
       <Grid container spacing={2}>
@@ -108,7 +114,7 @@ const RetrievingUserInfo = () =>{
 }
 
 
-
+//getUser query 
 
 //***** useQuery Display friends associated with the user in session   ******/
 // getMe the friends part 
