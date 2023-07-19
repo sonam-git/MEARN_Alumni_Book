@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef } from 'react';
-import JoyMenu, { MenuActions } from '@mui/joy/Menu';
+import JoyMenu from '@mui/joy/Menu';
 
 
 import MenuItem from '@mui/joy/MenuItem';

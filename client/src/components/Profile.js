@@ -7,13 +7,13 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/joy/Typography";
 import { Container } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import ButtonGroup from "@mui/material/ButtonGroup";
-import Button from "@mui/material/Button";
-import { useState } from "react";
-import { useQuery } from "@apollo/client";
-import {useMutation} from "@apollo/client";
-import { GET_ME } from '../utils/queries';
-import { ADD_POST } from "../utils/mutations";
+// import ButtonGroup from "@mui/material/ButtonGroup";
+// import Button from "@mui/material/Button";
+// import { useState } from "react";
+// import { useQuery } from "@apollo/client";
+// import {useMutation} from "@apollo/client";
+// import { GET_ME } from '../utils/queries';
+// import { ADD_POST } from "../utils/mutations";
 
 
 //Displaying user avatar //variable for uploaded file of user

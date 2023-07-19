@@ -20,9 +20,9 @@ import Logo from '../assets/images/AB_Logo.png';
 import { useMutation } from '@apollo/client';
 import { LOGIN } from '../utils/mutations';
 import Auth from '../utils/auth';
-import { Link } from 'react-router-dom';
 import { Grid } from '@mui/material';
 import UserDashboard from '../pages/UserDashboard';
+import { Link } from "react-router-dom";
 
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
@@ -125,7 +125,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
 
     // if user is logged in the render dashboard 
     if (isLoggedIn) {
-      return <UserDashboard />;
+      return <Dashboard />;
     }
 
 
