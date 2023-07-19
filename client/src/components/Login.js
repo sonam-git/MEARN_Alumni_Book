@@ -17,18 +17,13 @@ import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import DarkModePicture from '../assets/images/darkmode-pic.webp';
 import LightModePicture from '../assets/images/lightmode-pic.jpg';
 import Logo from '../assets/images/AB_Logo.png';
-import UserDashboard from '../pages/UserDashboard';
+import Dashboard from '../components/Dashboard';
 import { useMutation } from '@apollo/client';
 import { LOGIN } from '../utils/mutations';
 import Auth from '../utils/auth';
-import { Link } from 'react-router-dom';
 import { Grid } from '@mui/material';
-
-import { LOGIN } from "../utils/mutations";
-import Auth from "../utils/auth";
 import { Link } from "react-router-dom";
 import { Grid } from "@mui/material";
-import Signup from "./Signup";
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = React.useState(false);
@@ -178,7 +173,7 @@ export const Login = () => {
 
     // if user is logged in the render dashboard 
     if (isLoggedIn) {
-      return <UserDashboard />;
+      return <Dashboard />;
     }
 
 

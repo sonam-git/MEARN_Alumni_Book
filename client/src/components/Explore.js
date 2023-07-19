@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import Typography from '@mui/joy/Typography';
 import DescriptionLayout from '../containers/DescriptionLayout';
 import ExploreIcon from '@mui/icons-material/Explore';
@@ -120,7 +121,13 @@ export const Explore = () => {
                       },
                 }}
                 >
-                  <a href="https://www.news-herald.com/2023/04/11/alumni-should-have-active-role-in-inspiring-current-hs-sports-programs-opinion/" target="_blank" rel="noopener noreferrer">click</a>
+                 <Link
+        to="https://www.news-herald.com/2023/04/11/alumni-should-have-active-role-in-inspiring-current-hs-sports-programs-opinion/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        click
+      </Link>
                 </CardCover>
                 </AspectRatio>
               </CardOverflow>
@@ -156,7 +163,14 @@ export const Explore = () => {
                       },
                 }}
                 >
-                  <a href="https://www.jamesgmartin.center/2023/05/undoing-diversity-equity-and-inclusion-requires-alumni-effort/" target="_blank" rel="noopener noreferrer">click</a>
+                  <Link
+        to="https://www.jamesgmartin.center/2023/05/undoing-diversity-equity-and-inclusion-requires-alumni-effort/" 
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        click
+      </Link>
+                 
                 </CardCover>
                 </AspectRatio>
               </CardOverflow>
@@ -192,9 +206,11 @@ export const Explore = () => {
                       },
                 }}
                 >
-                  <a href="https://www.bu.edu/articles/2023/5-tips-for-life-after-college-a-guide-to-living-life-as-an-alumni/" target="_blank" rel="noopener noreferrer"
-                 
-                  > click</a>
+                  <Link
+                  to="https://www.bu.edu/articles/2023/5-tips-for-life-after-college-a-guide-to-living-life-as-an-alumni/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  > click</Link>
                 </CardCover>
                 </AspectRatio>
               </CardOverflow>

@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { Link } from 'react-router-dom';
 import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
 import AspectRatio from '@mui/joy/AspectRatio';
@@ -70,9 +71,12 @@ function ColorSchemeToggle() {
 
 const Dashboard = () => {
 
+<<<<<<< HEAD
 
   const [showLogin, setShowLogin] = useState(false);
 
+=======
+>>>>>>> 0bf3a33 (remove anchor tag within JSX and use Link instead)
 
 
   const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -247,7 +251,8 @@ const Dashboard = () => {
               size="sm"
               variant="outlined"
               color="primary"
-              component="a"
+              component={Link}
+              to='/'
               style={{
                 padding: '10px'
               }}

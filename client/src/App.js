@@ -15,6 +15,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import { Dashboard } from '@material-ui/icons';
 
 import Login from "./components/Login";
+import Dashboard from "./components/Dashboard"
+import Profile from "./components/Profile";
 
 
 // Construct our main GraphQL API endpoint
@@ -59,6 +61,10 @@ function App() {
             <Route path="/login" element={<Login/>} />
 
             <Route path="/signup" element={<Signup />} />
+
+            <Route path="/dashboard" element={<Dashboard />} />
+
+            <Route path="/profile" element={<Profile />} />
 
           </Routes>
         </>
