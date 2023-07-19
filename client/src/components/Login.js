@@ -17,18 +17,13 @@ import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import DarkModePicture from '../assets/images/darkmode-pic.webp';
 import LightModePicture from '../assets/images/lightmode-pic.jpg';
 import Logo from '../assets/images/AB_Logo.png';
-import UserDashboard from '../pages/UserDashboard';
 import { useMutation } from '@apollo/client';
 import { LOGIN } from '../utils/mutations';
 import Auth from '../utils/auth';
 import { Link } from 'react-router-dom';
 import { Grid } from '@mui/material';
+import UserDashboard from '../pages/UserDashboard';
 
-import { LOGIN } from "../utils/mutations";
-import Auth from "../utils/auth";
-import { Link } from "react-router-dom";
-import { Grid } from "@mui/material";
-import Signup from "./Signup";
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = React.useState(false);
@@ -89,54 +84,6 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
     </div>
   );
 };
-export const Login = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [formState, setFormState] = useState({
-    email: "",
-    password: "",
-    persistent: false,
-  });
-
-  const [login, { error, data }] = useMutation(LOGIN);
-
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      const mutationResponse = await login({
-        variables: { 
-          email: formState.email, 
-          password: formState.password , 
-          persistent: formState.persistent},
-      });
-      const token = mutationResponse.data.login.token;
-      Auth.login(token);
-      setIsLoggedIn(true);
-    } catch (error) {
-      console.log(error);
-       // Reset the form
-       setFormState({
-        email: '',
-        password: '',
-        persistent: true,
-      });
-    }
-    
-  };
-
-  const handleChange = (event) => {
-    const { name, value, checked, type } = event.target;
-    const inputValue = type === "checkbox" ? checked : value;
-    setFormState({
-      ...formState,
-      [name]: inputValue,
-    });
-  };
-  
-  // if user is logged in the render dashboard
-  if (isLoggedIn) {
-    return <UserDashboard />;
-  }
-
 
  export const Login = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -269,7 +216,7 @@ export const Login = () => {
                 Welcome back User!
               </Typography>
             </div>
-            { data ? (
+            { isLoggedIn ? (
               <p>Login Success! </p>
             ) : (
               <form onSubmit={handleFormSubmit}>
@@ -362,6 +309,8 @@ export const Login = () => {
       />
     </CssVarsProvider>
   );
+  
 }
+
 
 export default Login;

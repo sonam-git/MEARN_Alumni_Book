@@ -104,43 +104,17 @@ export const Signup = () => {
       Auth.login(token);
     } catch (error) {
       console.log(error);
+      setFormState({
+        firstname: '',
+        lastname: '',
+        username: '',
+        email: '',
+        password: '',
+        image: null,
+      });
     }
    
   };
-
-=======
-  const [addUser] = useMutation(ADD_USER);
-
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
-    try {
-    const mutationResponse = await addUser({
-      variables: {
-        firstname: formState.firstname,
-        lastname: formState.lastname,
-        username: formState.username,
-        email: formState.email,
-        password: formState.password,
-        image: formState.image,
-      },
-    });
-    const token = mutationResponse.data.addUser.token;
-    Auth.login(token);
-
-    // Reset the form
-    setFormState({
-      firstname: '',
-      lastname: '',
-      username: '',
-      email: '',
-      password: '',
-      image: null,
-    });
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -244,104 +218,30 @@ export const Signup = () => {
               Sign Up Success!
               </p>
             ) : (
-              <form onSubmit={handleFormSubmit}>
-              <div style={{ display: 'flex', columnGap: 3}}>
-                  <FormControl required >
-                    <FormLabel>First Name</FormLabel>
-                    <Input
-                      placeholder="First"
-                      name="firstname"
-                      type="firstname"
-                      id="firstname"
-                      onChange={handleChange}
-                    />
-                  </FormControl>
-                  <FormControl required>
-                    <FormLabel>Last Name</FormLabel>
-                    <Input
-                      placeholder="Last"
-                      name="lastname"
-                      type="lastname"
-                      id="lastname"
-                      onChange={handleChange}
-                    />
-                  </FormControl>
-                </div>
-                <FormControl required>
-                  <FormLabel>Username</FormLabel>
-                  <Input
-                    placeholder="Username"
-                    name="username"
-                    type="username"
-                    id="username"
-                    onChange={handleChange}
-                  />
-                </FormControl>
-                <FormControl required>
-                  <FormLabel>Email</FormLabel>
-                  <Input
-                    placeholder="Email"
-                    name="email"
-                    type="email"
-                    id="email"
-                    onChange={handleChange}
-                  />
-                </FormControl>
-                <FormControl required>
-                  <FormLabel>Password</FormLabel>
-                  <Input
-                    placeholder="Password"
-                    name="password"
-                    type="password"
-                    id="fpassword"
-                    onChange={handleChange}
-                  />
-                </FormControl>
-                {/* <FormControl>
-                  <FormLabel>Upload Image</FormLabel>
-                  <Input
-                    type="file"
-                    name="image"
-                    accept="image/*"
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
-                    onChange={(event) => {
-                      const file = event.target.files[0];
-                      setFormState((prevState) => ({
-                        ...prevState,
-                        image: file,
-                      }));
-                    }}
-                  />
-                </FormControl> */}
-                <Box
 
             <form onSubmit={handleFormSubmit}>
             <div style={{ display: 'flex', columnGap: 3}}>
-  <FormControl required >
-    <FormLabel>First Name</FormLabel>
-    <Input
-      placeholder="First"
-      name="firstname"
-      type="firstname"
-      id="firstname"
-      onChange={handleChange}
-    />
-  </FormControl>
-  <FormControl required>
-    <FormLabel>Last Name</FormLabel>
-    <Input
-      placeholder="Last"
-      name="lastname"
-      type="lastname"
-      id="lastname"
-      onChange={handleChange}
-    />
-  </FormControl>
-</div>
+                <FormControl required >
+                  <FormLabel>First Name</FormLabel>
+                  <Input
+                    placeholder="First"
+                    name="firstname"
+                    type="firstname"
+                    id="firstname"
+                    onChange={handleChange}
+                  />
+                </FormControl>
+                <FormControl required>
+                  <FormLabel>Last Name</FormLabel>
+                  <Input
+                    placeholder="Last"
+                    name="lastname"
+                    type="lastname"
+                    id="lastname"
+                    onChange={handleChange}
+                  />
+                </FormControl>
+              </div>
               <FormControl required>
                 <FormLabel>Username</FormLabel>
                 <Input
@@ -372,19 +272,6 @@ export const Signup = () => {
                   onChange={handleChange}
                 />
               </FormControl>
-              {/* <FormControl>
-                <FormLabel>Upload Image</FormLabel>
-                <Input
-                  type="file"
-                  name="image"
-                  accept="image/*"
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                </Box>
                 <Button type="submit" fullWidth>
                   Sign Up
                 </Button>

@@ -342,13 +342,6 @@ const Dashboard = () => {
           </List>
         </Layout.SideNav>
 
-        {/* Main Page */}
-        {/* where all the re-renders happens */}
-        <Layout.Main>
-          {showConnect && <Connect />}
-          {showExplore && <Explore />}
-        </Layout.Main>
-
         {/* Right Side Profile View */}
 
         {isSheetOpen && (

@@ -8,14 +8,13 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import Home from "./pages/Home";
-
+import Profile from "./components/Profile";
 import Signup from "./components/Signup";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import { Dashboard } from '@material-ui/icons';
-
+import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
-
 
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
@@ -60,6 +59,9 @@ function App() {
 
             <Route path="/signup" element={<Signup />} />
 
+            <Route path="/Dashboard" element={<Dashboard />} />
+
+            <Route path="/Profile/profileId" element={<Profile />} />
           </Routes>
         </>
       </Router>
