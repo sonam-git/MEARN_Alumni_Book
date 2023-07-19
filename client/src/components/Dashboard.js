@@ -69,15 +69,9 @@ function ColorSchemeToggle() {
   );
 }
 
-const Dashboard = () => {
-
-<<<<<<< HEAD
+export const Dashboard = () => {
 
   const [showLogin, setShowLogin] = useState(false);
-
-=======
->>>>>>> 0bf3a33 (remove anchor tag within JSX and use Link instead)
-
 
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);

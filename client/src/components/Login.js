@@ -125,7 +125,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
 
     // if user is logged in the render dashboard 
     if (isLoggedIn) {
-      return <Dashboard />;
+      return <UserDashboard />;
     }
 
 
