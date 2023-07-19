@@ -1,5 +1,13 @@
 import React, { useState, useCallback, useRef } from 'react';
+<<<<<<< HEAD
 import JoyMenu from '@mui/joy/Menu';
+=======
+<<<<<<< HEAD
+import JoyMenu, { MenuActions } from '@mui/joy/Menu';
+=======
+import JoyMenu from '@mui/joy/Menu';
+>>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
+>>>>>>> 0641225e673428163416866c05c7e62ceb2b5895
 import MenuItem from '@mui/joy/MenuItem';
 import { ListActionTypes } from '@mui/base/useList';
 
