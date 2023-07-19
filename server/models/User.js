@@ -31,13 +31,6 @@ const userSchema = new Schema({
     required: true,
     minlength: 5,
   },
-<<<<<<< HEAD
-  // image: {
-  //   type: String, //  image file name or URL should be store as a string
-  //   required: true,
-  // },
-=======
->>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
   posts: [
     {
       type: Schema.Types.ObjectId,

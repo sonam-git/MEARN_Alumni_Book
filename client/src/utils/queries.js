@@ -146,4 +146,3 @@ export const GET_ME = gql`
     }
   }
 `;
-// image not added to the database query 

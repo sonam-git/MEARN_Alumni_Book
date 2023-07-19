@@ -13,6 +13,8 @@ import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import {useMutation} from "@apollo/client";
 import { GET_ME } from '../utils/queries';
+import { ADD_POST } from "../utils/mutations";
+
 
 //Displaying user avatar //variable for uploaded file of user
 export function Profile() {
@@ -99,19 +101,19 @@ export function Profile() {
 
 //******Function that will be used when the profile page is loaded*******//
 //**making the useQuery to the backend for GET_ME * *//
-const RetrievingUserInfo = () =>{
+// const RetrievingUserInfo = () =>{
   
-  //make query call 
-  const { loading, data,error } = useQuery(GET_ME);
-  if (loading) return "Loading...";
+//   //make query call 
+//   const { loading, data,error } = useQuery(GET_ME);
+//   if (loading) return "Loading...";
 
-  if (error) return `Error! ${error.message}`;
+//   if (error) return `Error! ${error.message}`;
 
-  return <Layout grid>{JSON.stringify(data)}</Layout>;
+//   return <Layout grid>{JSON.stringify(data)}</Layout>;
 
-  //need to destructure and then place onto UI layout page 
+//   //need to destructure and then place onto UI layout page 
 
-}
+// }
 
 
 //getUser query 
@@ -119,73 +121,73 @@ const RetrievingUserInfo = () =>{
 //***** useQuery Display friends associated with the user in session   ******/
 // getMe the friends part 
 //decunstruct only the friends from this function
-const RetrievingUserFriends = () =>{
+// const RetrievingUserFriends = () =>{
   
-  //make query call 
-  const { loading, data,error } = useQuery(GET_ME);
-  if (loading) return "Loading...";
+//   //make query call 
+//   const { loading, data,error } = useQuery(GET_ME);
+//   if (loading) return "Loading...";
 
-  if (error) return `Error! ${error.message}`;
+//   if (error) return `Error! ${error.message}`;
 
-  return <Layout grid>{JSON.stringify(data)}</Layout>;
+//   return <Layout grid>{JSON.stringify(data)}</Layout>;
 
-  //need to destructure and then place onto UI layout page 
+//   //need to destructure and then place onto UI layout page 
 
-}
+// }
 
 //***** Function that will be used when taking account of the useState of UI *******//
 //***** Making a mutation to the backend for a comment adding to the mutation ADD_POST posts ******//
 //will be used for the input field of the textbox
-const CreatingAPost = () =>{
-  //inital state is no posts makes call getMe for posts to check if there are any posts for user
-  const [name, setName] = useState('');
-   const [addPost, { error }] = useMutation(ADD_POST);  
-   const handleFormSubmit = async (event) => {
-    event.preventDefault();
+// const CreatingAPost = () =>{
+//   //inital state is no posts makes call getMe for posts to check if there are any posts for user
+//   const [name, setName] = useState('');
+//    const [addPost, { error }] = useMutation(ADD_POST);  
+//    const handleFormSubmit = async (event) => {
+//     event.preventDefault();
 
-    // Since mutation function is async, wrap in a `try...catch` to catch any network errors from throwing due to a failed request.
-    try {
-      // Execute mutation and pass in defined parameter data as variables
-      const { data } = await addPost({
-        variables: { postText, postAuthor, createdAt, comments, likes },
-      });
-//for updating the query of getme ask if itsw necessary to do this 
-      window.location.reload();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-  return (
-    //for the text box for the post 
-    <div>
-      <h3>Add yourself to the list...</h3>
-      <form
-        className="flex-row justify-center justify-space-between-md align-center"
-        onSubmit={handleFormSubmit}
-      >
-        <div className="col-12 col-lg-9">
-          <input
-            placeholder="Add your profile name..."
-            value={name}
-            className="form-input w-100"
-            onChange={(event) => setName(event.target.value)}
-          />
-        </div>
+//     // Since mutation function is async, wrap in a `try...catch` to catch any network errors from throwing due to a failed request.
+//     try {
+//       // Execute mutation and pass in defined parameter data as variables
+//       const { data } = await addPost({
+//         variables: { postText, postAuthor, createdAt, comments, likes },
+//       });
+// //for updating the query of getme ask if itsw necessary to do this 
+//       window.location.reload();
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   };
+//   return (
+//     //for the text box for the post 
+//     <div>
+//       <h3>Add yourself to the list...</h3>
+//       <form
+//         className="flex-row justify-center justify-space-between-md align-center"
+//         onSubmit={handleFormSubmit}
+//       >
+//         <div className="col-12 col-lg-9">
+//           <input
+//             placeholder="Add your profile name..."
+//             value={name}
+//             className="form-input w-100"
+//             onChange={(event) => setName(event.target.value)}
+//           />
+//         </div>
 
-        <div className="col-12 col-lg-3">
-          <button className="btn btn-info btn-block py-3" type="submit">
-            Add Profile
-          </button>
-        </div>
-        {error && (
-          <div className="col-12 my-3 bg-danger text-white p-3">
-            Something went wrong...
-          </div>
-        )}
-      </form>
-    </div>
-  );
-}
+//         <div className="col-12 col-lg-3">
+//           <button className="btn btn-info btn-block py-3" type="submit">
+//             Add Profile
+//           </button>
+//         </div>
+//         {error && (
+//           <div className="col-12 my-3 bg-danger text-white p-3">
+//             Something went wrong...
+//           </div>
+//         )}
+//       </form>
+//     </div>
+//   );
+// }
 
 
 //*****Add functionality for when user in sesh clicks on a friend within profile we can see the clicked users profile ********//
