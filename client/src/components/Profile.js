@@ -119,14 +119,23 @@ export function Profile() {
             >
               <Typography sx={{ flex: 1 }}>Create Post</Typography>
               {postsDisplay}
-
-              <TextField
-                item
-                xs={4}
-                id="outlined-multiline-flexible"
-                multiline
-                maxRows={4}
-              />
+              <form onSubmit={handleFormSubmit}>
+                <TextField
+                  item
+                  xs={4}
+                  id="outlined-multiline-flexible"
+                  multiline
+                  maxRows={4}
+                  value={postText}
+                  onChange={(event) => setPostText(event.target.value)}
+                />
+                <Button type="submit">Submit</Button>
+              </form>
+              {addPostError && (
+                <div className="my-3 bg-danger text-white p-3">
+                  Tech difficulties..
+                </div>
+              )}
             </Box>
           </Grid>
           {/* education right box of layout */}
@@ -190,42 +199,42 @@ export function Profile() {
 //***** Function that will be used when taking account of the useState of UI *******//
 //***** Making a mutation to the backend for a comment adding to the mutation ADD_POST posts ******//
 //will be used for the input field of the textbox
-const CreatingAPost = () => {
-  //inital state is no posts makes call getMe for posts to check if there are any posts for user
-  const [name, setName] = useState("");
-  const [addPost, { error }] = useMutation(ADD_POST);
+// const CreatingAPost = () => {
+//   //inital state is no posts makes call getMe for posts to check if there are any posts for user
+//   const [name, setName] = useState("");
+//   const [addPost, { error }] = useMutation(ADD_POST);
 
-  return (
-    //for the text box for the post
-    <div>
-      <h3>Add a post!</h3>
-      <form
-        className="flex-row justify-center justify-space-between-md align-center"
-        onSubmit={handleFormSubmit}
-      >
-        <div className="col-12 col-lg-9">
-          <input
-            placeholder="Start your post..."
-            value={name}
-            className="form-input w-100"
-            onChange={(event) => setName(event.target.value)}
-          />
-        </div>
+//   return (
+//     //for the text box for the post
+//     <div>
+//       <h3>Add a post!</h3>
+//       <form
+//         className="flex-row justify-center justify-space-between-md align-center"
+//         onSubmit={handleFormSubmit}
+//       >
+//         <div className="col-12 col-lg-9">
+//           <input
+//             placeholder="Start your post..."
+//             value={name}
+//             className="form-input w-100"
+//             onChange={(event) => setName(event.target.value)}
+//           />
+//         </div>
 
-        <div className="col-12 col-lg-3">
-          <button className="btn btn-info btn-block py-3" type="submit">
-            Create Post
-          </button>
-        </div>
-        {error && (
-          <div className="col-12 my-3 bg-danger text-white p-3">
-            Something went wrong...
-          </div>
-        )}
-      </form>
-    </div>
-  );
-};
+//         <div className="col-12 col-lg-3">
+//           <button className="btn btn-info btn-block py-3" type="submit">
+//             Create Post
+//           </button>
+//         </div>
+//         {error && (
+//           <div className="col-12 my-3 bg-danger text-white p-3">
+//             Something went wrong...
+//           </div>
+//         )}
+//       </form>
+//     </div>
+//   );
+// };
 
 //*****Add functionality for when user in sesh clicks on a friend within profile we can see the clicked users profile ********//
 //based on the friend id we will use that id so that we can use the Query GET_USER with the id of friends
