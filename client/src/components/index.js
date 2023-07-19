@@ -6,3 +6,4 @@ export * from "./Dashboard";
 export * from "./Explore";
 export * from "./Connect";
 export * from "./Profile";
+export * from "./UsersProfile"

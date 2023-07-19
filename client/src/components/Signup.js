@@ -20,6 +20,12 @@ import Auth from "../utils/auth";
 import { useMutation } from "@apollo/client";
 import { Link } from 'react-router-dom';
 import { Grid } from "@mui/material";
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> 6af3e4a (update UI)
 // allows toggling between light and dark modes.
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
@@ -59,7 +65,8 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
               size="sm"
               variant="outlined"
               color="primary"
-              component="a"
+              component={Link} // <a> tags within JSX, which is not allowed in HTML use Link instead
+            to="/"
               style={{
                 padding: '10px'
               }}
@@ -69,7 +76,6 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
                 marginRight: '5px'
               }}
               />
-              Home
             </IconButton></Link>
     </Grid>
     </Grid>
@@ -88,8 +94,13 @@ export const Signup = () => {
   image: null,
  });
   const [addUser] = useMutation(ADD_USER);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6af3e4a (update UI)
   const handleFormSubmit = async (event) => {
     event.preventDefault();
+    try {
     const mutationResponse = await addUser({
       variables: {
         firstname: formState.firstname,
@@ -102,7 +113,26 @@ export const Signup = () => {
     });
     const token = mutationResponse.data.addUser.token;
     Auth.login(token);
+<<<<<<< HEAD
   };
+=======
+
+  
+    // Reset the form
+    setFormState({
+      firstname: '',
+      lastname: '',
+      username: '',
+      email: '',
+      password: '',
+      image: null,
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+>>>>>>> 6af3e4a (update UI)
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormState({
@@ -246,7 +276,7 @@ export const Signup = () => {
                   placeholder="Password"
                   name="password"
                   type="password"
-                  id="fpassword"
+                  id="password"
                   onChange={handleChange}
                 />
               </FormControl>

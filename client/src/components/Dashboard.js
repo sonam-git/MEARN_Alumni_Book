@@ -15,9 +15,6 @@ import ListItemButton from '@mui/joy/ListItemButton';
 import ListItemContent from '@mui/joy/ListItemContent';
 import ListSubheader from '@mui/joy/ListSubheader';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
-import Login from './Login';
-
-
 
 // Icons import
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
@@ -72,8 +69,11 @@ function ColorSchemeToggle() {
 
 const Dashboard = () => {
 
+<<<<<<< HEAD
 
   const [showLogin, setShowLogin] = useState(false);
+=======
+>>>>>>> 6af3e4a (update UI)
 
 
   const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -85,9 +85,7 @@ const Dashboard = () => {
 
   const [selectedItem, setSelectedItem] = useState('explore');
 
-  const handleShowLogin = () => {
-    setShowLogin(true);
-  };
+  
 
   const handleItemClick = (item) => {
     setSelectedItem(item);
@@ -200,7 +198,6 @@ const Dashboard = () => {
               style={{
                 padding: '10px'
               }}
-              onClick={handleShowLogin} 
             >
               <HomeIcon 
               style={{
@@ -438,8 +435,6 @@ const Dashboard = () => {
         <Layout.Main>
         {showConnect && <Connect/>}
         {showExplore && <Explore/>}
-        {showLogin && <Login/>}
-        
         </Layout.Main>
         {/* Right Side Profile View */}
          
