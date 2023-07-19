@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -24,6 +24,7 @@ import { LOGIN } from "../utils/mutations";
 import Auth from "../utils/auth";
 import { Link } from "react-router-dom";
 import { Grid } from "@mui/material";
+import Signup from "./Signup";
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = React.useState(false);
@@ -91,30 +92,33 @@ export const Login = () => {
     password: "",
     persistent: false,
   });
-  const [login, { error }] = useMutation(LOGIN);
+
+  const [login, { error, data }] = useMutation(LOGIN);
+
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     try {
       const mutationResponse = await login({
-        variables: {
-          email: formState.email,
-          password: formState.password,
-          persistent: formState.persistent,
-        },
+        variables: { 
+          email: formState.email, 
+          password: formState.password , 
+          persistent: formState.persistent},
       });
       const token = mutationResponse.data.login.token;
       Auth.login(token);
       setIsLoggedIn(true);
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      console.log(error);
+       // Reset the form
+       setFormState({
+        email: '',
+        password: '',
+        persistent: true,
+      });
     }
-    // Reset the form
-    setFormState({
-      email: "",
-      password: "",
-      persistent: false,
-    });
+    
   };
+
   const handleChange = (event) => {
     const { name, value, checked, type } = event.target;
     const inputValue = type === "checkbox" ? checked : value;
@@ -123,6 +127,7 @@ export const Login = () => {
       [name]: inputValue,
     });
   };
+  
   // if user is logged in the render dashboard
   if (isLoggedIn) {
     return <UserDashboard />;
@@ -212,7 +217,10 @@ export const Login = () => {
                 Welcome back User!
               </Typography>
             </div>
-            <form onSubmit={handleFormSubmit}>
+            { data ? (
+              <p>Login Success! </p>
+            ) : (
+              <form onSubmit={handleFormSubmit}>
               <FormControl required>
                 <FormLabel htmlFor="email">Email</FormLabel>
                 <Input
@@ -220,6 +228,7 @@ export const Login = () => {
                   name="email"
                   type="email"
                   id="email"
+                  value={formState.email}
                   onChange={handleChange}
                 />
               </FormControl>
@@ -230,6 +239,7 @@ export const Login = () => {
                   name="password"
                   type="password"
                   id="pwd"
+                  value={formState.password}
                   onChange={handleChange}
                 />
               </FormControl>
@@ -251,13 +261,7 @@ export const Login = () => {
                   Forgot your password?
                 </Link> */}
               </Box>
-              {error ? (
-                <div>
-                  <p className="error-text">
-                    The provided credentials are incorrect
-                  </p>
-                </div>
-              ) : null}
+
               <Button type="submit" fullWidth>
                 Log In
               </Button>
@@ -265,6 +269,15 @@ export const Login = () => {
                 <Button fullWidth>← Go to Sign Up</Button>
               </Link>
             </form>
+            )}
+
+            {error ? (
+                <div>
+                  <p className="error-text">
+                    The provided credentials are incorrect
+                  </p>
+                </div>
+              ) : null}
           </Box>
           <Box component="footer" sx={{ py: 3 }}>
             <Typography level="body3" textAlign="center">

@@ -15,7 +15,6 @@ import ListItemButton from '@mui/joy/ListItemButton';
 import ListItemContent from '@mui/joy/ListItemContent';
 import ListSubheader from '@mui/joy/ListSubheader';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
-import Login from './Login';
 
 
 
@@ -41,6 +40,7 @@ import Menu from '../containers/Menu';
 import Layout from '../containers/Layout';
 import Connect from './Connect';
 import Explore from './Explore';
+import Auth from '../utils/auth'
 
 function ColorSchemeToggle() {
   const { mode, setMode } = useColorScheme();
@@ -84,6 +84,11 @@ const Dashboard = () => {
   
 
   const [selectedItem, setSelectedItem] = useState('explore');
+
+  const handleLogout = (event) => {
+    event.preventDefault();
+    Auth.logout();
+  }
 
   const handleShowLogin = () => {
     setShowLogin(true);
@@ -247,6 +252,7 @@ const Dashboard = () => {
               style={{
                 padding: '10px'
               }}
+              onClick={handleLogout}
             >
               <LogoutIcon
               style={{
@@ -431,18 +437,8 @@ const Dashboard = () => {
           </Sheet>
         )}
 
-      
-        
-        {/* Main Page */}
-        {/* where all the re-renders happens */}
-        <Layout.Main>
-        {showConnect && <Connect/>}
-        {showExplore && <Explore/>}
-        {showLogin && <Login/>}
-        
-        </Layout.Main>
+
         {/* Right Side Profile View */}
-         
         {isSheetOpen &&  ( 
         <Sheet
           sx={{
