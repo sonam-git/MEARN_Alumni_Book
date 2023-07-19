@@ -21,7 +21,6 @@ import { useMutation } from "@apollo/client";
 import { Link } from 'react-router-dom';
 import { Grid } from "@mui/material";
 
-
 // allows toggling between light and dark modes.
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
@@ -61,7 +60,8 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
               size="sm"
               variant="outlined"
               color="primary"
-              component="a"
+              component={Link} // <a> tags within JSX, which is not allowed in HTML use Link instead
+            to="/"
               style={{
                 padding: '10px'
               }}
@@ -71,7 +71,6 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
                 marginRight: '5px'
               }}
               />
-              Home
             </IconButton></Link>
     </Grid>
     </Grid>
@@ -90,6 +89,7 @@ export const Signup = () => {
   password: '',
   image: null, 
  });
+
   const [addUser, {error, data}] = useMutation(ADD_USER);
   
   const handleFormSubmit = async (event) => {
@@ -107,6 +107,40 @@ export const Signup = () => {
     }
    
   };
+
+=======
+  const [addUser] = useMutation(ADD_USER);
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    try {
+    const mutationResponse = await addUser({
+      variables: {
+        firstname: formState.firstname,
+        lastname: formState.lastname,
+        username: formState.username,
+        email: formState.email,
+        password: formState.password,
+        image: formState.image,
+      },
+    });
+    const token = mutationResponse.data.addUser.token;
+    Auth.login(token);
+
+    // Reset the form
+    setFormState({
+      firstname: '',
+      lastname: '',
+      username: '',
+      email: '',
+      password: '',
+      image: null,
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -203,6 +237,7 @@ export const Signup = () => {
               </Typography>
             </div>
 
+
             {/* Signup Form */}
             { data ? (
               <p>
@@ -283,6 +318,66 @@ export const Signup = () => {
                   />
                 </FormControl> */}
                 <Box
+
+            <form onSubmit={handleFormSubmit}>
+            <div style={{ display: 'flex', columnGap: 3}}>
+  <FormControl required >
+    <FormLabel>First Name</FormLabel>
+    <Input
+      placeholder="First"
+      name="firstname"
+      type="firstname"
+      id="firstname"
+      onChange={handleChange}
+    />
+  </FormControl>
+  <FormControl required>
+    <FormLabel>Last Name</FormLabel>
+    <Input
+      placeholder="Last"
+      name="lastname"
+      type="lastname"
+      id="lastname"
+      onChange={handleChange}
+    />
+  </FormControl>
+</div>
+              <FormControl required>
+                <FormLabel>Username</FormLabel>
+                <Input
+                  placeholder="Username"
+                  name="username"
+                  type="username"
+                  id="username"
+                  onChange={handleChange}
+                />
+              </FormControl>
+              <FormControl required>
+                <FormLabel>Email</FormLabel>
+                <Input
+                  placeholder="Email"
+                  name="email"
+                  type="email"
+                  id="email"
+                  onChange={handleChange}
+                />
+              </FormControl>
+              <FormControl required>
+                <FormLabel>Password</FormLabel>
+                <Input
+                  placeholder="Password"
+                  name="password"
+                  type="password"
+                  id="password"
+                  onChange={handleChange}
+                />
+              </FormControl>
+              {/* <FormControl>
+                <FormLabel>Upload Image</FormLabel>
+                <Input
+                  type="file"
+                  name="image"
+                  accept="image/*"
                   sx={{
                     display: "flex",
                     justifyContent: "space-between",

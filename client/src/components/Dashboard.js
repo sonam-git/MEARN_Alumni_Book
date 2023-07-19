@@ -16,8 +16,6 @@ import ListItemContent from '@mui/joy/ListItemContent';
 import ListSubheader from '@mui/joy/ListSubheader';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
 
-
-
 // Icons import
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
@@ -76,6 +74,7 @@ const Dashboard = () => {
   const [showLogin, setShowLogin] = useState(false);
 
 
+
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
@@ -84,6 +83,7 @@ const Dashboard = () => {
   
 
   const [selectedItem, setSelectedItem] = useState('explore');
+
 
   const handleLogout = (event) => {
     event.preventDefault();
@@ -205,7 +205,6 @@ const Dashboard = () => {
               style={{
                 padding: '10px'
               }}
-              onClick={handleShowLogin} 
             >
               <HomeIcon 
               style={{
@@ -436,7 +435,14 @@ const Dashboard = () => {
             </Box>
           </Sheet>
         )}
-
+      
+        
+        {/* Main Page */}
+        {/* where all the re-renders happens */}
+        <Layout.Main>
+        {showConnect && <Connect/>}
+        {showExplore && <Explore/>}
+        </Layout.Main>
 
         {/* Right Side Profile View */}
         {isSheetOpen &&  ( 

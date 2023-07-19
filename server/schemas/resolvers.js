@@ -8,12 +8,15 @@ const resolvers = {
   /************************* QUERIES *************************/
   Query: {
     // returns all users, populating the posts field
-    users: async () => {
-      return User.find().populate("posts").populate('friends');
+    users: async ( ) => {
+      return User.find().populate("posts").populate('friends')
+      .select("firstname lastname username email");
     },
     // finds a single user by their username, populating the posts field.
     user: async (parent, { username }) => {
-      return User.findOne({ username }).populate("posts").populate('friends');
+      return User.findOne({ username }).populate("posts")
+      .populate('friends')
+      .select("firstname lastname username email");
     },
     // returns posts, either for a specific user
     posts: async (parent, { username }) => {

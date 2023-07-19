@@ -38,7 +38,7 @@ type Auth {
 }
 type Query {
     users: [User]
-    user(username: String!): User
+    user(userId: ID!): User
     posts(username: String): [Post]
     post(postId: ID!): Post
     me: User

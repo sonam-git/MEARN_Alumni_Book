@@ -10,15 +10,19 @@ import FormLabel, { formLabelClasses } from "@mui/joy/FormLabel";
 import IconButton from "@mui/joy/IconButton";
 import HomeIcon from "@mui/icons-material/Home";
 // import Link from '@mui/joy/Link';
-import Input from "@mui/joy/Input";
-import Typography from "@mui/joy/Typography";
-import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
-import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
-import DarkModePicture from "../assets/images/darkmode-pic.webp";
-import LightModePicture from "../assets/images/lightmode-pic.jpg";
-import Logo from "../assets/images/AB_Logo.png";
-import UserDashboard from "../pages/UserDashboard";
-import { useMutation } from "@apollo/client";
+import Input from '@mui/joy/Input';
+import Typography from '@mui/joy/Typography';
+import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
+import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
+import DarkModePicture from '../assets/images/darkmode-pic.webp';
+import LightModePicture from '../assets/images/lightmode-pic.jpg';
+import Logo from '../assets/images/AB_Logo.png';
+import UserDashboard from '../pages/UserDashboard';
+import { useMutation } from '@apollo/client';
+import { LOGIN } from '../utils/mutations';
+import Auth from '../utils/auth';
+import { Link } from 'react-router-dom';
+import { Grid } from '@mui/material';
 
 import { LOGIN } from "../utils/mutations";
 import Auth from "../utils/auth";
@@ -67,7 +71,8 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
               size="sm"
               variant="outlined"
               color="primary"
-              component="a"
+              component={Link} // <a> tags within JSX, which is not allowed in HTML use Link instead
+              to="/"
               style={{
                 padding: "10px",
               }}
@@ -78,10 +83,9 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
                 }}
               />
               Home
-            </IconButton>
-          </Link>
-        </Grid>
-      </Grid>
+            </IconButton></Link>
+    </Grid>
+    </Grid>
     </div>
   );
 };
@@ -132,6 +136,52 @@ export const Login = () => {
   if (isLoggedIn) {
     return <UserDashboard />;
   }
+
+
+ export const Login = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [formState, setFormState] = useState({
+      email: '',
+      password: '',
+      persistent: false,
+    });
+    const [login, { error }] = useMutation(LOGIN);
+
+    const handleFormSubmit = async (event) => {
+      event.preventDefault();
+      try {
+        const mutationResponse = await login({
+          variables: { email: formState.email, password: formState.password , persistent: formState.persistent},
+        });
+        const token = mutationResponse.data.login.token;
+        Auth.login(token);
+        setIsLoggedIn(true);
+      } catch (e) {
+        console.log(e);
+      }
+      // Reset the form
+    setFormState({
+      email: "",
+      password: "",
+      persistent: false,
+    });
+    };
+
+    const handleChange = (event) => {
+      const { name, value, checked,type } = event.target;
+      const inputValue = type === 'checkbox' ? checked : value;
+      setFormState({
+        ...formState,
+        [name]:inputValue,
+      });
+    };
+
+    // if user is logged in the render dashboard 
+    if (isLoggedIn) {
+      return <UserDashboard />;
+    }
+
+
   return (
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
       <CssBaseline />
@@ -182,8 +232,10 @@ export const Login = () => {
               justifyContent: "space-between",
             }}
           >
-            {/* Logo */}
-            <img src={Logo} alt="Logo" width={250} height={150} />
+         
+               {/* Logo */}
+          <img src={Logo} alt="Logo" width={250} height={150} />
+          
             <ColorSchemeToggle />
           </Box>
           <Box
@@ -310,5 +362,6 @@ export const Login = () => {
       />
     </CssVarsProvider>
   );
-};
+}
+
 export default Login;
