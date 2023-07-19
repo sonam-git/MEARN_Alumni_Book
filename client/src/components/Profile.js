@@ -212,5 +212,6 @@ const CreatingAPost = () =>{
 //posts initial state no text 
 //updates when user edits and saves it 
 
-
+//for getusers can create another react component or a custom hook
+//create props for the profile or useParam which allows communication between the component and which queries will be used
 export default Profile;
