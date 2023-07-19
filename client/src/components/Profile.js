@@ -15,7 +15,12 @@ import {useMutation} from "@apollo/client";
 import { GET_ME } from '../utils/queries';
 import { ADD_POST } from "../utils/mutations";
 
+//can move this profile into page folder 
+//components are smaller components that are used within pages 
 
+//profile component runs query GET_ME
+//if i had a component within this component and exported that component within another place 
+//i can pass the prop from the card component 
 //Displaying user avatar //variable for uploaded file of user
 export function Profile() {
   const { loading, data, error } = useQuery(GET_ME);
@@ -24,6 +29,20 @@ export function Profile() {
   if (error) return `Error! ${error.message}`;
   console.log(data);
   //use data as props 
+  let postsDisplay; 
+
+  if (data.me.posts.length) {
+    postsDisplay = <h3>{data.me.posts}</h3>;
+  }else{postsDisplay = <h1>No posts at the moment</h1>;
+
+  let friendsDisplay;
+  if(data.me.friends.length){
+    friendsDisplay = <h3>{data.me.friends}</h3>;
+  }else {
+    friendsDisplay = <h1>No Friends at the moment</h1>;
+  }
+  
+  //
   return (
     <Sheet>
       <Grid container spacing={2}>
@@ -42,14 +61,15 @@ export function Profile() {
               }}
             >
               {/* adding input field for name field */}
-              <TextField
+              
+              {/* <TextField
                 item
                 xs={4}
                 id="outlined-multiline-flexible"
                 label="Name"
                 multiline
                 maxRows={4}
-              />
+              /> */}
               <Avatar
                 item
                 xs={8}
@@ -57,6 +77,7 @@ export function Profile() {
                 alt="A beautiful flower of pink color within a glass bubble shapped casing"
                 src={flowerImage}
               />
+              <h1>{data.me.firstname} {data.me.lastname}</h1>
             </Box>
           </Container>
         </Grid>
@@ -74,8 +95,10 @@ export function Profile() {
               },
             }}
           >
+            
             <Typography sx={{ flex: 1 }}>Create Post</Typography>
-
+            {postsDisplay}
+          
             <TextField
               item
               xs={4}
@@ -88,6 +111,7 @@ export function Profile() {
         {/* education right box of layout */}
         <Grid item xs={8}>
           <Box>Friends</Box>
+          {friendsDisplay}
           <TextField
             id="outlined-basic"
             label="Friend List"
@@ -98,18 +122,26 @@ export function Profile() {
     </Sheet>
   );
 }
+}
 
+// if (data.me.post === 0 ){
+//   return <h1>No posts at the moment</h1>
+// } else {
+//   display DataTransfer.name.post
+// }
 //******Function that will be used when the profile page is loaded*******//
 //**making the useQuery to the backend for GET_ME * *//
 // const RetrievingUserInfo = () =>{
   
-//   //make query call 
-//   const { loading, data,error } = useQuery(GET_ME);
+// //   //make query call 
+//   const { loading, data, error } = useQuery(GET_ME);
 //   if (loading) return "Loading...";
 
 //   if (error) return `Error! ${error.message}`;
 
-//   return <Layout grid>{JSON.stringify(data)}</Layout>;
+//   return <div>{
+//    <h1>{data.firstname}</h1>
+//     }</div>;
 
 //   //need to destructure and then place onto UI layout page 
 

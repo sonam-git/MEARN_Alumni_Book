@@ -124,7 +124,6 @@ export const GET_ME = gql`
         _id
         postText
         postAuthor
-        createdAt
         comments {
           commentText
           commentAuthor
@@ -141,8 +140,10 @@ export const GET_ME = gql`
         lastname
         username
         email
-        image
+      
       }
     }
   }
-`;
+`; 
+//  image
+//  createdAt
