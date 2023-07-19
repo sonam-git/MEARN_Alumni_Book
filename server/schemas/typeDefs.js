@@ -48,10 +48,7 @@ type Query {
     addUser(firstname: String!,lastname: String!,username: String!, email: String!, password: String! ): Auth
     login(email: String!, password: String!): Auth
     addFriend(userId: ID!, friendId: ID!): User
-<<<<<<< HEAD
-=======
     removeFriend(friendId: ID!): User 
->>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
     addPost(postText: String!): Post
     addComment(postId: ID!, commentText: String!): Post
     removePost(postId: ID!): Post

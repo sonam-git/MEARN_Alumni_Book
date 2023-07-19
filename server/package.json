@@ -4,34 +4,14 @@
     "description": "",
     "main": "server.js",
     "scripts": {
-<<<<<<< HEAD
-      "start": "node server.js",
-      "watch": "nodemon",
-      "seed": "node seeders/seed.js"
-=======
         "start": "node server.js",
         "watch": "nodemon",
         "seed": "node seeders/seed.js"
->>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "dependencies": {
-<<<<<<< HEAD
-      "apollo-server-express": "^3.6.2",
-      "bcrypt": "^5.0.0",
-      "express": "^4.17.2",
-      "graphql": "^16.3.0",
-      "jsonwebtoken": "^8.5.1",
-      "mongoose": "^7.0.2"
-    },
-    "devDependencies": {
-      "nodemon": "^2.0.3"
-    }
-  }
-  
-=======
         "apollo-server-express": "^3.6.2",
         "bcrypt": "^5.0.0",
         "cloudinary": "^1.37.3",
@@ -45,4 +25,3 @@
         "nodemon": "^2.0.3"
     }
 }
->>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2

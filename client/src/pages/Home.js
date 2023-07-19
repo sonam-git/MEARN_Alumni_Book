@@ -1,20 +1,3 @@
-<<<<<<< HEAD
-// import necessary components
-import Signup from "../components/Signup";
-import Login from "../components/Login";
-
-// Home page
-const Home = () => {
-    return (
-      <div className="container">
-        <Signup />
-        
-      </div>
-    );
-  };
-  
-  export default Home;
-=======
 import React from "react";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
 import GlobalStyles from "@mui/joy/GlobalStyles";
@@ -239,4 +222,3 @@ const HeroImage = () => {
 };
 
 export default Home;
->>>>>>> 2577892e991a28eacb5ae745421cdf0ea014d1d2
