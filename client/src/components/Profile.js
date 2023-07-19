@@ -24,8 +24,8 @@ import { ADD_POST } from "../utils/mutations";
 //Displaying user avatar //variable for uploaded file of user
 export function Profile() {
   const { loading, data, error } = useQuery(GET_ME);
-  const [name, setName] = useState("");
-  const [addPost, { error:addPostError }] = useMutation(ADD_POST);
+  const [postText, setPostText] = useState("");
+  const [addPost, { error: addPostError }] = useMutation(ADD_POST);
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -34,9 +34,9 @@ export function Profile() {
     try {
       // Execute mutation and pass in defined parameter data as variables
       const { data } = await addPost({
-        variables: { postText},
-      }); 
-      //postAuthor, createdAt, comments, likes 
+        variables: { postText },
+      });
+      //postAuthor, createdAt, comments, likes
       //for updating the query of getme ask if itsw necessary to do this
       window.location.reload();
     } catch (err) {
@@ -49,16 +49,15 @@ export function Profile() {
   console.log(data);
   //use data as props
   let postsDisplay;
-
+  let friendsDisplay;
   if (data.me.posts.length) {
     postsDisplay = <h3>{data.me.posts}</h3>;
   } else {
     postsDisplay = <h1>No posts at the moment</h1>;
 
-    let friendsDisplay;
-    if (data.me.friends.length) {
+  if (data.me.friends.length) {
       friendsDisplay = <h3>{data.me.friends}</h3>;
-    } else {
+  } else {
       friendsDisplay = <h1>No Friends at the moment</h1>;
     }
 
