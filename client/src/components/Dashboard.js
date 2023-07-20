@@ -199,7 +199,8 @@ export const Dashboard = () => {
               size="sm"
               variant="outlined"
               color="primary"
-              component="a"
+              component={Link}
+              to="/"
               style={{
                 padding: '10px'
               }}
