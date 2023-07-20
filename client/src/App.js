@@ -13,7 +13,7 @@ import Signup from "./components/Signup";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import { Dashboard } from '@material-ui/icons';
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./pages/Dashboard";
 import Login from "./components/Login";
 
 
