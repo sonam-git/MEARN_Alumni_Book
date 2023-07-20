@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -61,24 +61,23 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
           </IconButton>
         </Grid>
         <Grid item>
-          <Link to="/">
-            <IconButton
-              size="sm"
-              variant="outlined"
-              color="primary"
-              component={Link} // <a> tags within JSX, which is not allowed in HTML use Link instead
-              to="/"
-              style={{
-                padding: "10px",
-              }}
-            >
-              <HomeIcon
-                style={{
-                  marginRight: "5px",
-                }}
-              />
-              Home
-            </IconButton></Link>
+        <Link to="/">
+  <IconButton
+    size="sm"
+    variant="outlined"
+    color="primary"
+    style={{
+      padding: "10px",
+    }}
+  >
+    <HomeIcon
+      style={{
+        marginRight: "5px",
+      }}
+    />
+    Home
+  </IconButton>
+</Link>
     </Grid>
     </Grid>
     </div>

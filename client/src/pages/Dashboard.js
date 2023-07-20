@@ -149,10 +149,7 @@ export const Dashboard = () => {
           }),
         }}
       >
-
-      {/* Header.js */}
-      <Header/>
-
+        <Header/>
         {/* Side Bar Navigations */}
         <Layout.SideNav>
         <List size="sm" sx={{ '--ListItem-radius': '8px', '--List-gap': '4px' }}>
