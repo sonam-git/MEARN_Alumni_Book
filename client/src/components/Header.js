@@ -143,12 +143,11 @@ export const Header = () => {
             />
                 Profile
             </IconButton>
+            <Link to='/'>
            <IconButton
             size="sm"
             variant="outlined"
             color="primary"
-            component={Link}
-            to='/'
             style={{
               padding: '10px'
             }}
@@ -161,6 +160,7 @@ export const Header = () => {
             />
             Log Out
           </IconButton>
+          </Link>
         </Box>
       </Layout.Header>
     );

@@ -301,14 +301,14 @@ export const Signup = () => {
                   onChange={handleChange}
                 />
               </FormControl>
-              <FormControl required>
+              {/* <FormControl required>
               <FormLabel>Upload Image</FormLabel>
                 <Input
                   name="image"
                   type="file"
                   onChange={handleChange}
                 />
-              </FormControl>
+              </FormControl> */}
                 <Button type="submit" fullWidth>
                   Sign Up
                 </Button>
