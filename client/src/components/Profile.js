@@ -14,14 +14,18 @@ import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import { GET_ME } from "../utils/queries";
 import { ADD_POST } from "../utils/mutations";
+import { REMOVE_POST } from "../utils/mutations";
 
 export default function Profile() {
   const { loading, data, error } = useQuery(GET_ME);
   const [postText, setPostText] = useState("");
   const [addPost] = useMutation(ADD_POST);
+  const [removePost] = useMutation(REMOVE_POST);
   // const [showCommentBox, setShowCommentBox] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [commentBoxStates, setCommentBoxStates] = useState({});
+
+
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
@@ -94,6 +98,23 @@ export default function Profile() {
     // Clear the comment textbox for the specific post
     setCommentText("");
   };
+//handle form for deleting post
+  const handleDeletePost = async (postId) => {
+    try {
+      // Execute the removePost mutation and pass the postId as a variable
+      await removePost({
+        variables: { postId },
+      });
+  
+      // Perform any necessary actions after successful deletion, such as updating the UI
+      console.log("Post deleted successfully");
+    } catch (error) {
+      // Handle any errors that occur during the deletion process
+      console.error("Error deleting post:", error);
+    }
+  };
+
+
   return (
     <Sheet>
       <Grid container spacing={2}>
@@ -145,6 +166,8 @@ export default function Profile() {
                 <div key={post._id}>
                   <h3>{post.postText}</h3>
                   <p>Author: {post.postAuthor}</p>
+                  <button className="deleteButton" onClick={() => handleDeletePost(post._id)} >Delete</button>
+                  <button className="editButton">Edit</button>
                   <button className="likeButton">like</button>
                   <button
                     className="commentButton"
@@ -200,6 +223,8 @@ export default function Profile() {
   );
 }
 
+
+//Saved for when the Friends part works for get_me query
 {
   /* {data.me.friends.length ? (
             data.me.friends.map((friend) => (
