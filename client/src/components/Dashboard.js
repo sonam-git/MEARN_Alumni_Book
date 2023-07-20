@@ -69,15 +69,9 @@ function ColorSchemeToggle() {
   );
 }
 
-const Dashboard = () => {
-
-<<<<<<< HEAD
+export const Dashboard = () => {
 
   const [showLogin, setShowLogin] = useState(false);
-
-=======
->>>>>>> 0bf3a33 (remove anchor tag within JSX and use Link instead)
-
 
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -346,13 +340,6 @@ const Dashboard = () => {
 
           </List>
         </Layout.SideNav>
-
-        {/* Main Page */}
-        {/* where all the re-renders happens */}
-        <Layout.Main>
-          {showConnect && <Connect />}
-          {showExplore && <Explore />}
-        </Layout.Main>
 
         {/* Right Side Profile View */}
 
