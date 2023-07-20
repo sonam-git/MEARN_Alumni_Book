@@ -20,8 +20,8 @@ export default function Profile() {
   const [postText, setPostText] = useState("");
   const [addPost] = useMutation(ADD_POST);
   // const [showCommentBox, setShowCommentBox] = useState(false);
-const [commentText, setCommentText] = useState("");
-const [commentBoxStates, setCommentBoxStates] = useState({});
+  const [commentText, setCommentText] = useState("");
+  const [commentBoxStates, setCommentBoxStates] = useState({});
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
@@ -44,14 +44,14 @@ const [commentBoxStates, setCommentBoxStates] = useState({});
   console.log(data);
   // //use data as props
   // let postItems;
- 
+
   // //  console.log('  before posts check');
   // if (data.me.posts.length) {
   //   console.log('Posts exist');
   //   const handleCommentSubmit = () => {
   //     // Perform any necessary actions with the comment text
   //     console.log("Comment submitted:", commentText);
-    
+
   //     // Clear the comment textbox and hide it
   //     setCommentText("");
   //     setShowCommentBox(false);
@@ -76,7 +76,7 @@ const [commentBoxStates, setCommentBoxStates] = useState({});
   // const handleCommentSubmit = () => {
   //   // Perform any necessary actions with the comment text
   //   console.log("Comment submitted:", commentText);
-  
+
   //   // Clear the comment textbox and hide it
   //   setCommentText("");
   //   setShowCommentBox(false);
@@ -90,7 +90,7 @@ const [commentBoxStates, setCommentBoxStates] = useState({});
   const handleCommentSubmit = (postId) => {
     // Perform any necessary actions with the comment text for the specific post
     console.log(`Comment submitted for post ${postId}:`, commentText);
-  
+
     // Clear the comment textbox for the specific post
     setCommentText("");
   };
@@ -112,15 +112,6 @@ const [commentBoxStates, setCommentBoxStates] = useState({});
               }}
             >
               {/* adding input field for name field */}
-
-              {/* <TextField
-                item
-                xs={4}
-                id="outlined-multiline-flexible"
-                label="Name"
-                multiline
-                maxRows={4}
-              /> */}
               <Avatar
                 item
                 xs={8}
@@ -129,8 +120,8 @@ const [commentBoxStates, setCommentBoxStates] = useState({});
                 src={flowerImage}
               />
               <h1>
-                  {data.me.firstname} {data.me.lastname}
-                </h1>
+                {data.me.firstname} {data.me.lastname}
+              </h1>
             </Box>
           </Container>
         </Grid>
@@ -148,35 +139,40 @@ const [commentBoxStates, setCommentBoxStates] = useState({});
               },
             }}
           >
-            <Typography sx={{ flex: 1 }}>Create Post</Typography>
+            <Typography sx={{ flex: 1 }}>Posts</Typography>
             {data.me.posts.length ? (
-            data.me.posts.map((post) => (
-              <div key={post._id}>
-                <h3>{post.postText}</h3>
-                <p>Author: {post.postAuthor}</p>
-                <button className="likeButton">like</button>
-                <button className="commentButton" onClick={() => toggleCommentBox(post._id)}>
-                  comment
-                </button>
-                {commentBoxStates[post._id] && (
-                  <div>
-                    <TextField
-                      id={`comment-textfield-${post._id}`}
-                      label="Add a comment"
-                      value={commentText}
-                      onChange={(event) => setCommentText(event.target.value)}
-                    />
-                    <Button onClick={handleCommentSubmit}>Submit Comment</Button>
-                  </div>
-                )}
-              </div>
-            ))
-          ) : (
-            <h1>No posts at the moment</h1>
-          )}
+              data.me.posts.map((post) => (
+                <div key={post._id}>
+                  <h3>{post.postText}</h3>
+                  <p>Author: {post.postAuthor}</p>
+                  <button className="likeButton">like</button>
+                  <button
+                    className="commentButton"
+                    onClick={() => toggleCommentBox(post._id)}
+                  >
+                    comment
+                  </button>
+                  {commentBoxStates[post._id] && (
+                    <div>
+                      <TextField
+                        id={`comment-textfield-${post._id}`}
+                        label="Add a comment"
+                        value={commentText}
+                        onChange={(event) => setCommentText(event.target.value)}
+                      />
+                      <Button onClick={handleCommentSubmit}>
+                        Submit Comment
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              ))
+            ) : (
+              <h1>No posts at the moment</h1>
+            )}
             {/* {postItems} */}
+            <Typography sx={{ flex: 1 }}>Create A Post</Typography>
             <form onSubmit={handleFormSubmit}>
-            
               <TextField
                 item
                 xs={4}
@@ -198,7 +194,14 @@ const [commentBoxStates, setCommentBoxStates] = useState({});
         {/* education right box of layout */}
         <Grid item xs={8}>
           <Box>Friends</Box>
-          {data.me.friends.length ? (
+        </Grid>
+      </Grid>
+    </Sheet>
+  );
+}
+
+{
+  /* {data.me.friends.length ? (
             data.me.friends.map((friend) => (
               <div key={friend._id}>
                 <h3>{friend.firstname}</h3>
@@ -206,15 +209,5 @@ const [commentBoxStates, setCommentBoxStates] = useState({});
             ))
           ) : (
             <h1>No Friends at the moment</h1>
-          )}
-          <TextField
-            id="outlined-basic"
-            label="Friend List"
-            variant="outlined"
-          />
-        </Grid>
-      </Grid>
-    </Sheet>
-  );
+          )} */
 }
-

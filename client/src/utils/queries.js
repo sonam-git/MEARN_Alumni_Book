@@ -136,14 +136,15 @@ export const GET_ME = gql`
       }
       friends {
         _id
-        firstname
-        lastname
-        username
-        email
+        
       
       }
     }
   }
-`; 
+`;
+//  firstname
+//         lastname
+//         username
+//         email
 //  image
 //  createdAt
