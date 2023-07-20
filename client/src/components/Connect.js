@@ -6,13 +6,14 @@ import CardOverflow from '@mui/joy/CardOverflow';
 import CardCover from '@mui/joy/CardCover';
 import Typography from '@mui/joy/Typography';
 
+
 import IconButton from '@mui/joy/IconButton';
 import ViewCompactAltIcon from '@mui/icons-material/ViewCompactAlt';
 
 // Icons import
 import PersonIcon from '@mui/icons-material/Person';
 
-const Connect = () => {
+const Connect = ({ users, }) => {
     return(
         <div>
             <Typography 
@@ -35,19 +36,24 @@ const Connect = () => {
               gap: 2,
             }}
             >
-            <Card
-              variant="outlined"
-              sx={{
-                '--Card-radius': (theme) => theme.vars.radius.sm,
-                boxShadow: 'none',
-              }}
-            >
+
+            {/* Profiles Individual cards */}
+            {users && 
+              users.map((users) => (
+              <Card
+                variant="outlined"
+                sx={{
+                  '--Card-radius': (theme) => theme.vars.radius.sm,
+                  boxShadow: 'none',
+                }}
+                key={users._id}
+              >
               <CardOverflow
                 sx={{
                   borderBottom: '.5px solid',
                   borderColor: 'neutral.outlinedBorder',
                 }}
-              >
+                >
                 <AspectRatio ratio="16/9" color="primary">
                 <CardCover
                   sx={{
@@ -60,9 +66,9 @@ const Connect = () => {
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Box sx={{ flex: 1 }}>
                   
-                  <Typography>Example Profile 2</Typography>
+                  <Typography>{users.firstname} {users.lastname}</Typography>
                   <Typography level="body3" mt={0.5}>
-                    Joined March 07, 2011
+                    {users.email}
                   </Typography>
                 </Box>
                 <IconButton variant="plain" color="neutral">
@@ -70,201 +76,7 @@ const Connect = () => {
                 </IconButton>
               </Box>
             </Card>
-            <Card
-              variant="outlined"
-              sx={{
-                '--Card-radius': (theme) => theme.vars.radius.sm,
-                boxShadow: 'none',
-              }}
-            >
-              <CardOverflow
-                sx={{
-                  borderBottom: '1px solid',
-                  borderColor: 'neutral.outlinedBorder',
-                }}
-              >
-                <AspectRatio ratio="16/9" color="primary">
-                  <Typography
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'primary.plainColor',
-                    }}
-                  >
-                    .zip
-                  </Typography>
-                </AspectRatio>
-              </CardOverflow>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Box sx={{ flex: 1 }}>
-                  
-                  <Typography>Example Profile 2</Typography>
-                  <Typography level="body3" mt={0.5}>
-                    Joined March 07, 2011
-                  </Typography>
-                </Box>
-                <IconButton variant="plain" color="neutral">
-                  <PersonIcon />
-                </IconButton>
-              </Box>
-
-            </Card>
-            <Card
-              variant="outlined"
-              sx={{
-                '--Card-radius': (theme) => theme.vars.radius.sm,
-                boxShadow: 'none',
-              }}
-            >
-              <CardOverflow
-                sx={{
-                  borderBottom: '1px solid',
-                  borderColor: 'neutral.outlinedBorder',
-                }}
-              >
-                <AspectRatio ratio="16/9" color="primary">
-                <CardCover>
-                <img
-                  alt=""
-                  src="https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?auto=format&fit=crop&w=774"
-                />
-              </CardCover>
-              <CardCover
-                sx={{
-                  background:
-                    'linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.12))',
-                }}
-              />
-                </AspectRatio>
-              </CardOverflow>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Box sx={{ flex: 1 }}>
-                  <Typography>Example Profile 3</Typography>
-                  <Typography level="body3" mt={0.5}>
-                  Joined September 26, 2009
-                  </Typography>
-                </Box>
-                <IconButton variant="plain" color="neutral">
-                  <PersonIcon />
-                </IconButton>
-                
-              </Box>
-            </Card>
-            <Card
-              variant="outlined"
-              sx={{
-                '--Card-radius': (theme) => theme.vars.radius.sm,
-                boxShadow: 'none',
-              }}
-            >
-              <CardOverflow
-                sx={{
-                  borderBottom: '1px solid',
-                  borderColor: 'neutral.outlinedBorder',
-                }}
-              >
-                <AspectRatio ratio="16/9" color="primary">
-                  <Typography
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'primary.plainColor',
-                    }}
-                  >
-                    .zip
-                  </Typography>
-                </AspectRatio>
-              </CardOverflow>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Box sx={{ flex: 1 }}>
-                  <Typography>Example Profile 3</Typography>
-                  <Typography level="body3" mt={0.5}>
-                  Joined September 26, 2009
-                  </Typography>
-                </Box>
-                <IconButton variant="plain" color="neutral">
-                  <PersonIcon />
-                </IconButton>
-              </Box>
-            </Card>
-            <Card
-              variant="outlined"
-              sx={{
-                '--Card-radius': (theme) => theme.vars.radius.sm,
-                boxShadow: 'none',
-              }}
-            >
-              <CardOverflow
-                sx={{
-                  borderBottom: '1px solid',
-                  borderColor: 'neutral.outlinedBorder',
-                }}
-              >
-                <AspectRatio ratio="16/9" color="primary">
-                  <Typography
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'primary.plainColor',
-                    }}
-                  >
-                    .zip
-                  </Typography>
-                </AspectRatio>
-              </CardOverflow>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Box sx={{ flex: 1 }}>
-                  <Typography>Example Profile 3</Typography>
-                  <Typography level="body3" mt={0.5}>
-                  Joined September 26, 2009
-                  </Typography>
-                </Box>
-                <IconButton variant="plain" color="neutral">
-                  <PersonIcon />
-                </IconButton>
-              </Box>
-            </Card>
-            <Card
-              variant="outlined"
-              sx={{
-                '--Card-radius': (theme) => theme.vars.radius.sm,
-                boxShadow: 'none',
-              }}
-            >
-              <CardOverflow
-                sx={{
-                  borderBottom: '1px solid',
-                  borderColor: 'neutral.outlinedBorder',
-                }}
-              >
-                <AspectRatio ratio="16/9" color="primary">
-                  <Typography
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'primary.plainColor',
-                    }}
-                  >
-                    .zip
-                  </Typography>
-                </AspectRatio>
-              </CardOverflow>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Box sx={{ flex: 1 }}>
-                  <Typography>Example Profile 3</Typography>
-                  <Typography level="body3" mt={0.5}>
-                  Joined September 26, 2009
-                  </Typography>
-                </Box>
-                <IconButton variant="plain" color="neutral">
-                  <PersonIcon />
-                </IconButton>
-              </Box>
-            </Card>
+              ))}
             </Box>
         </div>
     );

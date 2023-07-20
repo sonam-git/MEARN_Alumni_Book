@@ -21,8 +21,6 @@ import { useMutation } from "@apollo/client";
 import { Link } from 'react-router-dom';
 import { Grid } from "@mui/material";
 
-
-
 // allows toggling between light and dark modes.
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
@@ -222,7 +220,7 @@ export const Signup = () => {
             ) : (
 
             <form onSubmit={handleFormSubmit}>
-            <div style={{ display: 'flex', columnGap: 3}}>
+            <div style={{ display: 'flex', columnGap: 3, width: '50%'}}>
                 <FormControl required >
                   <FormLabel>First Name</FormLabel>
                   <Input
@@ -231,6 +229,7 @@ export const Signup = () => {
                     type="firstname"
                     id="firstname"
                     onChange={handleChange}
+                    style={{width: '92%'}}
                   />
                 </FormControl>
                 <FormControl required>
@@ -241,6 +240,7 @@ export const Signup = () => {
                     type="lastname"
                     id="lastname"
                     onChange={handleChange}
+                    style={{width: '92%'}}
                   />
                 </FormControl>
               </div>

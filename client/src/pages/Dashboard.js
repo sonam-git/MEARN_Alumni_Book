@@ -16,6 +16,12 @@ import ListItemButton from '@mui/joy/ListItemButton';
 import ListItemContent from '@mui/joy/ListItemContent';
 import ListSubheader from '@mui/joy/ListSubheader';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
+import Card from '@mui/joy/Card';
+import CardOverflow from '@mui/joy/CardOverflow';
+import CardCover from '@mui/joy/CardCover';
+import articleOneImage from '../assets/images/article-one.webp';
+import articleTwoImage from '../assets/images/article-two.jpeg';
+import articleThreeImage from '../assets/images/article-three.jpg';
 
 // Icons import
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
@@ -36,10 +42,14 @@ import ViewCompactAltIcon from '@mui/icons-material/ViewCompactAlt';
 // custom
 import filesTheme from '../containers/Theme';
 import Menu from '../containers/Menu';
+import Header from '../components/Header';
 import Layout from '../containers/Layout';
-import Connect from './Connect';
-import Explore from './Explore';
+import Connect from '../components/Connect';
+import Explore from '../components/Explore';
 import Auth from '../utils/auth'
+
+import { useQuery } from '@apollo/client';
+import { QUERY_PROFILES } from '../utils/queries';
 
 function ColorSchemeToggle() {
   const { mode, setMode } = useColorScheme();
@@ -70,6 +80,10 @@ function ColorSchemeToggle() {
 }
 
 export const Dashboard = () => {
+
+  const { loading, data } = useQuery(QUERY_PROFILES);
+  const users = data?.users || [];
+
 
   const [showLogin, setShowLogin] = useState(false);
 
@@ -114,14 +128,9 @@ export const Dashboard = () => {
     setIsSheetOpen(true);
   };
 
-  // const handlePersonAddIconClick = (event) => {
-  //   event.preventDefault();
-  //   setIsSheetOpen(true);
-  // };
-
   const handleIsSheetClose = (event) => {
     event.preventDefault();
-    setIsSheetOpen(false);
+    setIsSheetOpen(!isSheetOpen);
   }
 
   return (
@@ -140,127 +149,9 @@ export const Dashboard = () => {
           }),
         }}
       >
-        <Layout.Header>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: 1.5,
-            }}
-          >
-            <IconButton
-              variant="outlined"
-              size="sm"
-              onClick={() => setDrawerOpen(true)}
-              sx={{ display: { sm: 'none' } }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <IconButton
-              size="sm"
-              sx={{ display: { xs: 'none', sm: 'inline-flex' } }}
-            >
-              <ColorSchemeToggle />
-            </IconButton>
-            <Typography component="h1" fontWeight="xl">
-              Dashboard
-            </Typography>
-          </Box>
-          <Input
-            size="sm"
-            placeholder="Search anything…"
-            startDecorator={<SearchRoundedIcon color="primary" />}
-            endDecorator={
-              <IconButton variant="outlined" color="neutral">
-                <Typography fontWeight="lg" fontSize="sm" textColor="text.tertiary">
-                  Find
-                </Typography>
-              </IconButton>
-            }
-            sx={{
-              flexBasis: '500px',
-              display: {
-                xs: 'none',
-                sm: 'flex',
-              },
-            }}
-          />
-          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1.5 }}>
-            <IconButton
-              size="sm"
-              variant="outlined"
-              color="primary"
-              sx={{ display: { xs: 'inline-flex', sm: 'none' } }}
-            >
-              <SearchRoundedIcon />
-            </IconButton>
-            <IconButton
-              size="sm"
-              variant="outlined"
-              color="primary"
-              component="a"
-              style={{
-                padding: '10px'
-              }}
-            >
-              <HomeIcon 
-              style={{
-                marginRight: '5px'
-              }}
-              />
-              Home
-            </IconButton>
-            <Menu
-              id="app-selector"
-              control={
-                <IconButton
-                  size="sm"
-                  variant="outlined"
-                  color="primary"
-                  aria-label="Apps"
-                  style={{
-                    padding: '10px'
-                  }}
-                >
-                  <ManageAccountsIcon 
-                  style={{
-                    marginRight: '5px'
-                  }}
-                  />
-                  Account
-                </IconButton>
-              }
-              menus={[
-                {
-                  label: 'Profile',
-                },
-                {
-                  label: 'Settings',
-                  
-                },
-              ]}
-            />
-             <IconButton
-              size="sm"
-              variant="outlined"
-              color="primary"
-              component={Link}
-              to='/'
-              style={{
-                padding: '10px'
-              }}
-              onClick={handleLogout}
-            >
-              <LogoutIcon
-              style={{
-                marginRight: '5px'
-              }}
-              />
-              Log Out
-            </IconButton>
-          </Box>
-        </Layout.Header>
+
+      {/* Header.js */}
+      <Header/>
 
         {/* Side Bar Navigations */}
         <Layout.SideNav>
@@ -340,104 +231,25 @@ export const Dashboard = () => {
 
           </List>
         </Layout.SideNav>
-
-        {/* Right Side Profile View */}
-
-        {isSheetOpen && (
-          <Sheet
-            sx={{
-              display: { xs: "none", sm: "initial" },
-              borderLeft: "1px solid",
-              borderColor: "neutral.outlinedBorder",
-            }}
-          >
-            <Box sx={{ p: 2, display: "flex", alignItems: "center" }}>
-              <Typography sx={{ flex: 1 }}>Example Profile 2</Typography>
-              <IconButton
-                variant="outlined"
-                color="neutral"
-                size="sm"
-                onClick={handleIsSheetClose}
-              >
-                <CloseIcon />
-              </IconButton>
-            </Box>
-            <Divider />
-            <AspectRatio ratio="21/9">
-              <img
-                alt=""
-                src="https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?auto=format&fit=crop&w=774"
-              />
-            </AspectRatio>
-            <Box sx={{ p: 2, display: "flex", gap: 1, alignItems: "center" }}>
-              <Typography level="body2" mr={1}>
-                Profile Description
-              </Typography>
-            </Box>
-            <Divider />
-            <Box
-              sx={{
-                gap: 2,
-                p: 2,
-                display: "grid",
-                gridTemplateColumns: "auto 1fr",
-                "& > *:nth-child(odd)": { color: "text.secondary" },
-              }}
-            >
-              <Typography level="body2">Age</Typography>
-              <Typography level="body2" textColor="text.primary">
-                27
-              </Typography>
-
-              <Typography level="body2">High School/University</Typography>
-              <Typography level="body2" textColor="text.primary">
-                UC Berkeley
-              </Typography>
-
-              <Typography level="body2">Occupation</Typography>
-              <Typography level="body2" textColor="text.primary">
-                Software Engineer
-              </Typography>
-
-              <Typography level="body2">Graduated</Typography>
-              <Typography level="body2" textColor="text.primary">
-                May 31, 2016
-              </Typography>
-
-              <Typography level="body2">Work</Typography>
-              <Typography level="body2" textColor="text.primary">
-                Krusty Krab
-              </Typography>
-
-              <Typography level="body2">Hobbies</Typography>
-              <Typography level="body2" textColor="text.primary">
-                Music, Sports, Games
-              </Typography>
-
-              <Typography level="body2">Joined</Typography>
-              <Typography level="body2" textColor="text.primary">
-                March 07, 2011
-              </Typography>
-            </Box>
-            <Divider />
-            <Box sx={{ py: 2, px: 1 }}>
-              <Button variant="plain" size="sm" startDecorator={<PersonIcon />}>
-                View Full Profile
-              </Button>
-            </Box>
-          </Sheet>
-        )}
-      
         
         {/* Main Page */}
         {/* where all the re-renders happens */}
         <Layout.Main>
-        {showConnect && <Connect/>}
+        {showConnect && (
+            loading ? (
+            <div>Loading....</div>
+          ) : (
+            <Connect
+              users={users}
+              title="Some Users"
+              />
+          )
+        )}
         {showExplore && <Explore/>}
         </Layout.Main>
 
-        {/* Right Side Profile View */}
-        {isSheetOpen &&  ( 
+        {/* Right Side Profile View for Connect Page */}
+        { showConnect &&  ( 
         <Sheet
           sx={{
             display: { xs: 'none', sm: 'initial' },
@@ -514,6 +326,159 @@ export const Dashboard = () => {
             <Button variant="plain" size="sm" startDecorator={<PersonIcon />}>
               View Full Profile
             </Button>
+          </Box>
+        </Sheet>
+
+        )}
+
+         {/* Right Side Profile View for Explore Page*/}
+         { showExplore &&  ( 
+        <Sheet
+          sx={{
+            display: { xs: 'none', sm: 'initial' },
+            borderLeft: '1px solid',
+            borderColor: 'neutral.outlinedBorder',
+          }}
+        >
+          <Box sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
+            <Typography sx={{ flex: 1 }}>More Article</Typography>
+            <IconButton variant="outlined" color="neutral" size="sm" onClick={handleIsSheetClose}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+              gap: 2,
+            }}
+            >
+          <Divider />
+
+            {/* Article One */}
+            <Card variant="outlined">
+              <CardOverflow
+                sx={{
+                  borderBottom: '.5px solid',
+                  borderColor: 'neutral.outlinedBorder',
+                }}
+              >
+                <AspectRatio ratio="16/9" color="primary">
+                <CardCover
+                sx={{
+                  backgroundImage: `url(${articleOneImage})`,
+                  backgroundSize: 'cover',
+                  transition: 'transform 0.3s ease',
+                      '&:hover': {
+                     transform: 'scale(1.05)',
+                      },
+                }}
+                >
+                 <Link
+                  to="https://www.news-herald.com/2023/04/11/alumni-should-have-active-role-in-inspiring-current-hs-sports-programs-opinion/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  click
+                </Link>
+                </CardCover>
+                </AspectRatio>
+              </CardOverflow>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Box sx={{ flex: 1 }}>
+                  <Typography>Alumni should have active role in inspiring current HS sports programs | Opinion</Typography>
+                  <Typography level="body3" mt={0.5}>
+                    Created By: Chris Lillstrung
+                  </Typography>
+                  <Typography level="body3" mt={0.5}>
+                    Created: Saturday, July 15th 2023
+                  </Typography>
+                </Box>
+              </Box>
+            </Card>
+
+            {/* Article Two */}
+            <Card variant="outlined">
+              <CardOverflow
+                sx={{
+                  borderBottom: '.5px solid',
+                  borderColor: 'neutral.outlinedBorder',
+                }}
+              >
+                <AspectRatio ratio="16/9" color="primary">
+                <CardCover
+                sx={{
+                  backgroundImage: `url(${articleTwoImage})`,
+                  backgroundSize: 'cover',
+                  transition: 'transform 0.3s ease',
+                      '&:hover': {
+                     transform: 'scale(1.05)',
+                      },
+                }}
+                >
+                  <Link
+                    to="https://www.jamesgmartin.center/2023/05/undoing-diversity-equity-and-inclusion-requires-alumni-effort/" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    click
+                  </Link>
+                 
+                </CardCover>
+                </AspectRatio>
+              </CardOverflow>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Box sx={{ flex: 1 }}>
+                  <Typography>Undoing “Diversity, Equity, and Inclusion” Requires Alumni Effort</Typography>
+                  <Typography level="body3" mt={0.5}>
+                    Created By: Garland Tucker
+                  </Typography>
+                  <Typography level="body3" mt={0.5}>
+                    Created: Monday, May 29th 2023
+                  </Typography>
+                </Box>
+              </Box>
+            </Card>
+
+            {/* Article Three */}
+            <Card variant="outlined">
+              <CardOverflow
+                sx={{
+                  borderBottom: '.5px solid',
+                  borderColor: 'neutral.outlinedBorder',
+                }}
+              >
+                <AspectRatio ratio="16/9" color="primary">
+                <CardCover
+                sx={{
+                  backgroundImage: `url(${articleThreeImage})`,
+                  backgroundSize: 'cover',
+                  transition: 'transform 0.3s ease',
+                      '&:hover': {
+                     transform: 'scale(1.05)',
+                      },
+                }}
+                >
+                  <Link
+                  to="https://www.bu.edu/articles/2023/5-tips-for-life-after-college-a-guide-to-living-life-as-an-alumni/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  > click</Link>
+                </CardCover>
+                </AspectRatio>
+              </CardOverflow>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Box sx={{ flex: 1 }}>
+                  <Typography>5 Tips for Life After College: A Guide To Living Life As An Alumni</Typography>
+                  <Typography level="body3" mt={0.5}>
+                    Created By: Jada Warmington
+                  </Typography>
+                  <Typography level="body3" mt={0.5}>
+                    Posted: Tuesday, May 16th 2023
+                  </Typography>
+                </Box>
+              </Box>
+            </Card>
           </Box>
         </Sheet>
 
