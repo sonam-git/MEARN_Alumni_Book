@@ -6,14 +6,13 @@ import CardOverflow from '@mui/joy/CardOverflow';
 import CardCover from '@mui/joy/CardCover';
 import Typography from '@mui/joy/Typography';
 
-
 import IconButton from '@mui/joy/IconButton';
 import ViewCompactAltIcon from '@mui/icons-material/ViewCompactAlt';
 
 // Icons import
 import PersonIcon from '@mui/icons-material/Person';
 
-const Connect = ({ users, }) => {
+const Connect = ({ users, handlePersonIconClick }) => {
     return(
         <div>
             <Typography 
@@ -61,6 +60,7 @@ const Connect = ({ users, }) => {
                       'linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.12))',
                   }}
                 />
+                <img src={users.image} alt="User Avatar" />
                 </AspectRatio>
               </CardOverflow>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -71,8 +71,9 @@ const Connect = ({ users, }) => {
                     {users.email}
                   </Typography>
                 </Box>
-                <IconButton variant="plain" color="neutral">
-                  <PersonIcon />
+                <IconButton variant="plain" color="neutral" onClick={() => handlePersonIconClick(users)}>
+                  <PersonIcon/>
+                  
                 </IconButton>
               </Box>
             </Card>

@@ -20,6 +20,7 @@ import Auth from "../utils/auth";
 import { useMutation } from "@apollo/client";
 import { Link } from 'react-router-dom';
 import { Grid } from "@mui/material";
+import Axios from 'axios';
 
 // allows toggling between light and dark modes.
 const ColorSchemeToggle = ({ onClick, ...props }) => {
@@ -95,34 +96,59 @@ export const Signup = () => {
   
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-
+  
     try {
-      const { data } = await addUser({
-        variables: {...formState},
-      });
+  
+      
+      const formData = new FormData();
+      formData.append('file', formState.image);
+      formData.append('upload_preset', 'logging_preset'); // Replace 'YOUR_UPLOAD_PRESET_NAME' with the name of your created upload preset
 
+      const response = await Axios.post(
+      'https://api.cloudinary.com/v1_1/dnuanxqxg/image/upload',
+      formData
+    );
+
+      const imageUrl = response.data.secure_url;
+      console.log(imageUrl);
+
+      // Add the image URL to the formState
+      const { data } = await addUser({
+        variables: {
+          firstname: formState.firstname,
+          lastname: formState.lastname,
+          username: formState.username,
+          email: formState.email,
+          password: formState.password,
+          image: imageUrl, // Pass the image URL to the addUser mutation
+        },
+      });
+  
       const token = data.addUser.token;
       Auth.login(token);
+  
     } catch (error) {
       console.log(error);
-      setFormState({
-        firstname: '',
-        lastname: '',
-        username: '',
-        email: '',
-        password: '',
-        image: null,
-      });
     }
-   
   };
+  
+  
 
   const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormState({
-      ...formState,
-      [name]: value,
-    });
+    const { name, value, type } = event.target;
+
+    if (type === "file") {
+      const fieldValue = event.target.files[0];
+      setFormState({
+        ...formState,
+        [name]: fieldValue,
+      });
+    } else {
+      setFormState({
+        ...formState,
+        [name]: value,
+      });
+    }
   };
 
   // return signup component
@@ -272,6 +298,14 @@ export const Signup = () => {
                   name="password"
                   type="password"
                   id="password"
+                  onChange={handleChange}
+                />
+              </FormControl>
+              <FormControl required>
+              <FormLabel>Upload Image</FormLabel>
+                <Input
+                  name="image"
+                  type="file"
                   onChange={handleChange}
                 />
               </FormControl>

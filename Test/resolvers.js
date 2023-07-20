@@ -4,12 +4,6 @@ const cloudinary = require("cloudinary").v2;
 const { User, Post } = require("../models");
 const { signToken } = require("../utils/auth");
 
-cloudinary.config({ 
-  cloud_name: 'dnuanxqxg', 
-  api_key: '768784817278892', 
-  api_secret: 'u9P50V-GFNRIGKXjX4GzcQdYSB4' 
-});
-
 const resolvers = {
   /************************* QUERIES *************************/
   Query: {
@@ -93,12 +87,9 @@ const resolvers = {
     // creates a new user with the provided information
     addUser: async (
       parent,
-      { firstname, lastname, username, email, password}
+      { firstname, lastname, username, email, password }
     ) => {
-
-try{
       // Create the user with the provided information
-
       const user = await User.create({
         firstname,
         lastname,
@@ -109,10 +100,6 @@ try{
       // signs a token for authentication, and returns the token and user.
       const token = signToken(user);
       return { token, user };
-    } catch (error) {
-      console.error(error);
-      throw new Error('Failed to create user');
-    }
     },
 
     // add friend to your friend list
@@ -269,3 +256,67 @@ try{
 };
 // export module
 module.exports = resolvers;
+
+
+// import necessary packages
+const { gql } = require('apollo-server-express');
+
+const typeDefs = gql`
+type User {
+  _id: ID!
+  firstname: String!
+  lastname: String!
+  username: String!
+  email: String!
+  posts: [Post]
+  friends: [User]
+}
+
+type Post {
+  _id: ID!
+  postText: String!
+  postAuthor: String!
+  createdAt: String!
+  comments: [Comment]
+  likes: [Like]
+}
+
+type Comment {
+  _id: ID!
+  commentText: String!
+  commentAuthor: String!
+  createdAt: String!
+}
+
+type Like {
+  _id: ID!
+  username: String!
+  createdAt: String!
+}
+
+type Auth {
+  token: ID!
+  user: User
+}
+type Query {
+    users: [User]
+    user(userId: ID!): User
+    posts: [Post]
+    post(postId: ID!): Post
+    me: User
+  }
+
+  type Mutation {
+    addUser(firstname: String!,lastname: String!,username: String!, email: String!, password: String! ): Auth
+    login(email: String!, password: String!): Auth
+    addFriend(userId: ID!, friendId: ID!): User
+    removeFriend(friendId: ID!): User 
+    addPost(postText: String!): Post
+    addComment(postId: ID!, commentText: String!): Post
+    removePost(postId: ID!): Post
+    removeComment(postId: ID!, commentId: ID!): Post
+    likePost(postId: ID!): Post!
+  }
+`;
+
+module.exports = typeDefs;

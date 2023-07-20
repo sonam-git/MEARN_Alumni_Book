@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
-import { Link } from 'react-router-dom';
+import { useQuery } from '@apollo/client';
+import {  QUERY_PROFILES, GET_ME, GET_USER } from '../utils/queries';
+import { Link, useParams, Navigate } from 'react-router-dom';
 import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
 import AspectRatio from '@mui/joy/AspectRatio';
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
 import Typography from '@mui/joy/Typography';
-import Input from '@mui/joy/Input';
 import IconButton from '@mui/joy/IconButton';
 import Divider from '@mui/joy/Divider';
 import Sheet from '@mui/joy/Sheet';
@@ -24,16 +25,11 @@ import articleTwoImage from '../assets/images/article-two.jpeg';
 import articleThreeImage from '../assets/images/article-three.jpg';
 
 // Icons import
-import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import PersonIcon from '@mui/icons-material/Person';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import LogoutIcon from '@mui/icons-material/Logout';
-import MenuIcon from '@mui/icons-material/Menu';
 
 import CloseIcon from '@mui/icons-material/Close';
-import HomeIcon from '@mui/icons-material/Home';
 import ExploreIcon from '@mui/icons-material/Explore';
 import InfoIcon from '@mui/icons-material/Info';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
@@ -41,19 +37,15 @@ import ViewCompactAltIcon from '@mui/icons-material/ViewCompactAlt';
 
 // custom
 import filesTheme from '../containers/Theme';
-import Menu from '../containers/Menu';
 import Header from '../components/Header';
 import Layout from '../containers/Layout';
 import Connect from '../components/Connect';
 import Explore from '../components/Explore';
 import Auth from '../utils/auth'
 
-import { useQuery } from '@apollo/client';
-import { GET_USERS } from '../utils/queries';
-
 function ColorSchemeToggle() {
   const { mode, setMode } = useColorScheme();
-  const [mounted, setMounted] = React.useState(false);
+  const [mounted, setMounted] = useState(false);
   React.useEffect(() => {
     setMounted(true);
   }, []);
@@ -81,30 +73,54 @@ function ColorSchemeToggle() {
 
 export const Dashboard = () => {
 
-  const { loading, data } = useQuery(GET_USERS);
-  const users = data?.users || [];
-
-
   const [showLogin, setShowLogin] = useState(false);
 
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const [showConnect, setShowConnect] = useState(false);
   const [showExplore, setShowExplore] = useState(true);
+
+  const [selectedUser, setSelectedUser] = useState(null);
   
 
   const [selectedItem, setSelectedItem] = useState('explore');
 
+  const { username } = useParams();
+
+  const { loading, data } = useQuery(QUERY_PROFILES);
+  const users = data?.users || [];
+
+  const { loading1, data1 } = useQuery(
+    username ? GET_USER : GET_ME,
+    {
+      variables: { username: username }
+    }
+  );
+
+  const profile = data1?.me || data1?.user || {};
+
+  if (Auth.loggedIn() && Auth.getProfile().data._id === username) {
+    return <Navigate to="/me" />;
+  }
+
+  if (loading1) {
+    return <div>Loading...</div>;
+  }
+
+
+  const handlePersonIconClick = (user) => {
+    setSelectedUser(user);
+  };
 
   const handleLogout = (event) => {
     event.preventDefault();
     Auth.logout();
   }
 
-  const handleShowLogin = () => {
-    setShowLogin(true);
-  };
+  // const handleShowLogin = () => {
+  //   setShowLogin(true);
+  // };
 
   const handleItemClick = (item) => {
     setSelectedItem(item);
@@ -123,14 +139,14 @@ export const Dashboard = () => {
   };
 
 
-  const handlePersonAddIconClick = (event) => {
-    event.preventDefault();
-    setIsSheetOpen(true);
-  };
+  // const handlePersonAddIconClick = (event) => {
+  //   event.preventDefault();
+  //   setIsSheetOpen(true);
+  // };
 
   const handleIsSheetClose = (event) => {
     event.preventDefault();
-    setIsSheetOpen(!isSheetOpen);
+    setIsSheetOpen(false);
   }
 
   return (
@@ -149,7 +165,10 @@ export const Dashboard = () => {
           }),
         }}
       >
-        <Header/>
+    
+      <Header/>
+         
+        
         {/* Side Bar Navigations */}
         <Layout.SideNav>
         <List size="sm" sx={{ '--ListItem-radius': '8px', '--List-gap': '4px' }}>
@@ -238,6 +257,7 @@ export const Dashboard = () => {
           ) : (
             <Connect
               users={users}
+              handlePersonIconClick={handlePersonIconClick}
               title="Some Users"
               />
           )
@@ -246,7 +266,7 @@ export const Dashboard = () => {
         </Layout.Main>
 
         {/* Right Side Profile View for Connect Page */}
-        { showConnect &&  ( 
+        { showConnect && selectedUser &&  ( 
         <Sheet
           sx={{
             display: { xs: 'none', sm: 'initial' },
@@ -255,17 +275,11 @@ export const Dashboard = () => {
           }}
         >
           <Box sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
-            <Typography sx={{ flex: 1 }}>Example Profile 2</Typography>
-            <IconButton variant="outlined" color="neutral" size="sm" onClick={handleIsSheetClose}>
-              <CloseIcon />
-            </IconButton>
+            <Typography sx={{ flex: 1 }} key={profile._id}>{selectedUser.firstname} {selectedUser.lastname}</Typography>
           </Box>
           <Divider />
           <AspectRatio ratio="21/9">
-            <img
-              alt=""
-              src="https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?auto=format&fit=crop&w=774"
-            />
+          <img src={selectedUser.image} alt="User Avatar" />
           </AspectRatio>
           <Box sx={{ p: 2, display: 'flex', gap: 1, alignItems: 'center' }}>
             <Typography level="body2" mr={1}>
@@ -282,39 +296,14 @@ export const Dashboard = () => {
               '& > *:nth-child(odd)': { color: 'text.secondary' },
             }}
           >
-             <Typography level="body2">Age</Typography>
+             <Typography level="body2">Username</Typography>
             <Typography level="body2" textColor="text.primary">
-              27
+              {selectedUser.username}
             </Typography>
 
-            <Typography level="body2">High School/University</Typography>
+            <Typography level="body2">Email</Typography>
             <Typography level="body2" textColor="text.primary">
-              UC Berkeley
-            </Typography>
-
-            <Typography level="body2">Occupation</Typography>
-            <Typography level="body2" textColor="text.primary">
-              Software Engineer
-            </Typography>
-
-            <Typography level="body2">Graduated</Typography>
-            <Typography level="body2" textColor="text.primary">
-              May 31, 2016
-            </Typography>
-
-            <Typography level="body2">Work</Typography>
-            <Typography level="body2" textColor="text.primary">
-              Krusty Krab
-            </Typography>
-
-            <Typography level="body2">Hobbies</Typography>
-            <Typography level="body2" textColor="text.primary">
-              Music, Sports, Games
-            </Typography>
-
-            <Typography level="body2">Joined</Typography>
-            <Typography level="body2" textColor="text.primary">
-              March 07, 2011
+            {selectedUser.email}
             </Typography>
 
           </Box>
