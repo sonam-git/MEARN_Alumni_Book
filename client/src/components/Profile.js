@@ -19,9 +19,9 @@ export default function Profile() {
   const { loading, data, error } = useQuery(GET_ME);
   const [postText, setPostText] = useState("");
   const [addPost] = useMutation(ADD_POST);
-  const [showCommentBox, setShowCommentBox] = useState(false);
+  // const [showCommentBox, setShowCommentBox] = useState(false);
 const [commentText, setCommentText] = useState("");
-
+const [commentBoxStates, setCommentBoxStates] = useState({});
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
@@ -44,7 +44,7 @@ const [commentText, setCommentText] = useState("");
   console.log(data);
   // //use data as props
   // let postItems;
-  let friendsDisplay;
+ 
   // //  console.log('  before posts check');
   // if (data.me.posts.length) {
   //   console.log('Posts exist');
@@ -70,29 +70,30 @@ const [commentText, setCommentText] = useState("");
   //   postItems = <h1>No posts at the moment</h1>;
   // }
   // //   console.log('Before friends check');
-    if (data.me.friends.length) {
-      console.log('Friends exist');
-      friendsDisplay = data.me.friends.map((friend) => (
-        <div key={friend._id}>
-          <h3>{friend.fristname}</h3>
-          
-        </div>
-      ));
-    } else {
-       console.log('No friends');
-      friendsDisplay = <h1>No Friends at the moment</h1>;
-    }
+
   // console.log('Before return');
   //useMutation for hook mutation
-  const handleCommentSubmit = () => {
-    // Perform any necessary actions with the comment text
-    console.log("Comment submitted:", commentText);
+  // const handleCommentSubmit = () => {
+  //   // Perform any necessary actions with the comment text
+  //   console.log("Comment submitted:", commentText);
   
-    // Clear the comment textbox and hide it
-    setCommentText("");
-    setShowCommentBox(false);
+  //   // Clear the comment textbox and hide it
+  //   setCommentText("");
+  //   setShowCommentBox(false);
+  // };
+  const toggleCommentBox = (postId) => {
+    setCommentBoxStates((prevState) => ({
+      ...prevState,
+      [postId]: !prevState[postId],
+    }));
   };
-
+  const handleCommentSubmit = (postId) => {
+    // Perform any necessary actions with the comment text for the specific post
+    console.log(`Comment submitted for post ${postId}:`, commentText);
+  
+    // Clear the comment textbox for the specific post
+    setCommentText("");
+  };
   return (
     <Sheet>
       <Grid container spacing={2}>
@@ -154,13 +155,13 @@ const [commentText, setCommentText] = useState("");
                 <h3>{post.postText}</h3>
                 <p>Author: {post.postAuthor}</p>
                 <button className="likeButton">like</button>
-                <button className="commentButton" onClick={() => setShowCommentBox(!showCommentBox)}>
+                <button className="commentButton" onClick={() => toggleCommentBox(post._id)}>
                   comment
                 </button>
-                {showCommentBox && (
+                {commentBoxStates[post._id] && (
                   <div>
                     <TextField
-                      id="comment-textfield"
+                      id={`comment-textfield-${post._id}`}
                       label="Add a comment"
                       value={commentText}
                       onChange={(event) => setCommentText(event.target.value)}
@@ -197,7 +198,15 @@ const [commentText, setCommentText] = useState("");
         {/* education right box of layout */}
         <Grid item xs={8}>
           <Box>Friends</Box>
-          {friendsDisplay}
+          {data.me.friends.length ? (
+            data.me.friends.map((friend) => (
+              <div key={friend._id}>
+                <h3>{friend.firstname}</h3>
+              </div>
+            ))
+          ) : (
+            <h1>No Friends at the moment</h1>
+          )}
           <TextField
             id="outlined-basic"
             label="Friend List"
