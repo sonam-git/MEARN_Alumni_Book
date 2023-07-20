@@ -20,11 +20,11 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: authMiddleware,
-  persistedQueries: false, // Disable persisted queries
-  cacheControl: {
-    defaultMaxAge: 3600, // Set the default cache expiration time in seconds (e.g., 1 hour)
-    calculateHttpHeaders: false, // Disable automatic HTTP cache headers
-  },
+  // persistedQueries: false, // Disable persisted queries
+  // cacheControl: {
+  //   defaultMaxAge: 3600, // Set the default cache expiration time in seconds (e.g., 1 hour)
+  //   calculateHttpHeaders: false, // Disable automatic HTTP cache headers
+  // },
 });
 
 

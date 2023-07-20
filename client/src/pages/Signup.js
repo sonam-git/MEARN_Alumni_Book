@@ -1,67 +1,62 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import CssBaseline from "@mui/joy/CssBaseline";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
-import Checkbox from "@mui/joy/Checkbox";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel, { formLabelClasses } from "@mui/joy/FormLabel";
 import IconButton from "@mui/joy/IconButton";
-import HomeIcon from "@mui/icons-material/Home";
-// import Link from '@mui/joy/Link';
-import Input from '@mui/joy/Input';
-import Typography from '@mui/joy/Typography';
-import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
-import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
-import DarkModePicture from '../assets/images/darkmode-pic.webp';
-import LightModePicture from '../assets/images/lightmode-pic.jpg';
-import Logo from '../assets/images/AB_Logo.png';
-import { useMutation } from '@apollo/client';
-import { LOGIN } from '../utils/mutations';
-import Auth from '../utils/auth';
-import { Grid } from '@mui/material';
-import UserDashboard from '../pages/UserProfile';
-import { Link } from "react-router-dom";
+import HomeIcon from '@mui/icons-material/Home';
+import Input from "@mui/joy/Input";
+import Typography from "@mui/joy/Typography";
+import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
+import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
+import DarkModePicture from "../assets/images/darkmode-pic.webp";
+import LightModePicture from "../assets/images/lightmode-pic.jpg";
+import Logo from "../assets/images/AB_Logo.png";
+import { ADD_USER } from "../utils/mutations";
+import Auth from "../utils/auth";
+import { useMutation } from "@apollo/client";
+import { Link } from 'react-router-dom';
+import { Grid } from "@mui/material";
 
+// allows toggling between light and dark modes.
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
-  const [mounted, setMounted] = React.useState(false);
+  const [mounted, setMounted] = useState(false);
   React.useEffect(() => {
     setMounted(true);
   }, []);
   if (!mounted) {
-    return <IconButton size="sm" variant="plain" color="neutral" disabled />;
+    return <IconButton size="sm" variant="plain" color="neutral" disabled />
+    ;
   }
   return (
-    <div style={{ position: "fixed", top: "100px", right: "10px" }}>
-      <Grid container spacing={1} alignItems="center">
-        <Grid item>
-          <IconButton
-            id="toggle-mode"
-            size="sm"
-            variant="plain"
-            color="neutral"
-            aria-label="toggle light/dark mode"
-            {...props}
-            onClick={(event) => {
-              if (mode === "light") {
-                setMode("dark");
-              } else {
-                setMode("light");
-              }
-              onClick?.(event);
-            }}
-          >
-            {mode === "light" ? (
-              <DarkModeRoundedIcon />
-            ) : (
-              <LightModeRoundedIcon />
-            )}
-          </IconButton>
-        </Grid>
-        <Grid item>
-        <Link to="/">
+    <div style={{ position: 'fixed', top: '100px', right: '10px' }}>
+    <Grid container spacing={1} alignItems="center">
+      <Grid item>
+    <IconButton
+      id="toggle-mode"
+      size="sm"
+      variant="plain"
+      color="neutral"
+      aria-label="toggle light/dark mode"
+      {...props}
+      onClick={(event) => {
+        if (mode === "light") {
+          setMode("dark");
+        } else {
+          setMode("light");
+        }
+        onClick?.(event);
+      }}
+    >
+      {mode === "light" ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
+    </IconButton>
+    </Grid>
+    <Grid item>
+    <Link to="/">
   <IconButton
     size="sm"
     variant="outlined"
@@ -84,50 +79,53 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
   );
 };
 
- export const Login = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [formState, setFormState] = useState({
-      email: '',
-      password: '',
-      persistent: false,
-    });
-    const [login, { error }] = useMutation(LOGIN);
+// sign up functional component
+export const Signup = () => {
+  //  state variable
+  const [formState, setFormState] = useState({
+  firstname: '',
+  lastname: '',
+  username: '',
+  email: '',
+  password: '',
+  image: null, 
+ });
 
-    const handleFormSubmit = async (event) => {
-      event.preventDefault();
-      try {
-        const mutationResponse = await login({
-          variables: { email: formState.email, password: formState.password , persistent: formState.persistent},
-        });
-        const token = mutationResponse.data.login.token;
-        Auth.login(token);
-        setIsLoggedIn(true);
-      } catch (e) {
-        console.log(e);
-      }
-      // Reset the form
-    setFormState({
-      email: "",
-      password: "",
-      persistent: false,
-    });
-    };
+  const [addUser, {error, data}] = useMutation(ADD_USER);
+  
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
 
-    const handleChange = (event) => {
-      const { name, value, checked,type } = event.target;
-      const inputValue = type === 'checkbox' ? checked : value;
-      setFormState({
-        ...formState,
-        [name]:inputValue,
+    try {
+      const { data } = await addUser({
+        variables: {...formState},
       });
-    };
 
-    // if user is logged in the render dashboard 
-    if (isLoggedIn) {
-      return <UserDashboard />;
+      const token = data.addUser.token;
+      Auth.login(token);
+    } catch (error) {
+      console.log(error);
+      setFormState({
+        firstname: '',
+        lastname: '',
+        username: '',
+        email: '',
+        password: '',
+        image: null,
+      });
     }
+   
+  };
 
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormState({
+      ...formState,
+      [name]: value,
+    });
+  };
 
+  // return signup component
   return (
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
       <CssBaseline />
@@ -178,10 +176,8 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
               justifyContent: "space-between",
             }}
           >
-         
-               {/* Logo */}
-          <img src={Logo} alt="Logo" width={250} height={150} />
-          
+            {/* Logo */}
+            <img src={Logo} alt="Logo" width={250} height={150} />
             <ColorSchemeToggle />
           </Box>
           <Box
@@ -209,73 +205,89 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
           >
             <div>
               <Typography component="h1" fontSize="xl2" fontWeight="lg">
-                Log In Here!
+                Sign Up Here!
               </Typography>
               <Typography level="body2" sx={{ my: 1, mb: 3 }}>
-                Welcome back User!
+                Welcome New User!
               </Typography>
             </div>
-            { isLoggedIn ? (
-              <p>Login Success! </p>
+
+
+            {/* Signup Form */}
+            { data ? (
+              <p>
+              Sign Up Success!
+              </p>
             ) : (
-              <form onSubmit={handleFormSubmit}>
+
+            <form onSubmit={handleFormSubmit}>
+            <div style={{ display: 'flex', columnGap: 3, width: '50%'}}>
+                <FormControl required >
+                  <FormLabel>First Name</FormLabel>
+                  <Input
+                    placeholder="First"
+                    name="firstname"
+                    type="firstname"
+                    id="firstname"
+                    onChange={handleChange}
+                    style={{width: '92%'}}
+                  />
+                </FormControl>
+                <FormControl required>
+                  <FormLabel>Last Name</FormLabel>
+                  <Input
+                    placeholder="Last"
+                    name="lastname"
+                    type="lastname"
+                    id="lastname"
+                    onChange={handleChange}
+                    style={{width: '92%'}}
+                  />
+                </FormControl>
+              </div>
               <FormControl required>
-                <FormLabel htmlFor="email">Email</FormLabel>
+                <FormLabel>Username</FormLabel>
                 <Input
-                  placeholder="youremail@test.com"
+                  placeholder="Username"
+                  name="username"
+                  type="username"
+                  id="username"
+                  onChange={handleChange}
+                />
+              </FormControl>
+              <FormControl required>
+                <FormLabel>Email</FormLabel>
+                <Input
+                  placeholder="Email"
                   name="email"
                   type="email"
                   id="email"
-                  value={formState.email}
                   onChange={handleChange}
                 />
               </FormControl>
               <FormControl required>
-                <FormLabel htmlFor="pwd">Password</FormLabel>
+                <FormLabel>Password</FormLabel>
                 <Input
-                  placeholder="******"
+                  placeholder="Password"
                   name="password"
                   type="password"
-                  id="pwd"
-                  value={formState.password}
+                  id="password"
                   onChange={handleChange}
                 />
               </FormControl>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <Checkbox
-                  size="sm"
-                  label="Remember for 30 days"
-                  name="persistent"
-                  checked={formState.persistent}
-                  onChange={handleChange}
-                />
-                {/* <Link fontSize="sm" href="#replace-with-a-link" fontWeight="lg">
-                  Forgot your password?
-                </Link> */}
-              </Box>
-
-              <Button type="submit" fullWidth>
-                Log In
-              </Button>
-              <Link to="/signup">
-                <Button fullWidth>← Go to Sign Up</Button>
-              </Link>
-            </form>
+                <Button type="submit" fullWidth>
+                  Sign Up
+                </Button>
+                <Link to="/login"><Button fullWidth>← Go to Login</Button></Link>
+              </form>
             )}
 
-            {error ? (
-                <div>
-                  <p className="error-text">
-                    The provided credentials are incorrect
-                  </p>
-                </div>
-              ) : null}
+            {error && (
+              <div className="my-3 p-3 bg-danger text-white">
+                {'Username/Email Already Taken. Please Try Again!'}
+              </div>
+            )}
+
           </Box>
           <Box component="footer" sx={{ py: 3 }}>
             <Typography level="body3" textAlign="center">
@@ -308,8 +320,6 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
       />
     </CssVarsProvider>
   );
-  
-}
-
-
-export default Login;
+};
+// export signup
+export default Signup;

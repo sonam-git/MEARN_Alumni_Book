@@ -22,12 +22,14 @@ type Post {
 }
 
 type Comment {
+  _id: ID!
   commentText: String!
   commentAuthor: String!
   createdAt: String!
 }
 
 type Like {
+  _id: ID!
   username: String!
   createdAt: String!
 }
@@ -39,7 +41,7 @@ type Auth {
 type Query {
     users: [User]
     user(userId: ID!): User
-    posts(username: String): [Post]
+    posts: [Post]
     post(postId: ID!): Post
     me: User
   }

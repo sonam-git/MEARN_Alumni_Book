@@ -49,7 +49,7 @@ import Explore from '../components/Explore';
 import Auth from '../utils/auth'
 
 import { useQuery } from '@apollo/client';
-import { QUERY_PROFILES } from '../utils/queries';
+import { GET_USERS } from '../utils/queries';
 
 function ColorSchemeToggle() {
   const { mode, setMode } = useColorScheme();
@@ -81,7 +81,7 @@ function ColorSchemeToggle() {
 
 export const Dashboard = () => {
 
-  const { loading, data } = useQuery(QUERY_PROFILES);
+  const { loading, data } = useQuery(GET_USERS);
   const users = data?.users || [];
 
 
