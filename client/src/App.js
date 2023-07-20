@@ -8,13 +8,13 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import Home from "./pages/Home";
-import Profile from "./components/Profile";
-import Signup from "./components/Signup";
+import Profile from "./pages/Profile";
+import Signup from "./pages/Signup";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import { Dashboard } from '@material-ui/icons';
-import Dashboard from "./components/Dashboard";
-import Login from "./components/Login";
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
 
 
 // Construct our main GraphQL API endpoint
