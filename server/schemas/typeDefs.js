@@ -56,5 +56,6 @@ type Query {
     likePost(postId: ID!): Post!
   }
 `;
+//add a mutation for updating/editing post 
 
 module.exports = typeDefs;

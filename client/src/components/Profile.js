@@ -108,6 +108,7 @@ export default function Profile() {
   
       // Perform any necessary actions after successful deletion, such as updating the UI
       console.log("Post deleted successfully");
+      window.location.reload(); 
     } catch (error) {
       // Handle any errors that occur during the deletion process
       console.error("Error deleting post:", error);
