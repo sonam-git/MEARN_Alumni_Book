@@ -2,11 +2,15 @@
 const express = require('express');
 const path = require('path');
 require('dotenv').config();
+const cors = require('cors');
 //import apollo server
 const { ApolloServer } = require('apollo-server-express');
+const { graphqlUploadExpress } = require('graphql-upload'); // Import the graphqlUploadExpress middleware
+
 // import typeDefs and resolvers
 const { typeDefs, resolvers } = require('./schemas');
 const { authMiddleware } = require('./utils/auth');
+
 
 //db connection
 const db = require('./config/connection');
@@ -15,10 +19,13 @@ const db = require('./config/connection');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+app.use(cors());
+
 // create a new instance of ApolloServer,
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  uploads: false,
   context: authMiddleware,
   persistedQueries: false, // Disable persisted queries
   cacheControl: {
@@ -27,7 +34,7 @@ const server = new ApolloServer({
   },
 });
 
-
+app.use(graphqlUploadExpress())
 // body parser middlewares (require for Graphql to work)
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); 
