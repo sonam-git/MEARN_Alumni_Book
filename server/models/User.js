@@ -31,6 +31,10 @@ const userSchema = new Schema({
     required: true,
     minlength: 5,
   },
+  image: {
+    type: String,
+    required: true, // Assuming you store the image URL as a string
+  },
   posts: [
     {
       type: Schema.Types.ObjectId,

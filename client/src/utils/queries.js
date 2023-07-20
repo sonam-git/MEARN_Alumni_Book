@@ -7,6 +7,8 @@ export const QUERY_PROFILES = gql`
       firstname
       lastname
       email
+      username
+      image
     }
   }
 `;

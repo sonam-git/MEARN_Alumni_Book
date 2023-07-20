@@ -127,36 +127,22 @@ export const Header = () => {
             />
             Home
           </IconButton>
-          <Menu
-            id="app-selector"
-            control={
-              <IconButton
-                size="sm"
-                variant="outlined"
-                color="primary"
-                aria-label="Apps"
-                style={{
-                  padding: '10px'
-                }}
-              >
-                <ManageAccountsIcon 
-                style={{
-                  marginRight: '5px'
-                }}
-                />
-                Account
-              </IconButton>
-            }
-            menus={[
-              {
-                label: 'Profile',
-              },
-              {
-                label: 'Settings',
-                
-              },
-            ]}
-          />
+          <IconButton
+            size="sm"
+            variant="outlined"
+            color="primary"
+            aria-label="Apps"
+            style={{
+                padding: '10px'
+            }}
+            >
+            <ManageAccountsIcon 
+               style={{
+                marginRight: '5px'
+            }}
+            />
+                Profile
+            </IconButton>
            <IconButton
             size="sm"
             variant="outlined"

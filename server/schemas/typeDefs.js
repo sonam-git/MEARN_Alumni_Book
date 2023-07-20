@@ -8,6 +8,7 @@ type User {
   lastname: String!
   username: String!
   email: String!
+  image: String
   posts: [Post]
   friends: [User]
 }
@@ -45,7 +46,7 @@ type Query {
   }
 
   type Mutation {
-    addUser(firstname: String!,lastname: String!,username: String!, email: String!, password: String! ): Auth
+    addUser(firstname: String!, lastname: String!, username: String!, email: String!, password: String!, image: String! ): Auth
     login(email: String!, password: String!): Auth
     addFriend(userId: ID!, friendId: ID!): User
     removeFriend(friendId: ID!): User 
