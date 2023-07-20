@@ -155,18 +155,22 @@ const resolvers = {
     //removes a post by its postId
     removePost: async (parent, { postId }, context) => {
       if (context.user) {
-        const post = await Post.findOneAndDelete({
+        try{
+         await Post.findOneAndDelete({
           _id: postId,
           posttAuthor: context.user.username,
         });
-
         await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $pull: { posts: post._id } }
+          { $pull: { posts: postId } }
         );
 
-        return post;
+        return true;
+      } catch (error) {
+        console.error("Error deleting post:", error);
+        return false; // Return false to indicate failure
       }
+    }
       throw new AuthenticationError("You need to be logged in!");
     },
     //removes a comment from a post

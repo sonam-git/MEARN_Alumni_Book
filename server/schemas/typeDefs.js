@@ -51,7 +51,7 @@ type Query {
     removeFriend(friendId: ID!): User 
     addPost(postText: String!): Post
     addComment(postId: ID!, commentText: String!): Post
-    removePost(postId: ID!): Bolean
+    removePost(postId: ID!): Boolean
     removeComment(postId: ID!, commentId: ID!): Post
     likePost(postId: ID!): Post!
   }
