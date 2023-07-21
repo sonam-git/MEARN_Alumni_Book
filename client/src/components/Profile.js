@@ -13,6 +13,8 @@ import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import { GET_ME } from "../utils/queries";
 import { ADD_POST } from "../utils/mutations";
+import { REMOVE_POST } from "../utils/mutations";
+import { ADD_COMMENT } from "../utils/mutations";
 
 export default function Profile() {
   const { loading, data, error } = useQuery(GET_ME);
@@ -20,6 +22,8 @@ export default function Profile() {
   const [addPost] = useMutation(ADD_POST);
   const [commentText, setCommentText] = useState("");
   const [commentBoxStates, setCommentBoxStates] = useState({});
+  const [removePost] = useMutation(REMOVE_POST);
+  const [addComment] = useMutation(ADD_COMMENT);
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -46,8 +50,38 @@ export default function Profile() {
     }));
   };
 
-  const handleCommentSubmit = (postId) => {
+  const handleDeletePost = async (postId) => {
+    try {
+      // Execute the removePost mutation and pass the postId as a variable
+      await removePost({
+        variables: { postId },
+      });
+
+      // Perform any necessary actions after successful deletion, such as updating the UI
+      console.log("Post deleted successfully");
+      window.location.reload();
+    } catch (error) {
+      // Handle any errors that occur during the deletion process
+      console.error("Error deleting post:", error);
+    }
+  };
+
+  const handleCommentSubmit = async (postId) => {
+    // Perform any necessary actions with the comment text for the specific post
     console.log(`Comment submitted for post ${postId}:`, commentText);
+
+    // Try to submit the comment
+    try {
+      await addComment({
+        variables: { postId, commentText },
+      });
+
+      console.log("Comment added successfully");
+    } catch (err) {
+      console.error("Error adding comment:", err);
+    }
+
+    // Clear the comment textbox for the specific post
     setCommentText("");
   };
 
@@ -96,19 +130,35 @@ export default function Profile() {
               },
             }}
           >
-            <Typography sx={{ flex: 1 }}>Create A Post</Typography>
+            <Typography sx={{ flex: 1 }}>Posts</Typography>
             {data.me.posts.length ? (
               data.me.posts.map((post) => (
                 <div key={post._id}>
                   <h3>{post.postText}</h3>
                   <p>Author: {post.postAuthor}</p>
-                  <button className="likeButton">like</button>
+                  {post.postAuthor === data.me.username && (
+                    <>
+                      <button
+                        className="deleteButton"
+                        onClick={() => handleDeletePost(post._id)}
+                      >
+                        Delete
+                      </button>
+                      <button className="editButton">Edit</button>
+                    </>
+                  )}
+              
                   <button
                     className="commentButton"
                     onClick={() => toggleCommentBox(post._id)}
                   >
                     comment
                   </button>
+                  {post.comments.map((comment) => (
+                    <p key={comment._id}>
+                      {comment.commentText} - {comment.commentAuthor}
+                    </p>
+                  ))}
                   {commentBoxStates[post._id] && (
                     <div>
                       <TextField
@@ -127,6 +177,7 @@ export default function Profile() {
             ) : (
               <h1>No posts at the moment</h1>
             )}
+            <Typography sx={{ flex: 1 }}>Create a Post</Typography>
             <form onSubmit={handleFormSubmit}>
               <TextField
                 item
