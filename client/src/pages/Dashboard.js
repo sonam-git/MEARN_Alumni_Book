@@ -278,7 +278,7 @@ export const Dashboard = () => {
             <Typography sx={{ flex: 1 }} key={profile._id}>{selectedUser.firstname} {selectedUser.lastname}</Typography>
           </Box>
           <Divider />
-          <AspectRatio ratio="21/9">
+          <AspectRatio ratio="21/18">
           <img src={selectedUser.image} alt="User Avatar" />
           </AspectRatio>
           <Box sx={{ p: 2, display: 'flex', gap: 1, alignItems: 'center' }}>

@@ -52,14 +52,10 @@ const Connect = ({ users, handlePersonIconClick }) => {
                   borderColor: "neutral.outlinedBorder",
                 }}
               >
-                <AspectRatio ratio="16/9" color="primary">
-                  <CardCover
-                    sx={{
-                      background:
-                        "linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.12))",
-                    }}
+                <AspectRatio ratio="16/13" color="primary">
+                  <img src={users.image} alt="User Avatar" 
+                  style={{ width: '100%', height: '275px'}}
                   />
-                  <img src={users.image} alt="User Avatar" />
                 </AspectRatio>
               </CardOverflow>
               <Box sx={{ display: "flex", alignItems: "center" }}>
