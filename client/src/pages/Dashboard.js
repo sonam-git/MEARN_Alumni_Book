@@ -166,10 +166,7 @@ export const Dashboard = () => {
           }),
         }}
       >
-    
       <Header/>
-         
-        
         {/* Side Bar Navigations */}
         <Layout.SideNav>
         <List size="sm" sx={{ '--ListItem-radius': '8px', '--List-gap': '4px' }}>
@@ -295,7 +292,7 @@ export const Dashboard = () => {
               p: 2,
               display: 'grid',
               gridTemplateColumns: 'auto 1fr',
-              '& > *:nth-child(odd)': { color: 'text.secondary' },
+              '& > *:nth-of-type(odd)': { color: 'text.secondary' },
             }}
           >
              <Typography level="body2">Username</Typography>
