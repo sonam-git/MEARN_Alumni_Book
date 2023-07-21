@@ -91,20 +91,25 @@ const resolvers = {
     },
 
     // creates a new user with the provided information
-    addUser: async (
-      parent,
-      { firstname, lastname, username, email, password}
-    ) => {
+    addUser: async (parent,{ firstname, lastname, username, email, password, image}) => {
 
 try{
-      // Create the user with the provided information
-
-      const user = await User.create({
+  let imageUrl = null;
+  // Upload the image to Cloudinary only if an image was provided
+  if (image) {
+    const { secure_url: uploadedImageUrl } = await cloudinary.uploader.upload(image, {
+      upload_preset: 'logging_preset', // Replace 'logging_preset' with your upload preset name
+    });
+    imageUrl = uploadedImageUrl;
+  }
+    // Create the user with the provided information
+    const user = await User.create({
         firstname,
         lastname,
         username,
         email,
         password,
+        image: imageUrl,
       });
       // signs a token for authentication, and returns the token and user.
       const token = signToken(user);

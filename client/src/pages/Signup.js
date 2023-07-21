@@ -98,8 +98,6 @@ export const Signup = () => {
     event.preventDefault();
   
     try {
-  
-      
       const formData = new FormData();
       formData.append('file', formState.image);
       formData.append('upload_preset', 'logging_preset'); // Replace 'YOUR_UPLOAD_PRESET_NAME' with the name of your created upload preset
@@ -123,7 +121,7 @@ export const Signup = () => {
           image: imageUrl, // Pass the image URL to the addUser mutation
         },
       });
-  
+  console.log(data);
       const token = data.addUser.token;
       Auth.login(token);
   
@@ -301,14 +299,14 @@ export const Signup = () => {
                   onChange={handleChange}
                 />
               </FormControl>
-              {/* <FormControl required>
+              <FormControl required>
               <FormLabel>Upload Image</FormLabel>
                 <Input
                   name="image"
                   type="file"
                   onChange={handleChange}
                 />
-              </FormControl> */}
+              </FormControl>
                 <Button type="submit" fullWidth>
                   Sign Up
                 </Button>
