@@ -100,6 +100,7 @@ export const ADD_COMMENT = gql`
       postAuthor
       createdAt
       comments {
+        _id
         commentText
         commentAuthor
         createdAt
