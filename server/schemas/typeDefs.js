@@ -53,6 +53,7 @@ type Query {
     addFriend(userId: ID!, friendId: ID!): User
     removeFriend(friendId: ID!): User 
     addPost(postText: String!): Post
+    updatePost(postId: ID!, postText: String!): Post
     addComment(postId: ID!, commentText: String!): Post
     removePost(postId: ID!): Post
     removeComment(postId: ID!, commentId: ID!): Post

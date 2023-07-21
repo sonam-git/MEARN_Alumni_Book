@@ -207,6 +207,35 @@ try{
       }
       throw new AuthenticationError("You need to be logged in!");
     },
+
+    updatePost: async (_, { postId, postText }, context) => {
+      // Check if the user is authenticated
+      if (!context.user) {
+        throw new AuthenticationError("You need to be logged in!");
+      }
+  
+      try {
+        // Find the post by postId
+        const post = await Post.findById(postId);
+  
+        if (!post) {
+          throw new Error("Post not found.");
+        }
+  
+        // Check if the current user is the author of the post
+        if (post.postAuthor !== context.user.username) {
+          throw new AuthenticationError("You are not the author of this post.");
+        }
+  
+        // Update the postText
+        post.postText = postText;
+        await post.save();
+  
+        return post;
+      } catch (error) {
+        throw new Error("Failed to update the post.");
+      }
+    },
     //removes a post by its postId
     removePost: async (parent, { postId }, context) => {
       if (context.user) {
