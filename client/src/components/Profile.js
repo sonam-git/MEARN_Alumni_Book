@@ -87,11 +87,11 @@ export default function Profile() {
     setCommentText("");
   };
 
-  const handleDeleteComment = async (postId,commentId) => {
+  const handleDeleteComment = async (postId, commentId) => {
     try {
       // Execute the removeComment mutation and pass the commentId as a variable
       await removeComment({
-        variables: { postId,commentId },
+        variables: { postId, commentId },
       });
 
       // Perform any necessary actions after successful deletion, such as updating the UI
@@ -171,7 +171,29 @@ export default function Profile() {
                   >
                     comment
                   </button>
-                  {post.comments.map((comment) => (
+                  {post.comments.map((comment) => {
+                    console.log(`Post ID: ${post._id}`);
+                    console.log(`Comment ID: ${comment._id}`);
+                    return (
+                      <div key={comment._id}>
+                        <p>
+                          {comment.commentText} - {comment.commentAuthor}
+                        </p>
+                        {comment.commentAuthor === data.me.username && (
+                          <button
+                            className="deleteCommentButton"
+                            onClick={() =>
+                              handleDeleteComment(post._id, comment._id)
+                            }
+                          >
+                            Delete Comment
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })}
+
+                  {/* {post.comments.map((comment) => (
                     <div key={comment._id}>
                       <p>
                         {comment.commentText} - {comment.commentAuthor}
@@ -185,7 +207,7 @@ export default function Profile() {
                         </button>
                       )}
                     </div>
-                  ))}
+                  ))} */}
                   {commentBoxStates[post._id] && (
                     <div>
                       <TextField
