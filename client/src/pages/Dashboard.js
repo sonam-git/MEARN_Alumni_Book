@@ -100,6 +100,8 @@ export const Dashboard = () => {
 
   const profile = data1?.me || data1?.user || {};
 
+  const filteredUsers = users.filter((user) => user._id !== profile._id);
+
   if (Auth.loggedIn() && Auth.getProfile().data._id === username) {
     return <Navigate to="/me" />;
   }
@@ -107,7 +109,6 @@ export const Dashboard = () => {
   if (loading1) {
     return <div>Loading...</div>;
   }
-
 
   const handlePersonIconClick = (user) => {
     setSelectedUser(user);
@@ -253,9 +254,10 @@ export const Dashboard = () => {
             <div>Loading....</div>
           ) : (
             <Connect
-              users={users}
-              handlePersonIconClick={handlePersonIconClick}
-              title="Some Users"
+            users={filteredUsers}
+            handlePersonIconClick={handlePersonIconClick}
+            loggedInUser={profile} // Pass the loggedInUser prop here
+            title="Some Users"
               />
           )
         )}
@@ -263,7 +265,7 @@ export const Dashboard = () => {
         </Layout.Main>
 
         {/* Right Side Profile View for Connect Page */}
-        { showConnect && selectedUser &&  ( 
+        {selectedUser &&  ( 
         <Sheet
           sx={{
             display: { xs: 'none', sm: 'initial' },
@@ -307,7 +309,7 @@ export const Dashboard = () => {
           <Divider />
           <Box sx={{ py: 2, px: 1 }}>
             <Button variant="plain" size="sm" startDecorator={<PersonIcon />}>
-              View Full Profile
+              View Friends List
             </Button>
           </Box>
         </Sheet>

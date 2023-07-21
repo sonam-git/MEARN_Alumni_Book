@@ -3,7 +3,6 @@ import AspectRatio from "@mui/joy/AspectRatio";
 import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardOverflow from "@mui/joy/CardOverflow";
-import CardCover from "@mui/joy/CardCover";
 import Typography from "@mui/joy/Typography";
 
 import IconButton from "@mui/joy/IconButton";
@@ -11,8 +10,16 @@ import ViewCompactAltIcon from "@mui/icons-material/ViewCompactAlt";
 
 // Icons import
 import PersonIcon from "@mui/icons-material/Person";
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
-const Connect = ({ users, handlePersonIconClick }) => {
+// Makes the first letter of firstname and lastname to always be capital 
+const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
+const Connect = ({ users, handlePersonIconClick, loggedInUser }) => {
+
+  const filteredUsers = users.filter((user) => user._id !== loggedInUser._id);
   return (
     <div>
       <Typography
@@ -36,8 +43,9 @@ const Connect = ({ users, handlePersonIconClick }) => {
         }}
       >
         {/* Profiles Individual cards */}
-        {users &&
-          users.map((users) => (
+        {filteredUsers &&
+          filteredUsers.map((user) => (
+            user && user._id !== loggedInUser._id && (
             <Card
               variant="outlined"
               sx={{
@@ -53,7 +61,7 @@ const Connect = ({ users, handlePersonIconClick }) => {
                 }}
               >
                 <AspectRatio ratio="16/13" color="primary">
-                  <img src={users.image} alt="User Avatar" 
+                  <img src={user.image} alt="User Avatar" 
                   style={{ width: '100%', height: '275px'}}
                   />
                 </AspectRatio>
@@ -61,21 +69,28 @@ const Connect = ({ users, handlePersonIconClick }) => {
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Box sx={{ flex: 1 }}>
                   <Typography>
-                    {users.firstname} {users.lastname}
-                  </Typography>
-                  <Typography level="body3" mt={0.5}>
-                    {users.email}
+                  {capitalizeFirstLetter(user.firstname)} {capitalizeFirstLetter(user.lastname)}
                   </Typography>
                 </Box>
+              </Box>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+              <IconButton
+                  variant="plain"
+                  color="neutral"
+                  onClick={() => handlePersonIconClick(user)}
+                >
+                  <PersonAddIcon />
+                </IconButton>
                 <IconButton
                   variant="plain"
                   color="neutral"
-                  onClick={() => handlePersonIconClick(users)}
+                  onClick={() => handlePersonIconClick(user)}
                 >
                   <PersonIcon />
                 </IconButton>
-              </Box>
+                </Box>
             </Card>
+            ) 
           ))}
       </Box>
     </div>
