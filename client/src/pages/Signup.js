@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import CssBaseline from "@mui/joy/CssBaseline";
+import CircularProgress from "@mui/joy/CircularProgress";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import FormControl from "@mui/joy/FormControl";
@@ -83,6 +84,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
 // sign up functional component
 export const Signup = () => {
   //  state variable
+  const [loading, setLoading] = useState(false);
   const [formState, setFormState] = useState({
   firstname: '',
   lastname: '',
@@ -96,7 +98,7 @@ export const Signup = () => {
   
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-  
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append('file', formState.image);
@@ -127,6 +129,8 @@ export const Signup = () => {
   
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false); // Set loading back to false when the form submission is complete
     }
   };
   
@@ -308,7 +312,7 @@ export const Signup = () => {
                 />
               </FormControl>
                 <Button type="submit" fullWidth>
-                  Sign Up
+                {loading ? <CircularProgress size={24} /> : "Sign Up"}
                 </Button>
                 <Link to="/login"><Button fullWidth>← Go to Login</Button></Link>
               </form>

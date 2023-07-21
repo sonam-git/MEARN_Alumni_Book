@@ -19,7 +19,6 @@ const postSchema = new Schema({
   createdAt: {
     type: Date,
     default: Date.now,
-    get: (timestamp) => dateFormat(timestamp),
   },
   comments: [
     {
@@ -36,7 +35,6 @@ const postSchema = new Schema({
       createdAt: {
         type: Date,
         default: Date.now,
-        get: (timestamp) => dateFormat(timestamp),
       },
     },
   ],
@@ -46,7 +44,11 @@ const postSchema = new Schema({
       createdAt: String
     }
   ],
-});
+},
+{
+  timestamps: true, // This will automatically add createdAt and updatedAt fields
+}
+);
 
 const Post = model('Post', postSchema);
 
