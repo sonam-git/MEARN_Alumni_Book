@@ -118,9 +118,30 @@ export const ADD_COMMENT = gql`
   }
 `;
 
+
 export const REMOVE_POST = gql`
   mutation removePost($postId: ID!) {
     removePost(postId: $postId) {
+      _id
+      postText
+      postAuthor
+      createdAt
+      comments {
+        commentText
+        commentAuthor
+        createdAt
+      }
+      likes {
+        username
+        createdAt
+      }
+    }
+  }
+`;
+
+export const UPDATE_POST = gql`
+  mutation updatePost($postId: ID!, $postText: String!) {
+    updatePost(postId: $postId, postText: $postText) {
       _id
       postText
       postAuthor
