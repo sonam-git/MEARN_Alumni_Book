@@ -15,6 +15,7 @@ import { GET_ME } from "../utils/queries";
 import { ADD_POST } from "../utils/mutations";
 import { REMOVE_POST } from "../utils/mutations";
 import { ADD_COMMENT } from "../utils/mutations";
+import { REMOVE_COMMENT } from "../utils/mutations";
 
 export default function Profile() {
   const { loading, data, error } = useQuery(GET_ME);
@@ -24,6 +25,7 @@ export default function Profile() {
   const [commentBoxStates, setCommentBoxStates] = useState({});
   const [removePost] = useMutation(REMOVE_POST);
   const [addComment] = useMutation(ADD_COMMENT);
+  const [removeComment] = useMutation(REMOVE_COMMENT);
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -85,6 +87,21 @@ export default function Profile() {
     setCommentText("");
   };
 
+  const handleDeleteComment = async (postId,commentId) => {
+    try {
+      // Execute the removeComment mutation and pass the commentId as a variable
+      await removeComment({
+        variables: { postId,commentId },
+      });
+
+      // Perform any necessary actions after successful deletion, such as updating the UI
+      console.log("Comment deleted successfully");
+      window.location.reload();
+    } catch (error) {
+      // Handle any errors that occur during the deletion process
+      console.error("Error deleting comment:", error);
+    }
+  };
   return (
     <Sheet>
       <Grid container spacing={2}>
@@ -147,7 +164,7 @@ export default function Profile() {
                       <button className="editButton">Edit</button>
                     </>
                   )}
-              
+
                   <button
                     className="commentButton"
                     onClick={() => toggleCommentBox(post._id)}
@@ -155,9 +172,19 @@ export default function Profile() {
                     comment
                   </button>
                   {post.comments.map((comment) => (
-                    <p key={comment._id}>
-                      {comment.commentText} - {comment.commentAuthor}
-                    </p>
+                    <div key={comment._id}>
+                      <p>
+                        {comment.commentText} - {comment.commentAuthor}
+                      </p>
+                      {comment.commentAuthor === data.me.username && (
+                        <button
+                          className="deleteCommentButton"
+                          onClick={() => handleDeleteComment(post._id,comment._id)}
+                        >
+                          Delete Comment
+                        </button>
+                      )}
+                    </div>
                   ))}
                   {commentBoxStates[post._id] && (
                     <div>

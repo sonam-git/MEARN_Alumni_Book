@@ -22,6 +22,7 @@ type Post {
 }
 
 type Comment {
+  _id:ID
   commentText: String!
   commentAuthor: String!
   createdAt: String!
