@@ -167,8 +167,12 @@ export default function Profile() {
                 <div key={post._id}>
                   <h3>{post.postText}</h3>
                   <p>Author: {post.postAuthor}</p>
+                  {post.postAuthor === data.me.username && (
+                  <>
                   <button className="deleteButton" onClick={() => handleDeletePost(post._id)} >Delete</button>
                   <button className="editButton">Edit</button>
+                  </>
+                  )}
                   <button className="likeButton">like</button>
                   <button
                     className="commentButton"
