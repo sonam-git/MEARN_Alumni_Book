@@ -292,7 +292,7 @@ export const Dashboard = () => {
               p: 2,
               display: 'grid',
               gridTemplateColumns: 'auto 1fr',
-              '& > *:nth-of-type(odd)': { color: 'text.secondary' },
+              '& > *:nth-of-ty(odd)': { color: 'text.secondary' },
             }}
           >
              <Typography level="body2">Username</Typography>
