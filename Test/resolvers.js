@@ -4,12 +4,6 @@ const cloudinary = require("cloudinary").v2;
 const { User, Post } = require("../models");
 const { signToken } = require("../utils/auth");
 
-cloudinary.config({ 
-  cloud_name: 'dnuanxqxg', 
-  api_key: '768784817278892', 
-  api_secret: 'u9P50V-GFNRIGKXjX4GzcQdYSB4' 
-});
-
 const resolvers = {
   /************************* QUERIES *************************/
   Query: {
@@ -17,7 +11,7 @@ const resolvers = {
     users: async () => {
       try {
         return await User.find()
-          .select("firstname lastname username email image")
+          .select("firstname lastname username email")
           .populate("posts")
           .populate("friends");
       } catch (error) {
@@ -62,7 +56,6 @@ const resolvers = {
     me: async (parent, _args, context) => {
       if (context.user) {
         return User.findOne({ _id: context.user._id })
-          .select("firstname lastname username email")
           .populate("posts")
           .populate("friends");
       }
@@ -92,33 +85,21 @@ const resolvers = {
     },
 
     // creates a new user with the provided information
-    addUser: async (parent,{ firstname, lastname, username, email, password, image}) => {
-
-try{
-  let imageUrl = null;
-  // Upload the image to Cloudinary only if an image was provided
-  if (image) {
-    const { secure_url: uploadedImageUrl } = await cloudinary.uploader.upload(image, {
-      upload_preset: 'logging_preset', // Replace 'logging_preset' with your upload preset name
-    });
-    imageUrl = uploadedImageUrl;
-  }
-    // Create the user with the provided information
-    const user = await User.create({
+    addUser: async (
+      parent,
+      { firstname, lastname, username, email, password }
+    ) => {
+      // Create the user with the provided information
+      const user = await User.create({
         firstname,
         lastname,
         username,
         email,
         password,
-        image: imageUrl,
       });
       // signs a token for authentication, and returns the token and user.
       const token = signToken(user);
       return { token, user };
-    } catch (error) {
-      console.error(error);
-      throw new Error('Failed to create user');
-    }
     },
 
     // add friend to your friend list
@@ -196,7 +177,7 @@ try{
           { _id: postId },
           {
             $addToSet: {
-              comments: { _id: mongoose.Types.ObjectId(),commentText, commentAuthor: context.user.username },
+              comments: { commentText, commentAuthor: context.user.username },
             },
           },
           {
@@ -207,54 +188,26 @@ try{
       }
       throw new AuthenticationError("You need to be logged in!");
     },
-
-    updatePost: async (_, { postId, postText }, context) => {
-      // Check if the user is authenticated
-      if (!context.user) {
-        throw new AuthenticationError("You need to be logged in!");
-      }
-  
-      try {
-        // Find the post by postId
-        const post = await Post.findById(postId);
-  
-        if (!post) {
-          throw new Error("Post not found.");
-        }
-  
-        // Check if the current user is the author of the post
-        if (post.postAuthor !== context.user.username) {
-          throw new AuthenticationError("You are not the author of this post.");
-        }
-  
-        // Update the postText
-        post.postText = postText;
-        await post.save();
-  
-        return post;
-      } catch (error) {
-        throw new Error("Failed to update the post.");
-      }
-    },
     //removes a post by its postId
     removePost: async (parent, { postId }, context) => {
       if (context.user) {
-        try{
-         await Post.findOneAndDelete({
+        const post = await Post.findOneAndDelete({
           _id: postId,
           postAuthor: context.user.username, 
         });
+
+        if (!post) {
+          throw new Error("Post not found or you are not the author.");
+        }
+
         await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $pull: { posts: postId } }
+          { $pull: { posts: postId } } // Use postId instead of post._id
         );
 
-        return true;
-      } catch (error) {
-        console.error("Error deleting post:", error);
-        return false; // Return false to indicate failure
+        return post;
       }
-    }
+
       throw new AuthenticationError("You need to be logged in!");
     },
     //removes a comment from a post
@@ -303,3 +256,67 @@ try{
 };
 // export module
 module.exports = resolvers;
+
+
+// import necessary packages
+const { gql } = require('apollo-server-express');
+
+const typeDefs = gql`
+type User {
+  _id: ID!
+  firstname: String!
+  lastname: String!
+  username: String!
+  email: String!
+  posts: [Post]
+  friends: [User]
+}
+
+type Post {
+  _id: ID!
+  postText: String!
+  postAuthor: String!
+  createdAt: String!
+  comments: [Comment]
+  likes: [Like]
+}
+
+type Comment {
+  _id: ID!
+  commentText: String!
+  commentAuthor: String!
+  createdAt: String!
+}
+
+type Like {
+  _id: ID!
+  username: String!
+  createdAt: String!
+}
+
+type Auth {
+  token: ID!
+  user: User
+}
+type Query {
+    users: [User]
+    user(userId: ID!): User
+    posts: [Post]
+    post(postId: ID!): Post
+    me: User
+  }
+
+  type Mutation {
+    addUser(firstname: String!,lastname: String!,username: String!, email: String!, password: String! ): Auth
+    login(email: String!, password: String!): Auth
+    addFriend(userId: ID!, friendId: ID!): User
+    removeFriend(friendId: ID!): User 
+    addPost(postText: String!): Post
+    addComment(postId: ID!, commentText: String!): Post
+    removePost(postId: ID!): Post
+    removeComment(postId: ID!, commentId: ID!): Post
+    likePost(postId: ID!): Post!
+  }
+`;
+
+module.exports = typeDefs;

@@ -8,13 +8,14 @@ type User {
   lastname: String!
   username: String!
   email: String!
+  image: String
   posts: [Post]
   friends: [User]
 }
 
 type Post {
   _id: ID!
-  postText: String!
+  postText: String
   postAuthor: String!
   createdAt: String!
   comments: [Comment]
@@ -22,13 +23,14 @@ type Post {
 }
 
 type Comment {
-  _id:ID
+  _id: ID!
   commentText: String!
   commentAuthor: String!
   createdAt: String!
 }
 
 type Like {
+  _id: ID!
   username: String!
   createdAt: String!
 }
@@ -39,18 +41,19 @@ type Auth {
 }
 type Query {
     users: [User]
-    user(username: String!): User
-    posts(username: String): [Post]
+    user(userId: ID!): User
+    posts: [Post]
     post(postId: ID!): Post
     me: User
   }
 
   type Mutation {
-    addUser(firstname: String!,lastname: String!,username: String!, email: String!, password: String! ): Auth
+    addUser(firstname: String!, lastname: String!, username: String!, email: String!, password: String!, image: String! ): Auth
     login(email: String!, password: String!): Auth
     addFriend(userId: ID!, friendId: ID!): User
     removeFriend(friendId: ID!): User 
     addPost(postText: String!): Post
+    updatePost(postId: ID!, postText: String!): Post
     addComment(postId: ID!, commentText: String!): Post
     removePost(postId: ID!): Boolean!
     removeComment(postId: ID!, commentId: ID!): Post

@@ -17,7 +17,7 @@ import { REMOVE_POST } from "../utils/mutations";
 import { ADD_COMMENT } from "../utils/mutations";
 import { REMOVE_COMMENT } from "../utils/mutations";
 
-export default function Profile() {
+export function Profile() {
   const { loading, data, error } = useQuery(GET_ME);
   const [postText, setPostText] = useState("");
   const [addPost] = useMutation(ADD_POST);
@@ -262,3 +262,121 @@ export default function Profile() {
     </Sheet>
   );
 }
+
+//******Function that will be used when the profile page is loaded*******//
+//**making the useQuery to the backend for GET_ME * *//
+// const RetrievingUserInfo = () =>{
+  
+//   //make query call 
+//   const { loading, data,error } = useQuery(GET_ME);
+//   if (loading) return "Loading...";
+
+//   if (error) return `Error! ${error.message}`;
+
+//   return <Layout grid>{JSON.stringify(data)}</Layout>;
+
+//   //need to destructure and then place onto UI layout page 
+
+// }
+
+
+
+
+//***** useQuery Display friends associated with the user in session   ******/
+// getMe the friends part 
+//decunstruct only the friends from this function
+// const RetrievingUserFriends = () =>{
+  
+//   //make query call 
+//   const { loading, data,error } = useQuery(GET_ME);
+//   if (loading) return "Loading...";
+
+//   if (error) return `Error! ${error.message}`;
+
+//   return <Layout grid>{JSON.stringify(data)}</Layout>;
+
+//   //need to destructure and then place onto UI layout page 
+
+// }
+
+//***** Function that will be used when taking account of the useState of UI *******//
+//***** Making a mutation to the backend for a comment adding to the mutation ADD_POST posts ******//
+//will be used for the input field of the textbox
+// const CreatingAPost = () =>{
+//   //inital state is no posts makes call getMe for posts to check if there are any posts for user
+//   const [name, setName] = useState('');
+//    const [addPost, { error }] = useMutation(ADD_POST);  
+//    const handleFormSubmit = async (event) => {
+//     event.preventDefault();
+
+//     // Since mutation function is async, wrap in a `try...catch` to catch any network errors from throwing due to a failed request.
+//     try {
+//       // Execute mutation and pass in defined parameter data as variables
+//       const { data } = await addPost({
+//         variables: { postText, postAuthor, createdAt, comments, likes },
+//       });
+// //for updating the query of getme ask if itsw necessary to do this 
+//       window.location.reload();
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   };
+//   return (
+//     //for the text box for the post 
+//     <div>
+//       <h3>Add yourself to the list...</h3>
+//       <form
+//         className="flex-row justify-center justify-space-between-md align-center"
+//         onSubmit={handleFormSubmit}
+//       >
+//         <div className="col-12 col-lg-9">
+//           <input
+//             placeholder="Add your profile name..."
+//             value={name}
+//             className="form-input w-100"
+//             onChange={(event) => setName(event.target.value)}
+//           />
+//         </div>
+
+//         <div className="col-12 col-lg-3">
+//           <button className="btn btn-info btn-block py-3" type="submit">
+//             Add Profile
+//           </button>
+//         </div>
+//         {error && (
+//           <div className="col-12 my-3 bg-danger text-white p-3">
+//             Something went wrong...
+//           </div>
+//         )}
+//       </form>
+//     </div>
+//   );
+// }
+
+
+//*****Add functionality for when user in sesh clicks on a friend within profile we can see the clicked users profile ********//
+//based on the friend id we will use that id so that we can use the Query GET_USER with the id of friends 
+//then this will use all the same components used for user but for the users friends 
+
+
+
+//create component for query to obtain firstname  from user in sesh
+//component using react any type of hook in this case useQuery
+
+//const functionname = (params)=>{
+  //use query hook assiged to variable 
+  //console.log  variable to see the hook useQuery
+  //data we can do anything with it 
+  //err is for validation
+
+
+// use state for the editing of the text fields 
+
+//name initial state from signup information in session 
+//connects to the user profiles on dashboard when is updated
+
+//posts initial state no text 
+//updates when user edits and saves it 
+
+
+export default Profile;

@@ -20,6 +20,8 @@ import Auth from "../utils/auth";
 import { useMutation } from "@apollo/client";
 import { Link } from 'react-router-dom';
 import { Grid } from "@mui/material";
+import Axios from 'axios';
+
 // allows toggling between light and dark modes.
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
@@ -55,27 +57,29 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
     </IconButton>
     </Grid>
     <Grid item>
-    <Link to="/"><IconButton
-              size="sm"
-              variant="outlined"
-              color="primary"
-              component="a"
-              style={{
-                padding: '10px'
-              }}
-            >
-              <HomeIcon
-              style={{
-                marginRight: '5px'
-              }}
-              />
-              Home
-            </IconButton></Link>
+    <Link to="/">
+  <IconButton
+    size="sm"
+    variant="outlined"
+    color="primary"
+    style={{
+      padding: "10px",
+    }}
+  >
+    <HomeIcon
+      style={{
+        marginRight: "5px",
+      }}
+    />
+    Home
+  </IconButton>
+</Link>
     </Grid>
     </Grid>
     </div>
   );
 };
+
 // sign up functional component
 export const Signup = () => {
   //  state variable
@@ -85,43 +89,77 @@ export const Signup = () => {
   username: '',
   email: '',
   password: '',
-  image: null,
+  image: null, 
  });
-  const [addUser] = useMutation(ADD_USER);
+
+  const [addUser, {error, data}] = useMutation(ADD_USER);
+  
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    const mutationResponse = await addUser({
-      variables: {
-        firstname: formState.firstname,
-        lastname: formState.lastname,
-        username: formState.username,
-        email: formState.email,
-        password: formState.password,
-        image: formState.image,
-      },
-    });
-    const token = mutationResponse.data.addUser.token;
-    Auth.login(token);
+  
+    try {
+      const formData = new FormData();
+      formData.append('file', formState.image);
+      formData.append('upload_preset', 'logging_preset'); // Replace 'YOUR_UPLOAD_PRESET_NAME' with the name of your created upload preset
+
+      const response = await Axios.post(
+      'https://api.cloudinary.com/v1_1/dnuanxqxg/image/upload',
+      formData
+    );
+
+      const imageUrl = response.data.secure_url;
+      console.log(imageUrl);
+
+      // Add the image URL to the formState
+      const { data } = await addUser({
+        variables: {
+          firstname: formState.firstname,
+          lastname: formState.lastname,
+          username: formState.username,
+          email: formState.email,
+          password: formState.password,
+          image: imageUrl, // Pass the image URL to the addUser mutation
+        },
+      });
+  console.log(data);
+      const token = data.addUser.token;
+      Auth.login(token);
+  
+    } catch (error) {
+      console.log(error);
+    }
   };
+  
+  
+
   const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormState({
-      ...formState,
-      [name]: value,
-    });
+    const { name, value, type } = event.target;
+
+    if (type === "file") {
+      const fieldValue = event.target.files[0];
+      setFormState({
+        ...formState,
+        [name]: fieldValue,
+      });
+    } else {
+      setFormState({
+        ...formState,
+        [name]: value,
+      });
+    }
   };
+
   // return signup component
   return (
-  
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
       <CssBaseline />
       <GlobalStyles
         styles={{
           ":root": {
-            "--Collapsed-breakpoint": "1000px", // form will stretch when viewport is below 769px
-            "--Cover-width": "40vw", // must be vw only
+            "--Collapsed-breakpoint": "1000px", // form will stretch when viewport is below `769px`
+            "--Cover-width": "40vw", // must be `vw` only
             "--Form-maxWidth": "1150px",
-            "--Transition-duration": "0.4s", // set to none to disable transition
+            "--Transition-duration": "0.4s", // set to `none` to disable transition
           },
         }}
       />
@@ -184,7 +222,7 @@ export const Signup = () => {
                 flexDirection: "column",
                 gap: 2,
               },
-              '& .${formLabelClasses.asterisk}': {
+              [`& .${formLabelClasses.asterisk}`]: {
                 visibility: "hidden",
               },
             }}
@@ -197,29 +235,40 @@ export const Signup = () => {
                 Welcome New User!
               </Typography>
             </div>
+
+
+            {/* Signup Form */}
+            { data ? (
+              <p>
+              Sign Up Success!
+              </p>
+            ) : (
+
             <form onSubmit={handleFormSubmit}>
-            <div style={{ display: 'flex', columnGap: 3}}>
-  <FormControl required >
-    <FormLabel>First Name</FormLabel>
-    <Input
-      placeholder="First"
-      name="firstname"
-      type="firstname"
-      id="firstname"
-      onChange={handleChange}
-    />
-  </FormControl>
-  <FormControl required>
-    <FormLabel>Last Name</FormLabel>
-    <Input
-      placeholder="Last"
-      name="lastname"
-      type="lastname"
-      id="lastname"
-      onChange={handleChange}
-    />
-  </FormControl>
-</div>
+            <div style={{ display: 'flex', columnGap: 3, width: '50%'}}>
+                <FormControl required >
+                  <FormLabel>First Name</FormLabel>
+                  <Input
+                    placeholder="First"
+                    name="firstname"
+                    type="firstname"
+                    id="firstname"
+                    onChange={handleChange}
+                    style={{width: '92%'}}
+                  />
+                </FormControl>
+                <FormControl required>
+                  <FormLabel>Last Name</FormLabel>
+                  <Input
+                    placeholder="Last"
+                    name="lastname"
+                    type="lastname"
+                    id="lastname"
+                    onChange={handleChange}
+                    style={{width: '92%'}}
+                  />
+                </FormControl>
+              </div>
               <FormControl required>
                 <FormLabel>Username</FormLabel>
                 <Input
@@ -246,43 +295,31 @@ export const Signup = () => {
                   placeholder="Password"
                   name="password"
                   type="password"
-                  id="fpassword"
+                  id="password"
                   onChange={handleChange}
                 />
               </FormControl>
-              {/* <FormControl>
-                <FormLabel>Upload Image</FormLabel>
+              <FormControl required>
+              <FormLabel>Upload Image</FormLabel>
                 <Input
-                  type="file"
                   name="image"
-                  accept="image/*"
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}
-                  onChange={(event) => {
-                    const file = event.target.files[0];
-                    setFormState((prevState) => ({
-                      ...prevState,
-                      image: file,
-                    }));
-                  }}
+                  type="file"
+                  onChange={handleChange}
                 />
-              </FormControl> */}
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-              </Box>
-              <Button type="submit" fullWidth>
-                Sign Up
-              </Button>
-              <Link to="/login"><Button fullWidth>← Go to Login</Button></Link>
-            </form>
+              </FormControl>
+                <Button type="submit" fullWidth>
+                  Sign Up
+                </Button>
+                <Link to="/login"><Button fullWidth>← Go to Login</Button></Link>
+              </form>
+            )}
+
+            {error && (
+              <div className="my-3 p-3 bg-danger text-white">
+                {'Username/Email Already Taken. Please Try Again!'}
+              </div>
+            )}
+
           </Box>
           <Box component="footer" sx={{ py: 3 }}>
             <Typography level="body3" textAlign="center">

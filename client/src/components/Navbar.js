@@ -7,8 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import headerImage from '../assets/images/light-coding-background.jpg';
-import Login from './Login';
-import Signup from './Signup';
+import Login from '../pages/Login';
+import Signup from '../pages/Signup';
 
 const useStyles = makeStyles((theme) => ({
   root: {

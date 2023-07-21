@@ -63,6 +63,7 @@ export const Home = () => {
         }}
       />
       <Box
+      // home page content theme
         sx={(theme) => ({
           width:
             "clamp(100vw - var(--Cover-width), (var(--Collapsed-breakpoint) - 100vw) * 999, 100vw)",

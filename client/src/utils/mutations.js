@@ -7,6 +7,7 @@ export const ADD_USER = gql`
     $username: String!
     $email: String!
     $password: String!
+    $image: String!
   ) {
     addUser(
       firstname: $firstname
@@ -14,11 +15,16 @@ export const ADD_USER = gql`
       username: $username
       email: $email
       password: $password
+      image: $image
     ) {
       token
       user {
         _id
+        firstname
+        lastname
         username
+        email
+        image
       }
     }
   }
@@ -113,9 +119,30 @@ export const ADD_COMMENT = gql`
   }
 `;
 
+
 export const REMOVE_POST = gql`
   mutation removePost($postId: ID!) {
     removePost(postId: $postId) 
+  }
+`;
+
+export const UPDATE_POST = gql`
+  mutation updatePost($postId: ID!, $postText: String!) {
+    updatePost(postId: $postId, postText: $postText) {
+      _id
+      postText
+      postAuthor
+      createdAt
+      comments {
+        commentText
+        commentAuthor
+        createdAt
+      }
+      likes {
+        username
+        createdAt
+      }
+    }
   }
 `;
 

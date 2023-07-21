@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {  useState } from "react";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -10,20 +10,20 @@ import FormLabel, { formLabelClasses } from "@mui/joy/FormLabel";
 import IconButton from "@mui/joy/IconButton";
 import HomeIcon from "@mui/icons-material/Home";
 // import Link from '@mui/joy/Link';
-import Input from "@mui/joy/Input";
-import Typography from "@mui/joy/Typography";
-import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
-import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
-import DarkModePicture from "../assets/images/darkmode-pic.webp";
-import LightModePicture from "../assets/images/lightmode-pic.jpg";
-import Logo from "../assets/images/AB_Logo.png";
-import UserDashboard from "../pages/UserDashboard";
-import { useMutation } from "@apollo/client";
-
-import { LOGIN } from "../utils/mutations";
-import Auth from "../utils/auth";
+import Input from '@mui/joy/Input';
+import Typography from '@mui/joy/Typography';
+import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
+import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
+import DarkModePicture from '../assets/images/darkmode-pic.webp';
+import LightModePicture from '../assets/images/lightmode-pic.jpg';
+import Logo from '../assets/images/AB_Logo.png';
+import { useMutation } from '@apollo/client';
+import { LOGIN } from '../utils/mutations';
+import Auth from '../utils/auth';
+import { Grid } from '@mui/material';
 import { Link } from "react-router-dom";
-import { Grid } from "@mui/material";
+import Dashboard from "./Dashboard";
+
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = React.useState(false);
@@ -61,72 +61,73 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
           </IconButton>
         </Grid>
         <Grid item>
-          <Link to="/">
-            <IconButton
-              size="sm"
-              variant="outlined"
-              color="primary"
-              component="a"
-              style={{
-                padding: "10px",
-              }}
-            >
-              <HomeIcon
-                style={{
-                  marginRight: "5px",
-                }}
-              />
-              Home
-            </IconButton>
-          </Link>
-        </Grid>
-      </Grid>
+        <Link to="/">
+  <IconButton
+    size="sm"
+    variant="outlined"
+    color="primary"
+    style={{
+      padding: "10px",
+    }}
+  >
+    <HomeIcon
+      style={{
+        marginRight: "5px",
+      }}
+    />
+    Home
+  </IconButton>
+</Link>
+    </Grid>
+    </Grid>
     </div>
   );
 };
-export const Login = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [formState, setFormState] = useState({
-    email: "",
-    password: "",
-    persistent: false,
-  });
-  const [login, { error }] = useMutation(LOGIN);
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      const mutationResponse = await login({
-        variables: {
-          email: formState.email,
-          password: formState.password,
-          persistent: formState.persistent,
-        },
-      });
-      const token = mutationResponse.data.login.token;
-      Auth.login(token);
-      setIsLoggedIn(true);
-    } catch (e) {
-      console.log(e);
-    }
-    // Reset the form
+
+ export const Login = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [formState, setFormState] = useState({
+      email: '',
+      password: '',
+      persistent: false,
+    });
+    const [login, { error }] = useMutation(LOGIN);
+
+    const handleFormSubmit = async (event) => {
+      event.preventDefault();
+      try {
+        const mutationResponse = await login({
+          variables: { email: formState.email, password: formState.password , persistent: formState.persistent},
+        });
+        const token = mutationResponse.data.login.token;
+        Auth.login(token);
+        setIsLoggedIn(true);
+      } catch (e) {
+        console.log(e);
+      }
+      // Reset the form
     setFormState({
       email: "",
       password: "",
       persistent: false,
     });
-  };
-  const handleChange = (event) => {
-    const { name, value, checked, type } = event.target;
-    const inputValue = type === "checkbox" ? checked : value;
-    setFormState({
-      ...formState,
-      [name]: inputValue,
-    });
-  };
-  // if user is logged in the render dashboard
-  if (isLoggedIn) {
-    return <UserDashboard />;
-  }
+    };
+
+    const handleChange = (event) => {
+      const { name, value, checked,type } = event.target;
+      const inputValue = type === 'checkbox' ? checked : value;
+      setFormState({
+        ...formState,
+        [name]:inputValue,
+      });
+    };
+
+    // if user is logged in the render dashboard 
+    if (isLoggedIn) {
+      return <Dashboard />;
+    }
+
+
   return (
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
       <CssBaseline />
@@ -177,8 +178,10 @@ export const Login = () => {
               justifyContent: "space-between",
             }}
           >
-            {/* Logo */}
-            <img src={Logo} alt="Logo" width={250} height={150} />
+         
+               {/* Logo */}
+          <img src={Logo} alt="Logo" width={250} height={150} />
+          
             <ColorSchemeToggle />
           </Box>
           <Box
@@ -212,7 +215,10 @@ export const Login = () => {
                 Welcome back User!
               </Typography>
             </div>
-            <form onSubmit={handleFormSubmit}>
+            { isLoggedIn ? (
+              <p>Login Success! </p>
+            ) : (
+              <form onSubmit={handleFormSubmit}>
               <FormControl required>
                 <FormLabel htmlFor="email">Email</FormLabel>
                 <Input
@@ -220,6 +226,7 @@ export const Login = () => {
                   name="email"
                   type="email"
                   id="email"
+                  value={formState.email}
                   onChange={handleChange}
                 />
               </FormControl>
@@ -230,6 +237,7 @@ export const Login = () => {
                   name="password"
                   type="password"
                   id="pwd"
+                  value={formState.password}
                   onChange={handleChange}
                 />
               </FormControl>
@@ -251,13 +259,7 @@ export const Login = () => {
                   Forgot your password?
                 </Link> */}
               </Box>
-              {error ? (
-                <div>
-                  <p className="error-text">
-                    The provided credentials are incorrect
-                  </p>
-                </div>
-              ) : null}
+
               <Button type="submit" fullWidth>
                 Log In
               </Button>
@@ -265,6 +267,15 @@ export const Login = () => {
                 <Button fullWidth>← Go to Sign Up</Button>
               </Link>
             </form>
+            )}
+
+            {error ? (
+                <div>
+                  <p className="error-text">
+                    The provided credentials are incorrect
+                  </p>
+                </div>
+              ) : null}
           </Box>
           <Box component="footer" sx={{ py: 3 }}>
             <Typography level="body3" textAlign="center">
@@ -297,5 +308,8 @@ export const Login = () => {
       />
     </CssVarsProvider>
   );
-};
+  
+}
+
+
 export default Login;
