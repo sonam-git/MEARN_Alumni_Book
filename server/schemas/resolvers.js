@@ -141,7 +141,7 @@ const resolvers = {
           { _id: postId },
           {
             $addToSet: {
-              comments: { commentText, commentAuthor: context.user.username },
+              comments: { _id: mongoose.Types.ObjectId(),commentText, commentAuthor: context.user.username },
             },
           },
           {
