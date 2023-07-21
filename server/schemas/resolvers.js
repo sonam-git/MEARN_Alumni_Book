@@ -62,6 +62,7 @@ const resolvers = {
     me: async (parent, _args, context) => {
       if (context.user) {
         return User.findOne({ _id: context.user._id })
+          .select("firstname lastname username email")
           .populate("posts")
           .populate("friends");
       }

@@ -25,8 +25,8 @@ import articleTwoImage from '../assets/images/article-two.jpeg';
 import articleThreeImage from '../assets/images/article-three.jpg';
 
 // Icons import
-import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
-import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
+// import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
+// import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import PersonIcon from '@mui/icons-material/Person';
 
 import CloseIcon from '@mui/icons-material/Close';
@@ -43,33 +43,33 @@ import Connect from '../components/Connect';
 import Explore from '../components/Explore';
 import Auth from '../utils/auth'
 
-function ColorSchemeToggle() {
-  const { mode, setMode } = useColorScheme();
-  const [mounted, setMounted] = useState(false);
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-  if (!mounted) {
-    return <IconButton size="sm" variant="outlined" color="primary" />;
-  }
-  return (
-    <IconButton
-      id="toggle-mode"
-      size="sm"
-      variant="outlined"
-      color="primary"
-      onClick={() => {
-        if (mode === 'light') {
-          setMode('dark');
-        } else {
-          setMode('light');
-        }
-      }}
-    >
-      {mode === 'light' ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
-    </IconButton>
-  );
-}
+// function ColorSchemeToggle() {
+//   const { mode, setMode } = useColorScheme();
+//   const [mounted, setMounted] = useState(false);
+//   React.useEffect(() => {
+//     setMounted(true);
+//   }, []);
+//   if (!mounted) {
+//     return <IconButton size="sm" variant="outlined" color="primary" />;
+//   }
+//   return (
+//     <IconButton
+//       id="toggle-mode"
+//       size="sm"
+//       variant="outlined"
+//       color="primary"
+//       onClick={() => {
+//         if (mode === 'light') {
+//           setMode('dark');
+//         } else {
+//           setMode('light');
+//         }
+//       }}
+//     >
+//       {mode === 'light' ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
+//     </IconButton>
+//   );
+// }
 
 export const Dashboard = () => {
 
@@ -165,10 +165,7 @@ export const Dashboard = () => {
           }),
         }}
       >
-    
       <Header/>
-         
-        
         {/* Side Bar Navigations */}
         <Layout.SideNav>
         <List size="sm" sx={{ '--ListItem-radius': '8px', '--List-gap': '4px' }}>

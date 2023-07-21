@@ -15,7 +15,7 @@ type User {
 
 type Post {
   _id: ID!
-  postText: String!
+  postText: String
   postAuthor: String!
   createdAt: String!
   comments: [Comment]
