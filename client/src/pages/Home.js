@@ -64,6 +64,7 @@ export const Home = () => {
       />
       <Box
       // home page content theme
+      // styling for the opacity image
         sx={(theme) => ({
           width:
             "clamp(100vw - var(--Cover-width), (var(--Collapsed-breakpoint) - 100vw) * 999, 100vw)",
@@ -78,6 +79,7 @@ export const Home = () => {
           [theme.getColorSchemeSelector("dark")]: {
             backgroundColor: "rgba(19 19 24 / 0.4)",
           },
+          
         })}
       >
         <Box

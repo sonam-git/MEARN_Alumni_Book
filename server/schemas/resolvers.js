@@ -177,6 +177,7 @@ try{
         const post = await Post.create({
           postText,
           postAuthor: context.user.username,
+          createdAt: new Date().toISOString(),
         });
 
         await User.findOneAndUpdate(

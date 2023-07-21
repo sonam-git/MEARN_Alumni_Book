@@ -40,7 +40,7 @@ import filesTheme from '../containers/Theme';
 import Header from '../components/Header';
 import Layout from '../containers/Layout';
 import Connect from '../components/Connect';
-import Explore from '../components/Explore';
+import PostList from '../components/PostList';
 import Auth from '../utils/auth'
 
 function ColorSchemeToggle() {
@@ -182,19 +182,19 @@ export const Dashboard = () => {
             >
               <ListItem>
               <ListItemButton 
-              onClick={() => handleItemClick('explore')}
+              onClick={() => handleItemClick('post')}
               >
                 <ListItemDecorator >
                   <ExploreIcon />
                 </ListItemDecorator>
                 <ListItemContent
-                  selected={selectedItem === 'explore'}
+                  selected={selectedItem === 'post'}
                   onClick={handleShowExplore}
                   sx={{
-                     color: selectedItem === 'explore' ? '#2ACAEA' : 'white', 
+                     color: selectedItem === 'post' ? '#2ACAEA' : 'white', 
                     }}
                 >
-                  Explore
+                  Recent Post
                 </ListItemContent>
               </ListItemButton >
               </ListItem>
@@ -261,7 +261,7 @@ export const Dashboard = () => {
               />
           )
         )}
-        {showExplore && <Explore/>}
+        {showExplore && <PostList/>}
         </Layout.Main>
 
         {/* Right Side Profile View for Connect Page */}
