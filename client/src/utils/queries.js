@@ -15,6 +15,7 @@ export const GET_USERS = gql`
         postAuthor
         createdAt
         comments {
+          _id
           commentText
           commentAuthor
           createdAt
