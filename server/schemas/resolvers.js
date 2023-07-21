@@ -17,7 +17,7 @@ const resolvers = {
     users: async () => {
       try {
         return await User.find()
-          .select("firstname lastname username email")
+          .select("firstname lastname username email image")
           .populate("posts")
           .populate("friends");
       } catch (error) {

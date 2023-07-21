@@ -33,7 +33,6 @@ const userSchema = new Schema({
   },
   image: {
     type: String,
-    required: true, // Assuming you store the image URL as a string
   },
   posts: [
     {
