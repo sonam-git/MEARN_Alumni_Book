@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const ADD_USER = gql`
   mutation addUser(
@@ -106,7 +106,6 @@ export const ADD_COMMENT = gql`
       postAuthor
       createdAt
       comments {
-        
         _id
         commentText
         commentAuthor
@@ -119,7 +118,6 @@ export const ADD_COMMENT = gql`
     }
   }
 `;
-
 
 export const REMOVE_POST = gql`
   mutation removePost($postId: ID!) {
@@ -138,7 +136,6 @@ export const REMOVE_POST = gql`
         createdAt
       }
     }
-     removePost(postId: $postId) 
   }
 `;
 
