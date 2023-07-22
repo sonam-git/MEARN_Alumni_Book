@@ -104,9 +104,6 @@ export const Home = () => {
           >
             {/* Logo */}
             {/* <img src={Logo} alt="Logo" width={250} height={150} /> */}
-            <Typography component="h1" fontWeight="xl" fontFamily="fantasy">
-              Alumni Book
-            </Typography>
             <ColorSchemeToggle />
           </Box>
           <Box

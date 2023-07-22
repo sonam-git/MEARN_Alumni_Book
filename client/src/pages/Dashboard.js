@@ -32,8 +32,11 @@ import PersonIcon from '@mui/icons-material/Person';
 import CloseIcon from '@mui/icons-material/Close';
 import ExploreIcon from '@mui/icons-material/Explore';
 import InfoIcon from '@mui/icons-material/Info';
+import MessageIcon from '@mui/icons-material/Message';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import ViewCompactAltIcon from '@mui/icons-material/ViewCompactAlt';
+import sideImage from '../assets/images/importance.jpg';
+import sideImage1 from '../assets/images/opportunities.jpg'
 
 // custom
 import filesTheme from '../containers/Theme';
@@ -41,6 +44,7 @@ import Header from '../components/Header';
 import Layout from '../containers/Layout';
 import Connect from '../components/Connect';
 import PostList from '../components/PostList';
+import Profile from '../pages/Profile';
 import Auth from '../utils/auth'
 
 function ColorSchemeToggle() {
@@ -79,6 +83,7 @@ export const Dashboard = () => {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const [showConnect, setShowConnect] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
   const [showExplore, setShowExplore] = useState(true);
 
   const [selectedUser, setSelectedUser] = useState(null);
@@ -131,11 +136,20 @@ export const Dashboard = () => {
     event.preventDefault();
     setShowConnect(true);
     setShowExplore(false);
+    setShowProfile(false);
   };
 
   const handleShowExplore = (event) => {
     event.preventDefault();
     setShowExplore(true);
+    setShowConnect(false);
+    setShowProfile(false);
+  };
+
+  const handleShowProfile = (event) => {
+    event.preventDefault();
+    setShowProfile(true);
+    setShowExplore(false);
     setShowConnect(false);
   };
 
@@ -153,6 +167,8 @@ export const Dashboard = () => {
   return (
     <CssVarsProvider disableTransitionOnChange theme={filesTheme}>
       <CssBaseline />
+      {Auth.loggedIn() ? (
+        // If user is logged In
       <Layout.Root
         sx={{
           gridTemplateColumns: {
@@ -185,7 +201,7 @@ export const Dashboard = () => {
               onClick={() => handleItemClick('post')}
               >
                 <ListItemDecorator >
-                  <ExploreIcon />
+                  <MessageIcon />
                 </ListItemDecorator>
                 <ListItemContent
                   selected={selectedItem === 'post'}
@@ -194,7 +210,7 @@ export const Dashboard = () => {
                      color: selectedItem === 'post' ? '#2ACAEA' : 'white', 
                     }}
                 >
-                  Recent Post
+                  Activity Post
                 </ListItemContent>
               </ListItemButton >
               </ListItem>
@@ -219,11 +235,11 @@ export const Dashboard = () => {
                   </ListItemDecorator>
                   <ListItemContent 
                   selected={selectedItem === 'aboutus'}
-                  onClick={handleShowConnect}
+                  onClick={handleShowProfile}
                   sx={{
                     color: selectedItem === 'aboutus' ? '#2ACAEA' : 'white', 
                    }}
-                  >About Us</ListItemContent>
+                  >Profile</ListItemContent>
                 </ListItemButton>
               </ListItem>
               <ListItem>
@@ -262,6 +278,7 @@ export const Dashboard = () => {
           )
         )}
         {showExplore && <PostList/>}
+        {showProfile && <Profile/>}
         </Layout.Main>
 
         {/* Right Side Profile View for Connect Page */}
@@ -326,7 +343,7 @@ export const Dashboard = () => {
           }}
         >
           <Box sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
-            <Typography sx={{ flex: 1 }}> Article Section</Typography>
+            <Typography sx={{ flex: 1 }}>More Article</Typography>
             <IconButton variant="outlined" color="neutral" size="sm" onClick={handleIsSheetClose}>
               <CloseIcon />
             </IconButton>
@@ -364,7 +381,6 @@ export const Dashboard = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  click
                 </Link>
                 </CardCover>
                 </AspectRatio>
@@ -406,7 +422,7 @@ export const Dashboard = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    click
+              
                   </Link>
                  
                 </CardCover>
@@ -448,7 +464,7 @@ export const Dashboard = () => {
                   to="https://www.bu.edu/articles/2023/5-tips-for-life-after-college-a-guide-to-living-life-as-an-alumni/" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  > click</Link>
+                  ></Link>
                 </CardCover>
                 </AspectRatio>
               </CardOverflow>
@@ -469,6 +485,171 @@ export const Dashboard = () => {
 
         )}
       </Layout.Root>
+
+      ) : ( 
+        // If user is not logged In
+      <Layout.Root
+        sx={{
+          gridTemplateColumns: {
+            xs: '1fr',
+            sm: 'minmax(64px, 200px) minmax(450px, 1fr)',
+            md: 'minmax(160px, 300px) minmax(600px, 1fr) minmax(300px, 420px)',
+          },
+          ...(drawerOpen && {
+            height: '100vh',
+            overflow: 'hidden',
+          }),
+        }}
+      >
+      <Header/>
+        {/* Side Bar Navigations */}
+        <Layout.SideNav>
+        <List size="sm" sx={{ '--ListItem-radius': '8px', '--List-gap': '4px' }}>
+          <ListItem nested>
+            <ListSubheader>
+              Browse
+            </ListSubheader>
+            <List
+              aria-labelledby="nav-list-browse"
+              sx={{
+                '& .JoyListItemButton-root': { p: '8px' },
+              }}
+            >
+              <ListItem>
+              <ListItemButton 
+              onClick={() => handleItemClick('post')}
+              >
+                <ListItemDecorator >
+                  <MessageIcon />
+                </ListItemDecorator>
+                <ListItemContent
+                  selected={selectedItem === 'post'}
+                  onClick={handleShowExplore}
+                  sx={{
+                     color: selectedItem === 'post' ? '#2ACAEA' : 'white', 
+                    }}
+                >
+                  Recent Post
+                </ListItemContent>
+              </ListItemButton >
+              </ListItem>
+              <ListItem>
+                <ListItemButton onClick={() => handleItemClick('connect')}>
+                  <ListItemDecorator>
+                    <ViewCompactAltIcon/>
+                  </ListItemDecorator>
+                  <ListItemContent 
+                  selected={selectedItem === 'connect'}
+                  onClick={handleShowConnect}
+                  sx={{
+                    color: selectedItem === 'connect' ? '#2ACAEA' : 'white', 
+                   }}
+                  >Alumnis</ListItemContent>
+                </ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton onClick={() => handleItemClick('aboutus')}>
+                  <ListItemDecorator sx={{ color: 'neutral.500' }}>
+                    <InfoIcon/>
+                  </ListItemDecorator>
+                  <ListItemContent 
+                  selected={selectedItem === 'aboutus'}
+                  onClick={handleShowConnect}
+                  sx={{
+                    color: selectedItem === 'aboutus' ? '#2ACAEA' : 'white', 
+                   }}
+                  >About Us</ListItemContent>
+                </ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton onClick={() => handleItemClick('contact')}>
+                  <ListItemDecorator sx={{ color: 'neutral.500' }}>
+                    <ContactSupportIcon/>
+                    </ListItemDecorator>
+                    <ListItemContent
+                      selected={selectedItem === 'contact'}
+                      onClick={handleShowConnect}
+                      sx={{
+                        color: selectedItem === 'contact' ? '#2ACAEA' : 'white', 
+                      }}
+                     >Contacts</ListItemContent>
+                  </ListItemButton>
+                </ListItem>
+              </List>
+            </ListItem>
+
+          </List>
+        </Layout.SideNav>
+        
+        {/* Main Page */}
+        {/* where all the re-renders happens */}
+        <Layout.Main>
+        {showConnect && (
+            loading ? (
+            <div>Loading....</div>
+          ) : (
+            <Connect
+            users={filteredUsers}
+            handlePersonIconClick={handlePersonIconClick}
+            loggedInUser={profile} // Pass the loggedInUser prop here
+            title="Some Users"
+              />
+          )
+        )}
+        {showExplore && <PostList/>}
+        </Layout.Main>
+
+        {/* Right Side Profile View for Connect Page */}
+        {showConnect &&  ( 
+        <Sheet
+          sx={{
+            display: { xs: 'none', sm: 'initial' },
+            borderLeft: '1px solid',
+            borderColor: 'neutral.outlinedBorder',
+          }}
+        >
+         <Box
+            component="img"
+            src={sideImage}
+            alt="User Avatar"
+            sx={{
+              filter: 'brightness(80%)', // Adjust the percentage to control the level of dimness
+              objectFit: 'cover',
+              width: '100%',
+              height: '100%',
+            }}
+          />
+        </Sheet>
+
+        )}
+
+         {/* Right Side Profile View for Explore Page*/}
+         { showExplore &&  ( 
+        <Sheet
+          sx={{
+            display: { xs: 'none', sm: 'initial' },
+            borderLeft: '1px solid',
+            borderColor: 'neutral.outlinedBorder',
+          }}
+        >
+          <AspectRatio ratio="25/60">
+          <Box
+            component="img"
+            src={sideImage1}
+            alt="User Avatar"
+            sx={{
+              filter: 'brightness(80%)', // Adjust the percentage to control the level of dimness
+              objectFit: 'cover',
+              width: '100%',
+              height: '100%',
+            }}
+          />
+          </AspectRatio>
+        </Sheet>
+
+        )}
+      </Layout.Root>
+      )}
     </CssVarsProvider>
   );
 }

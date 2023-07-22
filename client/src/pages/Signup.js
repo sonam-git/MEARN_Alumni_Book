@@ -315,6 +315,10 @@ export const Signup = () => {
                 {loading ? <CircularProgress size={24} /> : "Sign Up"}
                 </Button>
                 <Link to="/login"><Button fullWidth>← Go to Login</Button></Link>
+                <Link to="/Dashboard" 
+                 fullWidth
+                 style={{margin: 'auto'}}
+                 >Continue Without Sign Up!</Link>
               </form>
             )}
 

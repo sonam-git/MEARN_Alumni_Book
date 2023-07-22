@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from 'react-router-dom';
 import Box from '@mui/joy/Box';
-import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
+import { useColorScheme } from '@mui/joy/styles';
 import Typography from '@mui/joy/Typography';
 import Input from '@mui/joy/Input';
 import IconButton from '@mui/joy/IconButton';
@@ -17,7 +17,6 @@ import HomeIcon from '@mui/icons-material/Home';
 import Auth from '../utils/auth'
 
 // custom
-import Menu from '../containers/Menu';
 import Layout from '../containers/Layout';
 
 function ColorSchemeToggle() {
@@ -49,41 +48,45 @@ function ColorSchemeToggle() {
   }
 
 export const Header = () => {
-    const [drawerOpen, setDrawerOpen] = React.useState(false);
-    const handleLogout = (event) => {
-        event.preventDefault();
-        Auth.logout();
-      }
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const handleLogout = (event) => {
+    event.preventDefault();
+    Auth.logout();
+  };
 
-    return(
-        <Layout.Header>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 1.5,
-          }}
-        >
-          <IconButton
-            variant="outlined"
-            size="sm"
-            onClick={() => setDrawerOpen(true)}
-            sx={{ display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <IconButton
-            size="sm"
-            sx={{ display: { xs: 'none', sm: 'inline-flex' } }}
-          >
-            <ColorSchemeToggle />
-          </IconButton>
-          <Typography component="h1" fontWeight="xl">
-            Dashboard
-          </Typography>
-        </Box>
-        <Input
+  // Get the login status using Auth.loggedIn()
+  const isLoggedIn = Auth.loggedIn();
+
+  return (
+    <Layout.Header>
+        {isLoggedIn ? (
+          <>
+           <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 1.5,
+              }}
+            >
+            <IconButton
+              variant="outlined"
+              size="sm"
+              onClick={() => setDrawerOpen(true)}
+              sx={{ display: { sm: 'none' } }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <IconButton
+              size="sm"
+              sx={{ display: { xs: 'none', sm: 'inline-flex' } }}
+            >
+              <ColorSchemeToggle />
+            </IconButton>
+            <Typography component="h1" fontWeight="xl">
+              Dashboard
+            </Typography>
+            <Input
           size="sm"
           placeholder="Search anything…"
           startDecorator={<SearchRoundedIcon color="primary" />}
@@ -102,6 +105,38 @@ export const Header = () => {
             },
           }}
         />
+            </Box>
+          </>
+        ) : (
+          <>
+          <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 1.5,
+              }}
+            >
+            <IconButton
+              variant="outlined"
+              size="sm"
+              onClick={() => setDrawerOpen(true)}
+              sx={{ display: { sm: 'none' } }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <IconButton
+              size="sm"
+              sx={{ display: { xs: 'none', sm: 'inline-flex' } }}
+            >
+              <ColorSchemeToggle />
+            </IconButton>
+            <Typography component="h1" fontWeight="xl">
+              Home : Sign Up For Free!
+            </Typography>
+            </Box>
+          </>
+        )}
         <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1.5 }}>
           <IconButton
             size="sm"
@@ -111,60 +146,83 @@ export const Header = () => {
           >
             <SearchRoundedIcon />
           </IconButton>
-          <IconButton
-            size="sm"
-            variant="outlined"
-            color="primary"
-            component="a"
-            style={{
-              padding: '10px'
-            }}
-          >
-            <HomeIcon 
-            style={{
-              marginRight: '5px'
-            }}
-            />
-            Home
-          </IconButton>
-          <IconButton
-            size="sm"
-            variant="outlined"
-            color="primary"
-            aria-label="Apps"
-            style={{
-                padding: '10px'
-            }}
-            
-            >
-            <ManageAccountsIcon 
-               style={{
-                marginRight: '5px'
-            }}
-            />
+          {isLoggedIn ? (
+            <>
+            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1.5 }}>
+             <IconButton
+                size="sm"
+                variant="outlined"
+                color="primary"
+                component={Link}
+                to="/Dashboard"
+                style={{
+                  padding: '10px',
+                }}
+              >
+                <HomeIcon style={{ marginRight: '5px' }} />
+                Home
+              </IconButton>
+              <IconButton
+                size="sm"
+                variant="outlined"
+                color="primary"
+                aria-label="Apps"
+                style={{
+                  padding: '10px',
+                }}
+                component={Link}
+                to="/Profile" // Link to the user's profile page
+              >
+                <ManageAccountsIcon style={{ marginRight: '5px' }} />
                 Profile
-            </IconButton>
-            <Link to='/'>
-           <IconButton
-            size="sm"
-            variant="outlined"
-            color="primary"
-            style={{
-              padding: '10px'
-            }}
-            onClick={handleLogout}
-          >
-            <LogoutIcon
-            style={{
-              marginRight: '5px'
-            }}
-            />
-            Log Out
-          </IconButton>
-          </Link>
+              </IconButton>
+              <IconButton
+                size="sm"
+                variant="outlined"
+                color="primary"
+                style={{
+                  padding: '10px',
+                }}
+                onClick={handleLogout}
+              >
+                <LogoutIcon style={{ marginRight: '5px' }} />
+                Log Out
+              </IconButton>
+              </Box>
+            </>
+          ) : (
+            <>
+            <IconButton
+                size="sm"
+                variant="outlined"
+                color="primary"
+                aria-label="Apps"
+                style={{
+                  padding: '10px',
+                }}
+                component={Link}
+                to="/Login" // Link to the user's profile page
+              >
+                Login
+              </IconButton>
+              <IconButton
+                size="sm"
+                variant="outlined"
+                color="primary"
+                style={{
+                  padding: '10px',
+                }}
+                component={Link}
+                to="/Signup"
+              >
+                Sign Up
+              </IconButton>
+              
+            </>
+          )}
         </Box>
-      </Layout.Header>
-    );
+    </Layout.Header>
+  );
 };
 
 export default Header;
