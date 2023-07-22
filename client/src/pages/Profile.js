@@ -16,6 +16,7 @@ import { ADD_POST } from "../utils/mutations";
 import { REMOVE_POST } from "../utils/mutations";
 import { ADD_COMMENT } from "../utils/mutations";
 import { REMOVE_COMMENT } from "../utils/mutations";
+import { UPDATE_POST } from "../utils/mutations";
 
 export const Profile = () => {
   const { loading, data, error } = useQuery(GET_ME);
@@ -26,6 +27,9 @@ export const Profile = () => {
   const [removePost] = useMutation(REMOVE_POST);
   const [addComment] = useMutation(ADD_COMMENT);
   const [removeComment] = useMutation(REMOVE_COMMENT);
+  const [updatePost] = useMutation(UPDATE_POST);
+  const [editPostId, setEditPostId] = useState(null);
+  const [editPostText, setEditPostText] = useState("");
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -102,14 +106,56 @@ export const Profile = () => {
       console.error("Error deleting comment:", error);
     }
   };
+
+  const handlePostUpdate = async (postId, postText) => {
+    try {
+      await updatePost({
+        variables: { postId: editPostId, postText: editPostText },
+      });
+
+      console.log("Post updated successfully");
+      setEditPostId(null); // Reset the editing post id
+      setEditPostText(""); // Clear the post text
+      window.location.reload();
+    } catch (error) {
+      console.error("Error updating post:", error);
+    }
+  };
   return (
-   <>
-    <Sheet>
-      
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Container>
-            {/* upper layer with profile pic */}
+    <>
+      <Sheet>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Container>
+              {/* upper layer with profile pic */}
+              <Box
+                sx={{
+                  width: 300,
+                  height: 300,
+                  backgroundColor: "primary.dark",
+                  "&:hover": {
+                    backgroundColor: "primary.main",
+                    opacity: [0.9, 0.8, 0.7],
+                  },
+                }}
+              >
+                {/* adding input field for name field */}
+                <Avatar
+                  item
+                  xs={8}
+                  sx={{ display: "flex", alignItems: "center" }}
+                  alt="A beautiful flower of pink color within a glass bubble shapped casing"
+                  src={flowerImage}
+                />
+                <h1>
+                  {data.me.firstname} {data.me.lastname}
+                </h1>
+              </Box>
+            </Container>
+          </Grid>
+
+          {/* first layer */}
+          <Grid item xs={4}>
             <Box
               sx={{
                 width: 300,
@@ -121,156 +167,133 @@ export const Profile = () => {
                 },
               }}
             >
-              {/* adding input field for name field */}
-              <Avatar
-                item
-                xs={8}
-                sx={{ display: "flex", alignItems: "center" }}
-                alt="A beautiful flower of pink color within a glass bubble shapped casing"
-                src={flowerImage}
-              />
-              <h1>
-                {data.me.firstname} {data.me.lastname}
-              </h1>
-            </Box>
-          </Container>
-        </Grid>
-
-        {/* first layer */}
-        <Grid item xs={4}>
-          <Box
-            sx={{
-              width: 300,
-              height: 300,
-              backgroundColor: "primary.dark",
-              "&:hover": {
-                backgroundColor: "primary.main",
-                opacity: [0.9, 0.8, 0.7],
-              },
-            }}
-          >
-            <Typography sx={{ flex: 1 }}>Posts</Typography>
-            {data.me.posts.length ? (
-              data.me.posts.map((post) => (
-                <div key={post._id}>
-                  <h3>{post.postText}</h3>
-                  <p>Author: {post.postAuthor}</p>
-                  {post.postAuthor === data.me.username && (
+              <Typography sx={{ flex: 1 }}>Posts</Typography>
+              {data.me.posts.length ? (
+                data.me.posts.map((post) => (
+                  <div key={post._id}>
+                       {editPostId === post._id ? (
+                  <>
+                    <TextField
+                      value={editPostText}
+                    onChange={(e) => setEditPostText(e.target.value)}
+                    />
+                    <Button onClick={handlePostUpdate}>Save</Button>
+                 </>
+                ) : (
                     <>
-                      <button
-                        className="deleteButton"
-                        onClick={() => handleDeletePost(post._id)}
-                      >
-                        Delete
-                      </button>
-                      <button className="editButton">Edit</button>
-                    </>
-                  )}
-
-                  <button
-                    className="commentButton"
-                    onClick={() => toggleCommentBox(post._id)}
-                  >
-                    comment
-                  </button>
-                  {post.comments.map((comment) => {
-                    console.log(`Post ID: ${post._id}`);
-                    console.log(`Comment ID: ${comment._id}`);
-                    return (
-                      <div key={comment._id}>
-                        <p>
-                          {comment.commentText} - {comment.commentAuthor}
-                        </p>
-                        {comment.commentAuthor === data.me.username && (
-                          <button
-                            className="deleteCommentButton"
-                            onClick={() =>
-                              handleDeleteComment(post._id, comment._id)
-                            }
-                          >
-                            Delete Comment
-                          </button>
-                        )}
-                      </div>
-                    );
-                  })}
-
-                  {/* {post.comments.map((comment) => (
-                    <div key={comment._id}>
-                      <p>
-                        {comment.commentText} - {comment.commentAuthor}
-                      </p>
-                      {comment.commentAuthor === data.me.username && (
+        
+                    <h3>{post.postText}</h3>
+                    <p>Author: {post.postAuthor}</p>
+                    {post.postAuthor === data.me.username && (
+                      <>
                         <button
-                          className="deleteCommentButton"
-                          onClick={() => handleDeleteComment(post._id,comment._id)}
+                          className="deleteButton"
+                          onClick={() => handleDeletePost(post._id)}
                         >
-                          Delete Comment
+                          Delete
                         </button>
-                      )}
-                    </div>
-                  ))} */}
-                  {commentBoxStates[post._id] && (
-                    <div>
-                      <TextField
-                        id={`comment-textfield-${post._id}`}
-                        label="Add a comment"
-                        value={commentText}
-                        onChange={(event) => setCommentText(event.target.value)}
-                      />
-                      <Button onClick={() => handleCommentSubmit(post._id)}>
-                        Submit Comment
-                      </Button>
-                    </div>
-                  )}
+                        <button
+                          className="editButton"
+                          onClick={() => {
+                            setEditPostId(post._id);
+                            setEditPostText(post.postText);
+                          }}
+                        >
+                          Edit
+                        </button>
+                      </>
+                    )}
+
+                    <button
+                      className="commentButton"
+                      onClick={() => toggleCommentBox(post._id)}
+                    >
+                      comment
+                    </button>
+                    {post.comments.map((comment) => {
+                      console.log(`Post ID: ${post._id}`);
+                      console.log(`Comment ID: ${comment._id}`);
+                      return (
+                        <div key={comment._id}>
+                          <p>
+                            {comment.commentText} - {comment.commentAuthor}
+                          </p>
+                          {comment.commentAuthor === data.me.username && (
+                            <button
+                              className="deleteCommentButton"
+                              onClick={() =>
+                                handleDeleteComment(post._id, comment._id)
+                              }
+                            >
+                              Delete Comment
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })}
+                    {commentBoxStates[post._id] && (
+                      <div>
+                        <TextField
+                          id={`comment-textfield-${post._id}`}
+                          label="Add a comment"
+                          value={commentText}
+                          onChange={(event) =>
+                            setCommentText(event.target.value)
+                          }
+                        />
+                        <Button onClick={() => handleCommentSubmit(post._id)}>
+                          Submit Comment
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <h1>No posts at the moment</h1>
+              )}
+              <Typography sx={{ flex: 1 }}>Create a Post</Typography>
+              <form onSubmit={handleFormSubmit}>
+                <TextField
+                  item
+                  xs={4}
+                  id="outlined-multiline-flexible"
+                  multiline
+                  maxRows={4}
+                  onChange={(event) => setPostText(event.target.value)}
+                />
+                <Button type="submit">Submit</Button>
+              </form>
+            </Box>
+          </Grid>
+          {/* education right box of layout */}
+          <Grid item xs={8}>
+            <Box>Friends</Box>
+            {data.me.friends.length ? (
+              data.me.friends.map((friend) => (
+                <div key={friend._id}>
+                  <h3>{friend.firstname}</h3>
                 </div>
               ))
             ) : (
-              <h1>No posts at the moment</h1>
+              <h1>No Friends at the moment</h1>
             )}
-            <Typography sx={{ flex: 1 }}>Create a Post</Typography>
-            <form onSubmit={handleFormSubmit}>
-              <TextField
-                item
-                xs={4}
-                id="outlined-multiline-flexible"
-                multiline
-                maxRows={4}
-                onChange={(event) => setPostText(event.target.value)}
-              />
-              <Button type="submit">Submit</Button>
-            </form>
-          </Box>
+            <TextField
+              id="outlined-basic"
+              label="Friend List"
+              variant="outlined"
+            />
+          </Grid>
         </Grid>
-        {/* education right box of layout */}
-        <Grid item xs={8}>
-          <Box>Friends</Box>
-          {data.me.friends.length ? (
-            data.me.friends.map((friend) => (
-              <div key={friend._id}>
-                <h3>{friend.firstname}</h3>
-              </div>
-            ))
-          ) : (
-            <h1>No Friends at the moment</h1>
-          )}
-          <TextField
-            id="outlined-basic"
-            label="Friend List"
-            variant="outlined"
-          />
-        </Grid>
-      </Grid>
-     </Sheet>
+      </Sheet>
     </>
   );
-}
+};
 
 //******Function that will be used when the profile page is loaded*******//
 //**making the useQuery to the backend for GET_ME * *//
 // const RetrievingUserInfo = () =>{
-  
-//   //make query call 
+
+//   //make query call
 //   const { loading, data,error } = useQuery(GET_ME);
 //   if (loading) return "Loading...";
 
@@ -278,19 +301,16 @@ export const Profile = () => {
 
 //   return <Layout grid>{JSON.stringify(data)}</Layout>;
 
-//   //need to destructure and then place onto UI layout page 
+//   //need to destructure and then place onto UI layout page
 
 // }
 
-
-
-
 //***** useQuery Display friends associated with the user in session   ******/
-// getMe the friends part 
+// getMe the friends part
 //decunstruct only the friends from this function
 // const RetrievingUserFriends = () =>{
-  
-//   //make query call 
+
+//   //make query call
 //   const { loading, data,error } = useQuery(GET_ME);
 //   if (loading) return "Loading...";
 
@@ -298,7 +318,7 @@ export const Profile = () => {
 
 //   return <Layout grid>{JSON.stringify(data)}</Layout>;
 
-//   //need to destructure and then place onto UI layout page 
+//   //need to destructure and then place onto UI layout page
 
 // }
 
@@ -308,7 +328,7 @@ export const Profile = () => {
 // const CreatingAPost = () =>{
 //   //inital state is no posts makes call getMe for posts to check if there are any posts for user
 //   const [name, setName] = useState('');
-//    const [addPost, { error }] = useMutation(ADD_POST);  
+//    const [addPost, { error }] = useMutation(ADD_POST);
 //    const handleFormSubmit = async (event) => {
 //     event.preventDefault();
 
@@ -318,14 +338,14 @@ export const Profile = () => {
 //       const { data } = await addPost({
 //         variables: { postText, postAuthor, createdAt, comments, likes },
 //       });
-// //for updating the query of getme ask if itsw necessary to do this 
+// //for updating the query of getme ask if itsw necessary to do this
 //       window.location.reload();
 //     } catch (err) {
 //       console.error(err);
 //     }
 //   };
 //   return (
-//     //for the text box for the post 
+//     //for the text box for the post
 //     <div>
 //       <h3>Add yourself to the list...</h3>
 //       <form
@@ -356,30 +376,25 @@ export const Profile = () => {
 //   );
 // }
 
-
 //*****Add functionality for when user in sesh clicks on a friend within profile we can see the clicked users profile ********//
-//based on the friend id we will use that id so that we can use the Query GET_USER with the id of friends 
-//then this will use all the same components used for user but for the users friends 
-
-
+//based on the friend id we will use that id so that we can use the Query GET_USER with the id of friends
+//then this will use all the same components used for user but for the users friends
 
 //create component for query to obtain firstname  from user in sesh
 //component using react any type of hook in this case useQuery
 
 //const functionname = (params)=>{
-  //use query hook assiged to variable 
-  //console.log  variable to see the hook useQuery
-  //data we can do anything with it 
-  //err is for validation
+//use query hook assiged to variable
+//console.log  variable to see the hook useQuery
+//data we can do anything with it
+//err is for validation
 
+// use state for the editing of the text fields
 
-// use state for the editing of the text fields 
-
-//name initial state from signup information in session 
+//name initial state from signup information in session
 //connects to the user profiles on dashboard when is updated
 
-//posts initial state no text 
-//updates when user edits and saves it 
-
+//posts initial state no text
+//updates when user edits and saves it
 
 export default Profile;
