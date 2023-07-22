@@ -106,6 +106,8 @@ export const ADD_COMMENT = gql`
       postAuthor
       createdAt
       comments {
+        
+        _id
         commentText
         commentAuthor
         createdAt
@@ -136,6 +138,7 @@ export const REMOVE_POST = gql`
         createdAt
       }
     }
+     removePost(postId: $postId) 
   }
 `;
 

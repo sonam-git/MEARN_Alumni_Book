@@ -197,7 +197,7 @@ try{
           { _id: postId },
           {
             $addToSet: {
-              comments: { commentText, commentAuthor: context.user.username },
+              comments: { _id: mongoose.Types.ObjectId(),commentText, commentAuthor: context.user.username },
             },
           },
           {
@@ -240,7 +240,8 @@ try{
     //removes a post by its postId
     removePost: async (parent, { postId }, context) => {
       if (context.user) {
-        const post = await Post.findOneAndDelete({
+        try{
+         await Post.findOneAndDelete({
           _id: postId,
           postAuthor: context.user.username, 
         });
@@ -254,7 +255,10 @@ try{
           { $pull: { posts: postId } } // Use postId instead of post._id
         );
 
-        return post;
+         return true;
+      } catch (error) {
+        console.error("Error deleting post:", error);
+        return false; 
       }
 
       throw new AuthenticationError("You need to be logged in!");
