@@ -343,7 +343,7 @@ export const Dashboard = () => {
           }}
         >
           <Box sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
-            <Typography sx={{ flex: 1 }} startDecorator={<ExploreIcon/>}>Explore</Typography>
+            <Typography sx={{ flex: 1 }}>More Article</Typography>
             <IconButton variant="outlined" color="neutral" size="sm" onClick={handleIsSheetClose}>
               <CloseIcon />
             </IconButton>

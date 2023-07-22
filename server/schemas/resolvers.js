@@ -3,6 +3,7 @@ const { AuthenticationError } = require("apollo-server-express");
 const cloudinary = require("cloudinary").v2;
 const { User, Post } = require("../models");
 const { signToken } = require("../utils/auth");
+const mongoose = require('mongoose');
 
 cloudinary.config({ 
   cloud_name: 'dnuanxqxg', 
