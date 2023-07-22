@@ -3,6 +3,7 @@ const { AuthenticationError } = require("apollo-server-express");
 const cloudinary = require("cloudinary").v2;
 const { User, Post } = require("../models");
 const { signToken } = require("../utils/auth");
+const mongoose = require('mongoose');
 
 cloudinary.config({ 
   cloud_name: 'dnuanxqxg', 
@@ -262,7 +263,8 @@ try{
       }
 
       throw new AuthenticationError("You need to be logged in!");
-    },
+    }
+  },
     //removes a comment from a post
     removeComment: async (parent, { postId, commentId }, context) => {
       if (context.user) {
