@@ -17,7 +17,7 @@ import { REMOVE_POST } from "../utils/mutations";
 import { ADD_COMMENT } from "../utils/mutations";
 import { REMOVE_COMMENT } from "../utils/mutations";
 
-export function Profile() {
+export const Profile = () => {
   const { loading, data, error } = useQuery(GET_ME);
   const [postText, setPostText] = useState("");
   const [addPost] = useMutation(ADD_POST);
@@ -103,7 +103,9 @@ export function Profile() {
     }
   };
   return (
+   <>
     <Sheet>
+      
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Container>
@@ -259,7 +261,8 @@ export function Profile() {
           />
         </Grid>
       </Grid>
-    </Sheet>
+     </Sheet>
+    </>
   );
 }
 
