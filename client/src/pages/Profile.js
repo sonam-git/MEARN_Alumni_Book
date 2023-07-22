@@ -172,16 +172,15 @@ export const Profile = () => {
                 data.me.posts.map((post) => (
                   <div key={post._id}>
                        {editPostId === post._id ? (
-                  <>
+                    <>
                     <TextField
                       value={editPostText}
                     onChange={(e) => setEditPostText(e.target.value)}
                     />
                     <Button onClick={handlePostUpdate}>Save</Button>
-                 </>
-                ) : (
+                   </>
+                    ) : (
                     <>
-        
                     <h3>{post.postText}</h3>
                     <p>Author: {post.postAuthor}</p>
                     {post.postAuthor === data.me.username && (
@@ -202,6 +201,8 @@ export const Profile = () => {
                           Edit
                         </button>
                       </>
+                    )}
+                    </>
                     )}
 
                     <button
