@@ -265,7 +265,7 @@ export const Dashboard = () => {
         </Layout.Main>
 
         {/* Right Side Profile View for Connect Page */}
-        {selectedUser &&  ( 
+        {showConnect && selectedUser &&  ( 
         <Sheet
           sx={{
             display: { xs: 'none', sm: 'initial' },

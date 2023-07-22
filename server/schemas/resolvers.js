@@ -262,7 +262,8 @@ try{
       }
 
       throw new AuthenticationError("You need to be logged in!");
-    },
+    }
+  },
     //removes a comment from a post
     removeComment: async (parent, { postId, commentId }, context) => {
       if (context.user) {
