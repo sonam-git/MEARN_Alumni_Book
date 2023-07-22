@@ -266,6 +266,10 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
               <Link to="/signup">
                 <Button fullWidth>← Go to Sign Up</Button>
               </Link>
+              <Link to="/Dashboard" 
+                 fullWidth
+                 style={{margin: 'auto'}}
+                 >Continue Without Log In!</Link>
             </form>
             )}
 
