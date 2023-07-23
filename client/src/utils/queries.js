@@ -92,6 +92,7 @@ export const GET_POSTS = gql`
       _id
       postText
       postAuthor
+      image
       createdAt
       comments {
         commentText
@@ -134,6 +135,7 @@ export const GET_ME = gql`
       lastname
       username
       email
+      image
       posts {
         _id
         postText
@@ -142,7 +144,7 @@ export const GET_ME = gql`
         comments {
           _id
           commentText
-          commentAuthor
+          commentAuthor 
           createdAt
         }
         likes {

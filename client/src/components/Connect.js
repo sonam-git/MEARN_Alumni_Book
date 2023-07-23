@@ -63,7 +63,7 @@ const Connect = ({ users, handlePersonIconClick, loggedInUser }) => {
           {/* Profiles Individual cards */}
           {filteredUsers &&
             shuffledUsers.map((user) => (
-              user && user._id !== loggedInUser._id && (
+              user && user._id !== loggedInUser._id ? (
               <Card
                 variant="outlined"
                 sx={{
@@ -108,7 +108,7 @@ const Connect = ({ users, handlePersonIconClick, loggedInUser }) => {
                   </IconButton>
                   </Box>
               </Card>
-              ) 
+              ) : null
             ))}
         </Box>
       </>

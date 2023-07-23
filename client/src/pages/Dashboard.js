@@ -23,6 +23,8 @@ import CardCover from '@mui/joy/CardCover';
 import articleOneImage from '../assets/images/article-one.webp';
 import articleTwoImage from '../assets/images/article-two.jpeg';
 import articleThreeImage from '../assets/images/article-three.jpg';
+import Avatar from '@mui/joy/Avatar';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 // Icons import
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
@@ -37,6 +39,8 @@ import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import ViewCompactAltIcon from '@mui/icons-material/ViewCompactAlt';
 import sideImage from '../assets/images/importance.jpg';
 import sideImage1 from '../assets/images/opportunities.jpg'
+import { REMOVE_COMMENT } from "../utils/mutations";
+import { useMutation } from "@apollo/client";
 
 // custom
 import filesTheme from '../containers/Theme';
@@ -77,6 +81,8 @@ function ColorSchemeToggle() {
 
 export const Dashboard = () => {
 
+  const [removeComment] = useMutation(REMOVE_COMMENT);
+
   const [showLogin, setShowLogin] = useState(false);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -87,6 +93,8 @@ export const Dashboard = () => {
   const [showExplore, setShowExplore] = useState(true);
 
   const [selectedUser, setSelectedUser] = useState(null);
+  const [postAndCommentsData, setPostAndCommentsData] = useState(null);
+  
   
 
   const [selectedItem, setSelectedItem] = useState('explore');
@@ -115,8 +123,28 @@ export const Dashboard = () => {
     return <div>Loading...</div>;
   }
 
+  const updatePostAndCommentsData = (data) => {
+    setPostAndCommentsData(data);
+  };
+
   const handlePersonIconClick = (user) => {
     setSelectedUser(user);
+  };
+
+  const handleDeleteComment = async (postId, commentId) => {
+    try {
+      // Execute the removeComment mutation and pass the commentId as a variable
+      await removeComment({
+        variables: { postId, commentId },
+      });
+
+      // Perform any necessary actions after successful deletion, such as updating the UI
+      console.log("Comment deleted successfully");
+      window.location.reload();
+    } catch (error) {
+      // Handle any errors that occur during the deletion process
+      console.error("Error deleting comment:", error);
+    }
   };
 
   const handleLogout = (event) => {
@@ -251,7 +279,7 @@ export const Dashboard = () => {
                       selected={selectedItem === 'contact'}
                       onClick={handleShowConnect}
                       sx={{
-                        color: selectedItem === 'contact' ? '#2ACAEA' : 'white', 
+                        color: selectedItem === 'contact' ? '#2ACAEA' : '#29b6f6', 
                       }}
                      >Contacts</ListItemContent>
                   </ListItemButton>
@@ -278,8 +306,79 @@ export const Dashboard = () => {
           )
         )}
         {showExplore && <PostList/>}
-        {showProfile && <Profile/>}
+        {showProfile && 
+        <Profile
+          updatePostAndCommentsData={updatePostAndCommentsData}
+        />}
         </Layout.Main>
+
+        {showProfile && postAndCommentsData && (
+          <Sheet
+            sx={{
+              display: { xs: 'none', sm: 'initial' },
+              borderLeft: '1px solid',
+              borderColor: 'neutral.outlinedBorder',
+            }}
+          >
+            <div key={postAndCommentsData.post._id}>
+              <Box sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px',  }}>
+                  <Avatar src={postAndCommentsData.me.image} size="lg" sx={{ '--Avatar-size': '50px',}} />
+              </Box>
+                <Typography sx={{ flex: 1 }}>
+                  {postAndCommentsData.post.postAuthor}
+                </Typography>
+              </Box>
+              {/* Add other components and details related to the selected post */}
+            </div>
+
+            <Divider />
+            <Typography sx={{ fontSize: '12px', padding: '10px', fontFamily: 'monospace' }}>Posted: {new Date(parseInt(postAndCommentsData.post.createdAt)).toLocaleDateString()}</Typography>
+            <Box
+              sx={{
+                gap: 2,
+                p: 2,
+                display: 'grid',
+                gridTemplateColumns: 'auto 1fr',
+                '& > *:nth-of-ty(odd)': { color: 'text.secondary' },
+              }}
+            > 
+              <Typography level="h6" fontWeight="lg" color="primary" sx={{ width: '100%' }}>
+                  {postAndCommentsData.post.postText}
+              </Typography>
+
+            </Box>
+
+            <Divider />
+
+            {postAndCommentsData.post.comments?.length === 0 ? (
+                <Typography
+                  sx={{
+                    textAlign: 'center',
+                    margin: 'auto',
+                    mt: 3,
+                  }}
+                >No Comments Yet!</Typography>
+              ) : (
+                <>
+                  {postAndCommentsData.post.comments.map((comment) => (
+                    <div key={comment._id} style={{ display: 'flex', justifyContent: 'space-between', padding: '15px', border: 'solid', borderRadius: '10px', width: '90%', margin: 'auto', marginTop: '15px'}}>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px',  }}>
+                        <Avatar src={postAndCommentsData.me.image} size="lg" sx={{ '--Avatar-size': '50px',}} />
+                      </Box>
+                      <Typography variant="body1" sx={{mt: '10px', fontFamily: 'monospace', width: "85%" }} color="primary">
+                        <span style={{ fontWeight: 'bold', fontStyle: 'italic', }}>{comment.commentAuthor}</span> - <span style={{ color: 'white' }}>{comment.commentText}</span>
+                        <Typography variant="body2" sx={{ marginRight: 'auto', display: 'flex', fontSize: '12px' }}>Posted: {new Date(parseInt(comment.createdAt)).toLocaleDateString()}</Typography>
+                      </Typography>
+                      <IconButton variant="outlined" color='danger' sx={{ padding: '5px', height: '20px', border: 'none' }} onClick={() => handleDeleteComment(postAndCommentsData.post._id, comment._id)}>
+                        <DeleteIcon/> 
+                      </IconButton>
+                    </div>
+                  ))}
+                </>
+              )}
+          </Sheet>
+        )}
 
         {/* Right Side Profile View for Connect Page */}
         {showConnect && selectedUser &&  ( 

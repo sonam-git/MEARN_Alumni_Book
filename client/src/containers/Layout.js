@@ -64,6 +64,8 @@ function SideNav(props) {
           bgcolor: 'background.surface',
           borderRight: '1px solid',
           borderColor: 'divider',
+          position: 'sticky',
+          top: 4,
           display: {
             xs: 'none',
             sm: 'initial',
