@@ -4,7 +4,7 @@ import { GET_ME, GET_USERS } from '../utils/queries';
 import { REMOVE_COMMENT } from "../utils/mutations";
 import { useMutation } from "@apollo/client";
 import { Link, useParams, Navigate } from 'react-router-dom';
-import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
+import { CssVarsProvider} from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
 import AspectRatio from '@mui/joy/AspectRatio';
 import Box from '@mui/joy/Box';
@@ -27,8 +27,8 @@ import Avatar from '@mui/joy/Avatar';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 // Icons import
-import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
-import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
+// import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
+// import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import PersonIcon from '@mui/icons-material/Person';
 
 import CloseIcon from '@mui/icons-material/Close';
@@ -56,33 +56,33 @@ const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-function ColorSchemeToggle() {
-  const { mode, setMode } = useColorScheme();
-  const [mounted, setMounted] = useState(false);
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-  if (!mounted) {
-    return <IconButton size="sm" variant="outlined" color="primary" />;
-  }
-  return (
-    <IconButton
-      id="toggle-mode"
-      size="sm"
-      variant="outlined"
-      color="primary"
-      onClick={() => {
-        if (mode === 'light') {
-          setMode('dark');
-        } else {
-          setMode('light');
-        }
-      }}
-    >
-      {mode === 'light' ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
-    </IconButton>
-  );
-}
+// function ColorSchemeToggle() {
+//   const { mode, setMode } = useColorScheme();
+//   const [mounted, setMounted] = useState(false);
+//   React.useEffect(() => {
+//     setMounted(true);
+//   }, []);
+//   if (!mounted) {
+//     return <IconButton size="sm" variant="outlined" color="primary" />;
+//   }
+//   return (
+//     <IconButton
+//       id="toggle-mode"
+//       size="sm"
+//       variant="outlined"
+//       color="primary"
+//       onClick={() => {
+//         if (mode === 'light') {
+//           setMode('dark');
+//         } else {
+//           setMode('light');
+//         }
+//       }}
+//     >
+//       {mode === 'light' ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
+//     </IconButton>
+//   );
+// }
 
 export const Dashboard = () => {
 
@@ -114,10 +114,7 @@ export const Dashboard = () => {
   const friendsArray = users.filter((user) => user.friends); 
   console.log(friendsArray)
 
-  if (Auth.loggedIn() && Auth.getProfile().data._id === username) {
-    return <Navigate to="/me" />;
-  }
-
+  
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -424,9 +421,9 @@ export const Dashboard = () => {
             {showFriends ? 'Close Friends List' : 'View Friends List'}
             </Button>
             <Divider sx={{marginBottom: 2}}></Divider>
-            {showFriends && <FriendList
+            {showFriends && (<FriendList
             friends={selectedUser.friends} 
-            />}
+            />)}
           </Box>
         </Sheet>
 

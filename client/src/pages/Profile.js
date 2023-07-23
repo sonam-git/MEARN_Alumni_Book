@@ -321,7 +321,7 @@ import EditIcon from '@mui/icons-material/Edit';
                               handleCommentsIconClick(post._id);
                               toggleCommentBox(post._id);
                             }}
-                            >Send</Button>
+                            >Add Comment</Button>
                           </Box>
                         }
                       />
@@ -346,7 +346,7 @@ import EditIcon from '@mui/icons-material/Edit';
           }}>
 
       <div>
-        <FormControl onSubmit={handleFormSubmit}>
+        <FormControl >
             <Textarea
               label="Add a comment"
               placeholder="What is on your mind......"
@@ -368,8 +368,8 @@ import EditIcon from '@mui/icons-material/Edit';
                     flex: 'auto',
                   }}
                 >
-                  <Button
-                  sx={{ ml: 'auto' }}>Send</Button>
+                  <Button onClick={handleFormSubmit}
+                  sx={{ ml: 'auto' }}>Add Post</Button>
                 </Box>
               }
             />
