@@ -54,6 +54,11 @@ export const Header = () => {
     Auth.logout();
   };
 
+  const handleHome = (event) => {
+    event.preventDefault();
+    window.location.reload();
+  }
+
   // Get the login status using Auth.loggedIn()
   const isLoggedIn = Auth.loggedIn();
 
@@ -153,8 +158,7 @@ export const Header = () => {
                 size="sm"
                 variant="outlined"
                 color="primary"
-                component={Link}
-                to="/Dashboard"
+                onClick={handleHome}
                 style={{
                   padding: '10px',
                 }}

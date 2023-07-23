@@ -1,14 +1,17 @@
 import React from "react";
-import Avatar from "@mui/material/Avatar";
+import Avatar from '@mui/joy/Avatar';
+import FormControl from "@mui/joy/FormControl";
+import FormLabel, { formLabelClasses } from "@mui/joy/FormLabel";
+import AspectRatio from '@mui/joy/AspectRatio';
 import flowerImage from "../assets/images/galactic-flower.png";
 import Sheet from "@mui/joy/Sheet";
 import Box from "@mui/joy/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/joy/Typography";
-import { Container } from "@mui/material";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import { useState } from "react";
+import { Container, Divider } from "@mui/material";
+import Textarea from '@mui/joy/Textarea';
+import Button from '@mui/joy/Button';
+import { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import { GET_ME } from "../utils/queries";
@@ -16,8 +19,31 @@ import { ADD_POST } from "../utils/mutations";
 import { REMOVE_POST } from "../utils/mutations";
 import { ADD_COMMENT } from "../utils/mutations";
 import { REMOVE_COMMENT } from "../utils/mutations";
+import Header from "../components/Header";
+import { CssVarsProvider } from "@mui/joy/styles";
+import CssBaseline from '@mui/joy/CssBaseline';
+import filesTheme from '../containers/Theme';
+import { Card, withWidth } from "@material-ui/core";
+import CardOverflow from "@mui/joy/CardOverflow";
+import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 
-export const Profile = () => {
+
+import Tabs from '@mui/joy/Tabs';
+import TabList from '@mui/joy/TabList';
+import Tab from '@mui/joy/Tab';
+
+
+import CardContent from '@mui/joy/CardContent';
+import CardActions from '@mui/joy/CardActions';
+import IconButton from '@mui/joy/IconButton';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import CommentIcon from '@mui/icons-material/Comment';
+
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EditIcon from '@mui/icons-material/Edit';
+
+
+export const Profile = ({ updatePostAndCommentsData, updateDeletePost }) => {
   const { loading, data, error } = useQuery(GET_ME);
   const [postText, setPostText] = useState("");
   const [addPost] = useMutation(ADD_POST);
@@ -25,7 +51,75 @@ export const Profile = () => {
   const [commentBoxStates, setCommentBoxStates] = useState({});
   const [removePost] = useMutation(REMOVE_POST);
   const [addComment] = useMutation(ADD_COMMENT);
-  const [removeComment] = useMutation(REMOVE_COMMENT);
+
+  const [activeTab, setActiveTab] = useState(1);
+
+  const [showMyPost, setShowMyPost] = useState(true); // Initially show My Post tab content
+  const [showCreatePost, setShowCreatePost] = useState(false);
+  const [showFriendsList, setShowFriendsList] = useState(false);
+
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+    switch (newValue) {
+      case 1:
+        handleShowMyPost();
+        break;
+      case 2:
+        handleShowCreatePost();
+        break;
+      case 3:
+        handleShowFriendsList();
+        break;
+      default:
+        break;
+    }
+  };
+  
+  const handleShowMyPost = () => {
+      
+      setShowMyPost(true);
+      setShowCreatePost(false);
+      setShowFriendsList(false);
+    };
+
+  const handleShowCreatePost = () => {
+      
+      setShowMyPost(false);
+      setShowCreatePost(true);
+      setShowFriendsList(false);
+    };
+
+  const handleShowFriendsList = () => {
+     
+      setShowMyPost(false);
+      setShowCreatePost(false);
+      setShowFriendsList(true);
+    };
+    // Function to update the data in Dashboard.js
+    const handleCommentsIconClick = (postId) => {
+
+      if (!loading && data) {
+        // Find the specific post using postId
+        const me = data.me;
+        const post = data.me.posts.find((post) => post._id === postId);
+    
+        if (post) {
+          // Fetch comments data for the specific post
+          const commentsData = post.comments;
+    
+          const postAndCommentsData = {
+          // Create the postAndCommentsData objec
+            me: me,
+            postId: postId,
+            post: post,
+            comments: commentsData,
+          };
+          // Pass the data to the Dashboard.js component by calling the function
+          updatePostAndCommentsData(postAndCommentsData);
+        }
+      }
+    };
+  
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -55,9 +149,20 @@ export const Profile = () => {
   const handleDeletePost = async (postId) => {
     try {
       // Execute the removePost mutation and pass the postId as a variable
-      await removePost({
-        variables: { postId },
-      });
+      if (!loading && data) {
+        // Find the specific post using postId
+        const post = data.me.posts.find((post) => post._id === postId);
+    
+        if (post) {
+          // Fetch comments data for the specific post
+    
+          const deletePost = await removePost ({
+            variables: { postId: postId }
+        })
+          // Pass the data to the Dashboard.js component by calling the function
+          updateDeletePost(deletePost);
+        }
+      }
 
       // Perform any necessary actions after successful deletion, such as updating the UI
       console.log("Post deleted successfully");
@@ -75,7 +180,7 @@ export const Profile = () => {
     // Try to submit the comment
     try {
       await addComment({
-        variables: { postId, commentText },
+        variables: { postId, commentText},
       });
 
       console.log("Comment added successfully");
@@ -87,299 +192,226 @@ export const Profile = () => {
     setCommentText("");
   };
 
-  const handleDeleteComment = async (postId, commentId) => {
-    try {
-      // Execute the removeComment mutation and pass the commentId as a variable
-      await removeComment({
-        variables: { postId, commentId },
-      });
-
-      // Perform any necessary actions after successful deletion, such as updating the UI
-      console.log("Comment deleted successfully");
-      window.location.reload();
-    } catch (error) {
-      // Handle any errors that occur during the deletion process
-      console.error("Error deleting comment:", error);
-    }
-  };
   return (
-   <>
-    <Sheet>
+    <>
+    <Typography 
+        level="h1"
+        fontWeight="xl"
+        fontSize="clamp(1.875rem, 1.3636rem + 2.1818vw, 3rem)"
+        style={{
+          textAlign: 'center',
+          marginBottom: '20px'
+        }}
+        startDecorator={<AccountBoxIcon/>}
+        >
+          Profile
+      </Typography>
       
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Container>
-            {/* upper layer with profile pic */}
-            <Box
-              sx={{
-                width: 300,
-                height: 300,
-                backgroundColor: "primary.dark",
-                "&:hover": {
-                  backgroundColor: "primary.main",
-                  opacity: [0.9, 0.8, 0.7],
-                },
-              }}
-            >
-              {/* adding input field for name field */}
-              <Avatar
-                item
-                xs={8}
-                sx={{ display: "flex", alignItems: "center" }}
-                alt="A beautiful flower of pink color within a glass bubble shapped casing"
-                src={flowerImage}
-              />
-              <h1>
-                {data.me.firstname} {data.me.lastname}
-              </h1>
-            </Box>
-          </Container>
-        </Grid>
+      
+      <hr />
+      <CardOverflow
+        sx={{
+          display: 'flex',
+          alignItems: 'center', // Center items vertically
+          justifyContent: 'center', // Center items horizontally
+          borderColor: 'neutral.outlinedBorder',
+          py: '20px', // Add some padding on the y-axis
+        }}
+      >
+        <Avatar
+          size="lg"
+          src={data.me.image}
+          sx={{ '--Avatar-size': '200px', border: '4px solid white', }}
+        />
+        <Typography
+          component="h1"
+          fontWeight="xl"
+          sx={{
+            display: 'flex',
+            backgroundColor: 'transparent',
+            fontSize: '45px',
+            ml: '50px', // Add some left margin to create space between Avatar and Typography
+          }}
+        >
+         {data.me.firstname} {data.me.lastname}
+        </Typography>
+      </CardOverflow>
 
-        {/* first layer */}
-        <Grid item xs={4}>
-          <Box
-            sx={{
-              width: 300,
-              height: 300,
-              backgroundColor: "primary.dark",
-              "&:hover": {
-                backgroundColor: "primary.main",
-                opacity: [0.9, 0.8, 0.7],
-              },
-            }}
-          >
-            <Typography sx={{ flex: 1 }}>Posts</Typography>
-            {data.me.posts.length ? (
-              data.me.posts.map((post) => (
-                <div key={post._id}>
-                  <h3>{post.postText}</h3>
-                  <p>Author: {post.postAuthor}</p>
-                  {post.postAuthor === data.me.username && (
-                    <>
-                      <button
-                        className="deleteButton"
-                        onClick={() => handleDeletePost(post._id)}
-                      >
+      <Tabs defaultValue={1} value={activeTab} onChange={handleTabChange} sx={{backgroundColor: 'transparent'}}>
+      <TabList>
+        <Tab value={1} label="My Post" sx={{fontFamily: 'monospace', fontSize: '20px'}}>My Post</Tab>
+        <Tab value={2} label="Create +" sx={{fontFamily: 'monospace', fontSize: '20px'}}>Create +</Tab>
+        <Tab value={3} label="Friends" sx={{fontFamily: 'monospace', fontSize: '20px'}}>Friends</Tab>
+      </TabList>
+    </Tabs>
+
+      {showMyPost && (
+        <Sheet style={{ marginBottom: '20px', width: '100%', backgroundColor: 'transparent'}}>
+        {data.me.posts.length ? (
+          data.me.posts.map((post) => (
+            <div style={{ width: "80%", overflow: 'auto', resize: 'horizontal', resize: 'none', margin: 'auto', marginBottom: '20px', marginTop: '20px', backgroundColor: 'transparent' }} key={post._id}>
+              <Card variant="neutral" sx={{ width: 200, overflow: 'auto', resize: 'horizontal', backgroundColor: 'transparent' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',}}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px',  }}>
+                    <Avatar src={data.me.image} size="lg" sx={{ '--Avatar-size': '50px',}} />
+                    <Typography variant="body1" sx={{ marginLeft: '5px', fontSize: '20px', color: 'black', fontFamily: 'monospace'  }}>
+                      {post.postAuthor}
+                    </Typography>
+                  </Box>
+                  <CardActions buttonFlex="0 1 120px" sx={{ padding: '15px' }}>
+                    <IconButton variant="solid" color="danger" onClick={() => { handleDeletePost(post._id)}} sx={{marginRight: '10px', paddingLeft: '20px', paddingRight: '20px'}}>
+                      <DeleteForeverIcon/>
                         Delete
-                      </button>
-                      <button className="editButton">Edit</button>
-                    </>
-                  )}
+                    </IconButton>
+                    <Button variant="solid" color="primary">
+                      <EditIcon/>
+                      Edit
+                    </Button>
+                  </CardActions>
+                </Box>
+                <hr/>
+                <CardContent sx={{ padding: '20px', height: '150px' }}>
+                  <Typography level="h4" fontWeight="lg" color="primary">
+                    {post.postText}
+                  </Typography>
+                </CardContent>
+                {post.postAuthor === data.me.username && (
+                  <CardActions buttonFlex="0 1 120px" sx={{ padding: '15px',}}>
+                    <IconButton variant="outlined" color="primary" sx={{ marginLeft: '10px', padding: '7px', color: 'gray' }}>
+                      <FavoriteBorder/>
+                      <span sx={{ marginLeft: '10px'}}>{data.me.username.length}</span>
+                    </IconButton>
+                    <IconButton variant="outlined" color="primary" sx={{ marginLeft: '10px', padding: '7px', color: 'gray' }}  onClick={() => {
+                      handleCommentsIconClick(post._id);
+                      toggleCommentBox(post._id);
+                      }}
+                      >
+                      <CommentIcon />
+                      <span sx={{ marginLeft: '10px'}}>{post.comments.length}</span>
+                    </IconButton>
+                    <Typography variant="body2" sx={{ marginLeft: 'auto', display: 'flex', fontSize: '12px' }}>Posted:{new Date(parseInt(post.createdAt)).toLocaleDateString()}</Typography>
+                  </CardActions>
+                )}
+                <Divider />
+                {commentBoxStates[post._id] && (
+                  <div>
 
-                  <button
-                    className="commentButton"
-                    onClick={() => toggleCommentBox(post._id)}
-                  >
-                    comment
-                  </button>
-                  {post.comments.map((comment) => {
-                    console.log(`Post ID: ${post._id}`);
-                    console.log(`Comment ID: ${comment._id}`);
-                    return (
-                      <div key={comment._id}>
-                        <p>
-                          {comment.commentText} - {comment.commentAuthor}
-                        </p>
-                        {comment.commentAuthor === data.me.username && (
-                          <button
-                            className="deleteCommentButton"
-                            onClick={() =>
-                              handleDeleteComment(post._id, comment._id)
-                            }
+                <FormControl>
+                      <Textarea
+                         id={`comment-textfield-${post._id}`}
+                         label="Add a comment"
+                         value={commentText}
+                         placeholder="Add a comment......."
+                         sx={{
+                          height: '150px',
+                          width: '95%',
+                          margin: 'auto',
+                          marginBottom: '20px'
+                         }}
+                         onChange={(event) => setCommentText(event.target.value)}
+                          endDecorator={
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              gap: 'var(--Textarea-paddingBlock)',
+                              pt: 'var(--Textarea-paddingBlock)',
+                              borderTop: '1px solid',
+                              borderColor: 'divider',
+                              flex: 'auto',
+                            }}
                           >
-                            Delete Comment
-                          </button>
-                        )}
-                      </div>
-                    );
-                  })}
-
-                  {/* {post.comments.map((comment) => (
-                    <div key={comment._id}>
-                      <p>
-                        {comment.commentText} - {comment.commentAuthor}
-                      </p>
-                      {comment.commentAuthor === data.me.username && (
-                        <button
-                          className="deleteCommentButton"
-                          onClick={() => handleDeleteComment(post._id,comment._id)}
-                        >
-                          Delete Comment
-                        </button>
-                      )}
-                    </div>
-                  ))} */}
-                  {commentBoxStates[post._id] && (
-                    <div>
-                      <TextField
-                        id={`comment-textfield-${post._id}`}
-                        label="Add a comment"
-                        value={commentText}
-                        onChange={(event) => setCommentText(event.target.value)}
+                            <Button
+                             sx={{ ml: 'auto' }}
+                             onClick={() => {
+                              handleCommentSubmit(post._id);
+                              handleCommentsIconClick(post._id);
+                              toggleCommentBox(post._id);
+                            }}
+                            >Send</Button>
+                          </Box>
+                        }
                       />
-                      <Button onClick={() => handleCommentSubmit(post._id)}>
-                        Submit Comment
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              ))
-            ) : (
-              <h1>No posts at the moment</h1>
-            )}
-            <Typography sx={{ flex: 1 }}>Create a Post</Typography>
-            <form onSubmit={handleFormSubmit}>
-              <TextField
-                item
-                xs={4}
-                id="outlined-multiline-flexible"
-                multiline
-                maxRows={4}
-                onChange={(event) => setPostText(event.target.value)}
-              />
-              <Button type="submit">Submit</Button>
-            </form>
-          </Box>
-        </Grid>
-        {/* education right box of layout */}
-        <Grid item xs={8}>
-          <Box>Friends</Box>
-          {data.me.friends.length ? (
+                    </FormControl>
+                  </div>
+                )}
+              <Divider />
+              </Card>
+            </div>
+          ))
+        ) : (
+          <Typography style={{ backgroundColor: 'transparent', margin: 'auto', fontSize: '25px'}}>Make Some Friends! Its Empty Here Right Now! </Typography>
+        )}
+      </Sheet>
+      )}
+    
+    {showCreatePost && (
+          <Sheet style={{
+            marginTop: '20px',
+            width: '100%',
+            backgroundColor: 'transparent',
+          }}>
+
+      <div>
+        <FormControl onSubmit={handleFormSubmit}>
+            <Textarea
+              label="Add a comment"
+              placeholder="What is on your mind......"
+              sx={{
+                height: '250px',
+                width: '95%',
+                margin: 'auto',
+                marginBottom: '20px'
+              }}
+              onChange={(event) => setPostText(event.target.value)}
+                endDecorator={
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 'var(--Textarea-paddingBlock)',
+                    pt: 'var(--Textarea-paddingBlock)',
+                    borderTop: '1px solid',
+                    borderColor: 'divider',
+                    flex: 'auto',
+                  }}
+                >
+                  <Button
+                  sx={{ ml: 'auto' }}>Send</Button>
+                </Box>
+              }
+            />
+          </FormControl>
+      </div>
+      <Box component="footer" sx={{ py: 3 }}>
+            <Typography level="body3" textAlign="center">
+              © The Alumni's {new Date().getFullYear()}
+            </Typography>
+        </Box>
+        </Sheet>
+    )}
+
+    {showFriendsList && (
+      <Sheet style={{
+            marginBottom: '20px',
+            backgroundColor: 'transparent',
+            textAlign: 'center',
+            marginTop: '20px'
+          }}>
+            {data.me.friends.length ? (
             data.me.friends.map((friend) => (
               <div key={friend._id}>
                 <h3>{friend.firstname}</h3>
               </div>
             ))
           ) : (
-            <h1>No Friends at the moment</h1>
+            <Typography style={{ backgroundColor: 'transparent', margin: 'auto', fontSize: '25px'}}>Make Some Friends! Its Empty Here Right Now! </Typography>
           )}
-          <TextField
-            id="outlined-basic"
-            label="Friend List"
-            variant="outlined"
-          />
-        </Grid>
-      </Grid>
-     </Sheet>
+        </Sheet>
+
+    )}
+        
+       
     </>
   );
 }
-
-//******Function that will be used when the profile page is loaded*******//
-//**making the useQuery to the backend for GET_ME * *//
-// const RetrievingUserInfo = () =>{
-  
-//   //make query call 
-//   const { loading, data,error } = useQuery(GET_ME);
-//   if (loading) return "Loading...";
-
-//   if (error) return `Error! ${error.message}`;
-
-//   return <Layout grid>{JSON.stringify(data)}</Layout>;
-
-//   //need to destructure and then place onto UI layout page 
-
-// }
-
-
-
-
-//***** useQuery Display friends associated with the user in session   ******/
-// getMe the friends part 
-//decunstruct only the friends from this function
-// const RetrievingUserFriends = () =>{
-  
-//   //make query call 
-//   const { loading, data,error } = useQuery(GET_ME);
-//   if (loading) return "Loading...";
-
-//   if (error) return `Error! ${error.message}`;
-
-//   return <Layout grid>{JSON.stringify(data)}</Layout>;
-
-//   //need to destructure and then place onto UI layout page 
-
-// }
-
-//***** Function that will be used when taking account of the useState of UI *******//
-//***** Making a mutation to the backend for a comment adding to the mutation ADD_POST posts ******//
-//will be used for the input field of the textbox
-// const CreatingAPost = () =>{
-//   //inital state is no posts makes call getMe for posts to check if there are any posts for user
-//   const [name, setName] = useState('');
-//    const [addPost, { error }] = useMutation(ADD_POST);  
-//    const handleFormSubmit = async (event) => {
-//     event.preventDefault();
-
-//     // Since mutation function is async, wrap in a `try...catch` to catch any network errors from throwing due to a failed request.
-//     try {
-//       // Execute mutation and pass in defined parameter data as variables
-//       const { data } = await addPost({
-//         variables: { postText, postAuthor, createdAt, comments, likes },
-//       });
-// //for updating the query of getme ask if itsw necessary to do this 
-//       window.location.reload();
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   };
-//   return (
-//     //for the text box for the post 
-//     <div>
-//       <h3>Add yourself to the list...</h3>
-//       <form
-//         className="flex-row justify-center justify-space-between-md align-center"
-//         onSubmit={handleFormSubmit}
-//       >
-//         <div className="col-12 col-lg-9">
-//           <input
-//             placeholder="Add your profile name..."
-//             value={name}
-//             className="form-input w-100"
-//             onChange={(event) => setName(event.target.value)}
-//           />
-//         </div>
-
-//         <div className="col-12 col-lg-3">
-//           <button className="btn btn-info btn-block py-3" type="submit">
-//             Add Profile
-//           </button>
-//         </div>
-//         {error && (
-//           <div className="col-12 my-3 bg-danger text-white p-3">
-//             Something went wrong...
-//           </div>
-//         )}
-//       </form>
-//     </div>
-//   );
-// }
-
-
-//*****Add functionality for when user in sesh clicks on a friend within profile we can see the clicked users profile ********//
-//based on the friend id we will use that id so that we can use the Query GET_USER with the id of friends 
-//then this will use all the same components used for user but for the users friends 
-
-
-
-//create component for query to obtain firstname  from user in sesh
-//component using react any type of hook in this case useQuery
-
-//const functionname = (params)=>{
-  //use query hook assiged to variable 
-  //console.log  variable to see the hook useQuery
-  //data we can do anything with it 
-  //err is for validation
-
-
-// use state for the editing of the text fields 
-
-//name initial state from signup information in session 
-//connects to the user profiles on dashboard when is updated
-
-//posts initial state no text 
-//updates when user edits and saves it 
-
 
 export default Profile;

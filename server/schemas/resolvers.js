@@ -63,7 +63,7 @@ const resolvers = {
     me: async (parent, _args, context) => {
       if (context.user) {
         return User.findOne({ _id: context.user._id })
-          .select("firstname lastname username email")
+          .select("firstname lastname username email image")
           .populate("posts")
           .populate("friends");
       }
@@ -198,7 +198,7 @@ try{
           { _id: postId },
           {
             $addToSet: {
-              comments: { _id: mongoose.Types.ObjectId(),commentText, commentAuthor: context.user.username },
+              comments: { _id: new mongoose.Types.ObjectId(), commentText, commentAuthor: context.user.username },
             },
           },
           {
@@ -239,31 +239,21 @@ try{
       }
     },
     //removes a post by its postId
-    removePost: async (parent, { postId }, context) => {
+    removePost: async (parent, { userId, postId }, context) => {
       if (context.user) {
-        try{
-         await Post.findOneAndDelete({
-          _id: postId,
-          postAuthor: context.user.username, 
-        });
-
-        if (!post) {
-          throw new Error("Post not found or you are not the author.");
-        }
-
-        await User.findOneAndUpdate(
-          { _id: context.user._id },
-          { $pull: { posts: postId } } // Use postId instead of post._id
+        return User.findOneAndUpdate(
+          { _id: userId },
+          {
+            $pull: {
+              posts: {
+                _id: postId,
+                postAuthor: context.user.username,
+              },
+            },
+          },
+          { new: true }
         );
-
-         return true;
-      } catch (error) {
-        console.error("Error deleting post:", error);
-        return false; 
       }
-
-      throw new AuthenticationError("You need to be logged in!");
-    }
   },
     //removes a comment from a post
     removeComment: async (parent, { postId, commentId }, context) => {
