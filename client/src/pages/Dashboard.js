@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import { useQuery } from '@apollo/client';
-import {  QUERY_PROFILES, GET_ME, GET_USER } from '../utils/queries';
+import { GET_ME, GET_USERS } from '../utils/queries';
+import { REMOVE_COMMENT } from "../utils/mutations";
+import { useMutation } from "@apollo/client";
 import { Link, useParams, Navigate } from 'react-router-dom';
 import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
@@ -21,8 +23,6 @@ import Card from '@mui/joy/Card';
 import CardOverflow from '@mui/joy/CardOverflow';
 import CardCover from '@mui/joy/CardCover';
 import articleOneImage from '../assets/images/article-one.webp';
-import articleTwoImage from '../assets/images/article-two.jpeg';
-import articleThreeImage from '../assets/images/article-three.jpg';
 import Avatar from '@mui/joy/Avatar';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -39,8 +39,7 @@ import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import ViewCompactAltIcon from '@mui/icons-material/ViewCompactAlt';
 import sideImage from '../assets/images/importance.jpg';
 import sideImage1 from '../assets/images/opportunities.jpg'
-import { REMOVE_COMMENT } from "../utils/mutations";
-import { useMutation } from "@apollo/client";
+
 
 // custom
 import filesTheme from '../containers/Theme';
@@ -48,7 +47,8 @@ import Header from '../components/Header';
 import Layout from '../containers/Layout';
 import Connect from '../components/Connect';
 import PostList from '../components/PostList';
-import Profile from '../pages/Profile';
+import Profile from './Profile';
+import FriendList from '../components/FriendList';
 import Auth from '../utils/auth'
 
 function ColorSchemeToggle() {
@@ -82,44 +82,40 @@ function ColorSchemeToggle() {
 export const Dashboard = () => {
 
   const [removeComment] = useMutation(REMOVE_COMMENT);
-
   const [showLogin, setShowLogin] = useState(false);
-
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-
   const [showConnect, setShowConnect] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-  const [showExplore, setShowExplore] = useState(true);
-
+  const [showPostList, setShowPostList] = useState(true);
   const [selectedUser, setSelectedUser] = useState(null);
   const [postAndCommentsData, setPostAndCommentsData] = useState(null);
-  
-  
+  const [showFriends, setShowFriends] = useState(false); // Initialize showFriends state to false
+  const [selectedFriendId, setSelectedFriendId] = useState(null);
+  const [showFriendsOfFriend, setShowFriendsOfFriend] = useState(false);
+  const [selectedItem, setSelectedItem] = useState('PostList');
 
-  const [selectedItem, setSelectedItem] = useState('explore');
+  // logged in user variable
+  const loggedInUser = Auth.loggedIn() ? Auth.getProfile().data._id : null;
 
   const { username } = useParams();
 
-  const { loading, data } = useQuery(QUERY_PROFILES);
+  const { loading, data } = useQuery(GET_USERS,
+    {
+      variables: { username },
+    });
+
   const users = data?.users || [];
 
-  const { loading1, data1 } = useQuery(
-    username ? GET_USER : GET_ME,
-    {
-      variables: { username: username }
-    }
-  );
-
-  const profile = data1?.me || data1?.user || {};
-
-  const filteredUsers = users.filter((user) => user._id !== profile._id);
+  const filteredUsers = users.filter((user) => user._id !== loggedInUser);
+  const friendsArray = users.filter((user) => user.friends); 
+  console.log(friendsArray)
 
   if (Auth.loggedIn() && Auth.getProfile().data._id === username) {
     return <Navigate to="/me" />;
   }
 
-  if (loading1) {
+  if (loading) {
     return <div>Loading...</div>;
   }
 
@@ -147,11 +143,6 @@ export const Dashboard = () => {
     }
   };
 
-  const handleLogout = (event) => {
-    event.preventDefault();
-    Auth.logout();
-  }
-
   // const handleShowLogin = () => {
   //   setShowLogin(true);
   // };
@@ -163,13 +154,13 @@ export const Dashboard = () => {
   const handleShowConnect = (event) => {
     event.preventDefault();
     setShowConnect(true);
-    setShowExplore(false);
+    setShowPostList(false);
     setShowProfile(false);
   };
 
-  const handleShowExplore = (event) => {
+  const handleShowPostList = (event) => {
     event.preventDefault();
-    setShowExplore(true);
+    setShowPostList(true);
     setShowConnect(false);
     setShowProfile(false);
   };
@@ -177,10 +168,14 @@ export const Dashboard = () => {
   const handleShowProfile = (event) => {
     event.preventDefault();
     setShowProfile(true);
-    setShowExplore(false);
+    setShowPostList(false);
     setShowConnect(false);
   };
-
+  const handleShowFriends = () => {
+    setSelectedFriendId(null); // Reset selectedFriendId when showing the main friends list
+    setShowFriends(!true);
+    setShowFriendsOfFriend(false); // Hide friends of the clicked friend when showing the main friends list
+  };
 
   // const handlePersonAddIconClick = (event) => {
   //   event.preventDefault();
@@ -191,11 +186,15 @@ export const Dashboard = () => {
     event.preventDefault();
     setIsSheetOpen(false);
   }
-
+  const handleFriendClick = (friendId) => {
+    setSelectedFriendId(friendId); // Set the selectedFriendId to the clicked friend's id
+    setShowFriends(false); // Hide the main friends list
+    setShowFriendsOfFriend(true);
+  };
   return (
     <CssVarsProvider disableTransitionOnChange theme={filesTheme}>
       <CssBaseline />
-      {Auth.loggedIn() ? (
+      {loggedInUser ? (
         // If user is logged In
       <Layout.Root
         sx={{
@@ -233,7 +232,7 @@ export const Dashboard = () => {
                 </ListItemDecorator>
                 <ListItemContent
                   selected={selectedItem === 'post'}
-                  onClick={handleShowExplore}
+                  onClick={handleShowPostList}
                   sx={{
                      color: selectedItem === 'post' ? '#2ACAEA' : 'white', 
                     }}
@@ -300,12 +299,12 @@ export const Dashboard = () => {
             <Connect
             users={filteredUsers}
             handlePersonIconClick={handlePersonIconClick}
-            loggedInUser={profile} // Pass the loggedInUser prop here
+            loggedInUser={loggedInUser} // Pass the loggedInUser prop here
             title="Some Users"
               />
           )
         )}
-        {showExplore && <PostList/>}
+        {showPostList && <PostList/>}
         {showProfile && 
         <Profile
           updatePostAndCommentsData={updatePostAndCommentsData}
@@ -390,7 +389,7 @@ export const Dashboard = () => {
           }}
         >
           <Box sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
-            <Typography sx={{ flex: 1 }} key={profile._id}>{selectedUser.firstname} {selectedUser.lastname}</Typography>
+            <Typography sx={{ flex: 1 }} key={users._id}>{selectedUser.firstname} {selectedUser.lastname}</Typography>
           </Box>
           <Divider />
           <AspectRatio ratio="21/18">
@@ -424,16 +423,21 @@ export const Dashboard = () => {
           </Box>
           <Divider />
           <Box sx={{ py: 2, px: 1 }}>
-            <Button variant="plain" size="sm" startDecorator={<PersonIcon />}>
-              View Friends List
+            <Button variant="plain" size="sm" startDecorator={<PersonIcon />} onClick={handleShowFriends}>
+            {showFriends ? 'Close Friends List' : 'View Friends List'}
             </Button>
+            <Divider sx={{marginBottom: 2}}></Divider>
+            {showFriends && <FriendList
+            friends={friendsArray} 
+            onFriendClick={handleFriendClick}
+            />}
           </Box>
         </Sheet>
 
         )}
 
-         {/* Right Side Profile View for Explore Page*/}
-         { showExplore &&  ( 
+         {/* Right Side Profile View for PostList Page*/}
+         { showPostList &&  ( 
         <Sheet
           sx={{
             display: { xs: 'none', sm: 'initial' },
@@ -496,89 +500,6 @@ export const Dashboard = () => {
                 </Box>
               </Box>
             </Card>
-
-            {/* Article Two */}
-            <Card variant="outlined">
-              <CardOverflow
-                sx={{
-                  borderBottom: '.5px solid',
-                  borderColor: 'neutral.outlinedBorder',
-                }}
-              >
-                <AspectRatio ratio="16/9" color="primary">
-                <CardCover
-                sx={{
-                  backgroundImage: `url(${articleTwoImage})`,
-                  backgroundSize: 'cover',
-                  transition: 'transform 0.3s ease',
-                      '&:hover': {
-                     transform: 'scale(1.05)',
-                      },
-                }}
-                >
-                  <Link
-                    to="https://www.jamesgmartin.center/2023/05/undoing-diversity-equity-and-inclusion-requires-alumni-effort/" 
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-              
-                  </Link>
-                 
-                </CardCover>
-                </AspectRatio>
-              </CardOverflow>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Box sx={{ flex: 1 }}>
-                  <Typography>Undoing “Diversity, Equity, and Inclusion” Requires Alumni Effort</Typography>
-                  <Typography level="body3" mt={0.5}>
-                    Created By: Garland Tucker
-                  </Typography>
-                  <Typography level="body3" mt={0.5}>
-                    Created: Monday, May 29th 2023
-                  </Typography>
-                </Box>
-              </Box>
-            </Card>
-
-            {/* Article Three */}
-            <Card variant="outlined">
-              <CardOverflow
-                sx={{
-                  borderBottom: '.5px solid',
-                  borderColor: 'neutral.outlinedBorder',
-                }}
-              >
-                <AspectRatio ratio="16/9" color="primary">
-                <CardCover
-                sx={{
-                  backgroundImage: `url(${articleThreeImage})`,
-                  backgroundSize: 'cover',
-                  transition: 'transform 0.3s ease',
-                      '&:hover': {
-                     transform: 'scale(1.05)',
-                      },
-                }}
-                >
-                  <Link
-                  to="https://www.bu.edu/articles/2023/5-tips-for-life-after-college-a-guide-to-living-life-as-an-alumni/" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  ></Link>
-                </CardCover>
-                </AspectRatio>
-              </CardOverflow>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Box sx={{ flex: 1 }}>
-                  <Typography>5 Tips for Life After College: A Guide To Living Life As An Alumni</Typography>
-                  <Typography level="body3" mt={0.5}>
-                    Created By: Jada Warmington
-                  </Typography>
-                  <Typography level="body3" mt={0.5}>
-                    Posted: Tuesday, May 16th 2023
-                  </Typography>
-                </Box>
-              </Box>
-            </Card>
           </Box>
         </Sheet>
 
@@ -623,7 +544,7 @@ export const Dashboard = () => {
                 </ListItemDecorator>
                 <ListItemContent
                   selected={selectedItem === 'post'}
-                  onClick={handleShowExplore}
+                  onClick={handleShowPostList}
                   sx={{
                      color: selectedItem === 'post' ? '#2ACAEA' : 'white', 
                     }}
@@ -690,12 +611,12 @@ export const Dashboard = () => {
             <Connect
             users={filteredUsers}
             handlePersonIconClick={handlePersonIconClick}
-            loggedInUser={profile} // Pass the loggedInUser prop here
+            loggedInUser={loggedInUser} // Pass the loggedInUser prop here
             title="Some Users"
               />
           )
         )}
-        {showExplore && <PostList/>}
+        {showPostList && <PostList/>}
         </Layout.Main>
 
         {/* Right Side Profile View for Connect Page */}
@@ -723,7 +644,7 @@ export const Dashboard = () => {
         )}
 
          {/* Right Side Profile View for Explore Page*/}
-         { showExplore &&  ( 
+         { showPostList &&  ( 
         <Sheet
           sx={{
             display: { xs: 'none', sm: 'initial' },

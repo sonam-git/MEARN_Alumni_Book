@@ -154,6 +154,7 @@ export const Header = () => {
           {isLoggedIn ? (
             <>
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1.5 }}>
+            <Link to="/dashboard" >
              <IconButton
                 size="sm"
                 variant="outlined"
@@ -166,6 +167,8 @@ export const Header = () => {
                 <HomeIcon style={{ marginRight: '5px' }} />
                 Home
               </IconButton>
+              </Link>
+              <Link to="/Profile" >
               <IconButton
                 size="sm"
                 variant="outlined"
@@ -174,12 +177,11 @@ export const Header = () => {
                 style={{
                   padding: '10px',
                 }}
-                component={Link}
-                to="/Profile" // Link to the user's profile page
               >
                 <ManageAccountsIcon style={{ marginRight: '5px' }} />
                 Profile
               </IconButton>
+              </Link>
               <IconButton
                 size="sm"
                 variant="outlined"

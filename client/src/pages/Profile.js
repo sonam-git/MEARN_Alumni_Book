@@ -1,17 +1,13 @@
 import React from "react";
 import Avatar from '@mui/joy/Avatar';
 import FormControl from "@mui/joy/FormControl";
-import FormLabel, { formLabelClasses } from "@mui/joy/FormLabel";
-import AspectRatio from '@mui/joy/AspectRatio';
-import flowerImage from "../assets/images/galactic-flower.png";
 import Sheet from "@mui/joy/Sheet";
 import Box from "@mui/joy/Box";
-import Grid from "@mui/material/Grid";
 import Typography from "@mui/joy/Typography";
-import { Container, Divider } from "@mui/material";
+import {  Divider } from "@mui/material";
 import Textarea from '@mui/joy/Textarea';
 import Button from '@mui/joy/Button';
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import { GET_ME } from "../utils/queries";
@@ -43,7 +39,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 
 
-export const Profile = ({ updatePostAndCommentsData, updateDeletePost }) => {
+ const Profile = ({ updatePostAndCommentsData, updateDeletePost }) => {
   const { loading, data, error } = useQuery(GET_ME);
   const [postText, setPostText] = useState("");
   const [addPost] = useMutation(ADD_POST);
@@ -206,8 +202,6 @@ export const Profile = ({ updatePostAndCommentsData, updateDeletePost }) => {
         >
           Profile
       </Typography>
-      
-      
       <hr />
       <CardOverflow
         sx={{
@@ -414,8 +408,4 @@ export const Profile = ({ updatePostAndCommentsData, updateDeletePost }) => {
   );
 };
 
-<<<<<<< HEAD
 export default Profile;
-=======
-export default Profile;
->>>>>>> origin/main
