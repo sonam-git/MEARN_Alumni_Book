@@ -4,7 +4,6 @@ import FormControl from "@mui/joy/FormControl";
 import Sheet from "@mui/joy/Sheet";
 import Box from "@mui/joy/Box";
 import Typography from "@mui/joy/Typography";
-import {  Divider } from "@mui/material";
 import Textarea from '@mui/joy/Textarea';
 import Button from '@mui/joy/Button';
 import { useState } from "react";
@@ -14,15 +13,12 @@ import { GET_ME } from "../utils/queries";
 import { ADD_POST } from "../utils/mutations";
 import { REMOVE_POST } from "../utils/mutations";
 import { ADD_COMMENT } from "../utils/mutations";
-import { REMOVE_COMMENT } from "../utils/mutations";
-import Header from "../components/Header";
-import { CssVarsProvider } from "@mui/joy/styles";
-import CssBaseline from '@mui/joy/CssBaseline';
-import filesTheme from '../containers/Theme';
-import { Card, withWidth } from "@material-ui/core";
+import { UPDATE_POST } from "../utils/mutations";
 import CardOverflow from "@mui/joy/CardOverflow";
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
-
+import { Card } from "@mui/joy";
+import Badge from '@mui/joy/Badge';
+import { Divider } from "@mui/material";
 
 import Tabs from '@mui/joy/Tabs';
 import TabList from '@mui/joy/TabList';
@@ -39,7 +35,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 
 
- const Profile = ({ updatePostAndCommentsData, updateDeletePost }) => {
+ const Profile = ({ updatePostAndCommentsData }) => {
   const { loading, data, error } = useQuery(GET_ME);
   const [postText, setPostText] = useState("");
   const [addPost] = useMutation(ADD_POST);
@@ -47,6 +43,9 @@ import EditIcon from '@mui/icons-material/Edit';
   const [commentBoxStates, setCommentBoxStates] = useState({});
   const [removePost] = useMutation(REMOVE_POST);
   const [addComment] = useMutation(ADD_COMMENT);
+  const [updatePost] = useMutation(UPDATE_POST);
+  const [editPostId, setEditPostId] = useState(null);
+  const [editPostText, setEditPostText] = useState("");
 
   const [activeTab, setActiveTab] = useState(1);
 
@@ -76,6 +75,7 @@ import EditIcon from '@mui/icons-material/Edit';
       setShowMyPost(true);
       setShowCreatePost(false);
       setShowFriendsList(false);
+      
     };
 
   const handleShowCreatePost = () => {
@@ -142,23 +142,14 @@ import EditIcon from '@mui/icons-material/Edit';
     }));
   };
 
+  
+
   const handleDeletePost = async (postId) => {
     try {
       // Execute the removePost mutation and pass the postId as a variable
-      if (!loading && data) {
-        // Find the specific post using postId
-        const post = data.me.posts.find((post) => post._id === postId);
-    
-        if (post) {
-          // Fetch comments data for the specific post
-    
-          const deletePost = await removePost ({
-            variables: { postId: postId }
-        })
-          // Pass the data to the Dashboard.js component by calling the function
-          updateDeletePost(deletePost);
-        }
-      }
+      await removePost({
+        variables: { postId },
+      });
 
       // Perform any necessary actions after successful deletion, such as updating the UI
       console.log("Post deleted successfully");
@@ -168,6 +159,7 @@ import EditIcon from '@mui/icons-material/Edit';
       console.error("Error deleting post:", error);
     }
   };
+
 
   const handleCommentSubmit = async (postId) => {
     // Perform any necessary actions with the comment text for the specific post
@@ -186,6 +178,21 @@ import EditIcon from '@mui/icons-material/Edit';
 
     // Clear the comment textbox for the specific post
     setCommentText("");
+  };
+
+  const handlePostUpdate = async (postId, postText) => {
+    try {
+      await updatePost({
+        variables: { postId: editPostId, postText: editPostText },
+      });
+
+      console.log("Post updated successfully");
+      setEditPostId(null); // Reset the editing post id
+      setEditPostText(""); // Clear the post text
+      window.location.reload();
+    } catch (error) {
+      console.error("Error updating post:", error);
+    }
   };
 
   return (
@@ -233,37 +240,76 @@ import EditIcon from '@mui/icons-material/Edit';
 
       <Tabs defaultValue={1} value={activeTab} onChange={handleTabChange} sx={{backgroundColor: 'transparent'}}>
       <TabList>
-        <Tab value={1} label="My Post" sx={{fontFamily: 'monospace', fontSize: '20px'}}>My Post</Tab>
-        <Tab value={2} label="Create +" sx={{fontFamily: 'monospace', fontSize: '20px'}}>Create +</Tab>
-        <Tab value={3} label="Friends" sx={{fontFamily: 'monospace', fontSize: '20px'}}>Friends</Tab>
+        <Tab 
+          value={1} 
+          label="My Post" 
+          sx={{
+            fontFamily: 'monospace', 
+            fontSize: '20px', 
+            color: showMyPost === true ? '#2ACAEA' : ' ', 
+            border: showMyPost === true ? 'solid' : '',
+            borderRadius: showMyPost === true ? "10px" : '', 
+            borderColor: showMyPost === true ? '#006EB3' : '',
+            backgroundColor: 'transparent',
+            }}>My Post</Tab>
+        <Tab 
+          value={2} 
+          label="Create +" 
+          sx={{
+            fontFamily: 'monospace', 
+            fontSize: '20px', 
+            color: showCreatePost === true ? '#2ACAEA' : ' ', 
+            border: showCreatePost === true ? 'solid' : '',
+            borderRadius: showCreatePost === true ? "10px" : '', 
+            borderColor: showCreatePost === true ? '#006EB3' : '',
+            backgroundColor: 'transparent',
+            }}>Create +</Tab>
+        <Tab 
+          value={3} 
+          label="Friends" 
+          sx={{
+            fontFamily: 'monospace', 
+            fontSize: '20px', 
+            color: showFriendsList === true ? '#2ACAEA' : ' ', 
+            border: showFriendsList === true ? 'solid' : '',
+            borderRadius: showFriendsList === true ? "10px" : '', 
+            borderColor: showFriendsList === true ? '#006EB3' : '',
+            backgroundColor: 'transparent',
+            }}>Friends</Tab>
       </TabList>
     </Tabs>
 
       {showMyPost && (
-        <Sheet style={{ marginBottom: '20px', width: '100%', backgroundColor: 'transparent'}}>
+        <Sheet style={{ margin: 'auto', marginTop: '20px', width: '80%', backgroundColor: 'transparent'}}>
         {data.me.posts.length ? (
           data.me.posts.map((post) => (
-            <div style={{ width: "80%", overflow: 'auto', resize: 'horizontal', resize: 'none', margin: 'auto', marginBottom: '20px', marginTop: '20px', backgroundColor: 'transparent' }} key={post._id}>
-              <Card variant="neutral" sx={{ width: 200, overflow: 'auto', resize: 'horizontal', backgroundColor: 'transparent' }}>
+            <div style={{ width: "95%", overflow: 'auto', resize: 'horizontal', resize: 'none', margin: 'auto', marginBottom: '20px', marginTop: '20px', backgroundColor: 'transparent' }} key={post._id}>
+              <Card sx={{ width: '100%', overflow: 'auto', resize: 'horizontal', backgroundColor: 'transparent', border: 'solid', borderRadius: '10px', borderColor: '#006EB3', resize: 'none'}}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',}}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px',  }}>
-                    <Avatar src={data.me.image} size="lg" sx={{ '--Avatar-size': '50px',}} />
-                    <Typography variant="body1" sx={{ marginLeft: '5px', fontSize: '20px', color: 'black', fontFamily: 'monospace'  }}>
+                    <Avatar src={data.me.image} size="lg" sx={{ '--Avatar-size': '50px', border: 'solid', borderColor: '#2ACAEA'}} />
+                    <Typography variant="body1" sx={{ marginLeft: '5px', fontSize: '20px', color: '#2ACAEA', fontFamily: 'monospace'  }}>
                       {post.postAuthor}
                     </Typography>
                   </Box>
                   <CardActions buttonFlex="0 1 120px" sx={{ padding: '15px' }}>
-                    <IconButton variant="solid" color="danger" onClick={() => { handleDeletePost(post._id)}} sx={{marginRight: '10px', paddingLeft: '20px', paddingRight: '20px'}}>
-                      <DeleteForeverIcon/>
-                        Delete
-                    </IconButton>
-                    <Button variant="solid" color="primary">
-                      <EditIcon/>
-                      Edit
-                    </Button>
-                  </CardActions>
+
+                  {post.postAuthor === data.me.username && (
+                    <>
+                      <IconButton variant="solid" color="danger" onClick={() =>  handleDeletePost(post._id)} sx={{marginRight: '10px', paddingLeft: '20px', paddingRight: '20px'}}>
+                        <DeleteForeverIcon/>
+                          Delete
+                      </IconButton>
+                      <IconButton variant="solid" color="primary" onClick={() => {setEditPostId(post._id)}} sx={{marginRight: '5px', paddingLeft: '20px', paddingRight: '20px'}}>
+                        <EditIcon/>
+                          Edit
+                      </IconButton>
+                    </>
+                  )}
+                    </CardActions>
+                 
                 </Box>
-                <hr/>
+                <hr style={{ borderColor: '#006EB3', width: '100%',}} />
                 <CardContent sx={{ padding: '20px', height: '150px' }}>
                   <Typography level="h4" fontWeight="lg" color="primary">
                     {post.postText}
@@ -272,25 +318,26 @@ import EditIcon from '@mui/icons-material/Edit';
                 {post.postAuthor === data.me.username && (
                   <CardActions buttonFlex="0 1 120px" sx={{ padding: '15px',}}>
                     <IconButton variant="outlined" color="primary" sx={{ marginLeft: '10px', padding: '7px', color: 'gray' }}>
-                      <FavoriteBorder/>
-                      <span sx={{ marginLeft: '10px'}}>{data.me.username.length}</span>
+                      <Badge color="neutral" badgeContent={data.me.username.length} size="sm">
+                        <FavoriteBorder/>
+                      </Badge>
+                   
                     </IconButton>
                     <IconButton variant="outlined" color="primary" sx={{ marginLeft: '10px', padding: '7px', color: 'gray' }}  onClick={() => {
                       handleCommentsIconClick(post._id);
                       toggleCommentBox(post._id);
                       }}
                       >
-                      <CommentIcon />
-                      <span sx={{ marginLeft: '10px'}}>{post.comments.length}</span>
+                      <Badge color="neutral" badgeContent={post.comments.length} size="sm">
+                        <CommentIcon />
+                      </Badge>
                     </IconButton>
                     <Typography variant="body2" sx={{ marginLeft: 'auto', display: 'flex', fontSize: '12px' }}>Posted:{new Date(parseInt(post.createdAt)).toLocaleDateString()}</Typography>
                   </CardActions>
                 )}
-                <Divider />
                 {commentBoxStates[post._id] && (
                   <div>
-
-                <FormControl>
+                  <FormControl>
                       <Textarea
                          id={`comment-textfield-${post._id}`}
                          label="Add a comment"
@@ -300,7 +347,9 @@ import EditIcon from '@mui/icons-material/Edit';
                           height: '150px',
                           width: '95%',
                           margin: 'auto',
-                          marginBottom: '20px'
+                          marginBottom: '20px', 
+                          borderColor: '#006EB3',
+                          padding: '15px'
                          }}
                          onChange={(event) => setCommentText(event.target.value)}
                           endDecorator={
@@ -328,22 +377,62 @@ import EditIcon from '@mui/icons-material/Edit';
                     </FormControl>
                   </div>
                 )}
-              <Divider />
-              </Card>
-            </div>
+
+                {editPostId === post._id &&  (
+                  <div>
+                  <FormControl>
+                      <Textarea
+                         id={`comment-textfield-${post._id}`}
+                         label="Edit Your Post"
+                         value={editPostText}
+                         onChange={(e) => setEditPostText(e.target.value)}
+                         placeholder="Edit Your Post......"
+                         sx={{
+                          height: '150px',
+                          width: '95%',
+                          margin: 'auto',
+                          marginBottom: '20px',
+                          borderColor: '#006EB3',
+                          padding: '15px',
+                         }}
+                          endDecorator={
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              gap: 'var(--Textarea-paddingBlock)',
+                              pt: 'var(--Textarea-paddingBlock)',
+                              borderTop: '1px solid',
+                              borderColor: 'divider',
+                              flex: 'auto',
+                            }}
+                          >
+                            <Button
+                             sx={{ ml: 'auto' }}
+                             onClick={
+                             handlePostUpdate
+                            }
+                            >Edit Post</Button>
+                          </Box>
+                        }
+                      />
+                    </FormControl>
+                  </div>
+                )} 
+                </Card>
+              </div>
           ))
         ) : (
-          <Typography style={{ backgroundColor: 'transparent', margin: 'auto', fontSize: '25px'}}>Make Some Friends! Its Empty Here Right Now! </Typography>
+          <Typography style={{width: '80%', textAlign: 'center', backgroundColor: 'transparent', margin: 'auto', marginTop: '20px', fontSize: '25px', border: 'solid', borderRadius: '10px', borderColor: '#006EB3'}}>Click "Create +" & Start Posting!</Typography>
         )}
       </Sheet>
       )}
     
     {showCreatePost && (
-          <Sheet style={{
-            marginTop: '20px',
-            width: '100%',
-            backgroundColor: 'transparent',
-          }}>
+      <Sheet style={{
+        marginTop: '20px',
+        width: '100%',
+        backgroundColor: 'transparent',
+      }}>
 
       <div>
         <FormControl >
@@ -354,7 +443,10 @@ import EditIcon from '@mui/icons-material/Edit';
                 height: '250px',
                 width: '95%',
                 margin: 'auto',
-                marginBottom: '20px'
+                marginBottom: '20px',
+                border: 'solid',
+                borderColor: '#006EB3',
+                padding: '15px',
               }}
               onChange={(event) => setPostText(event.target.value)}
                 endDecorator={
@@ -390,14 +482,14 @@ import EditIcon from '@mui/icons-material/Edit';
             textAlign: 'center',
             marginTop: '20px'
           }}>
-            {data.me.friends.length ? (
+          {data.me.friends.length ? (
             data.me.friends.map((friend) => (
               <div key={friend._id}>
                 <h3>{friend.firstname}</h3>
               </div>
             ))
           ) : (
-            <Typography style={{ backgroundColor: 'transparent', margin: 'auto', fontSize: '25px'}}>Make Some Friends! Its Empty Here Right Now! </Typography>
+            <Typography style={{width: '80%', backgroundColor: 'transparent', margin: 'auto', fontSize: '25px', border: 'solid', borderRadius: '10px', borderColor: '#006EB3'}}>Make Some Friends! Its Empty Here Right Now! </Typography>
           )}
         </Sheet>
 

@@ -21,6 +21,7 @@ const capitalizeFirstLetter = (string) => {
 };
 
 const Connect = ({ users, handlePersonIconClick, loggedInUser }) => {
+
   const filteredUsers = users ? users.filter((user) => user._id !== loggedInUser._id) : [];
   const [shuffledUsers, setShuffledUsers] = useState([...filteredUsers]);
 
