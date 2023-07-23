@@ -14,11 +14,13 @@ import { ADD_POST } from "../utils/mutations";
 import { REMOVE_POST } from "../utils/mutations";
 import { ADD_COMMENT } from "../utils/mutations";
 import { UPDATE_POST } from "../utils/mutations";
+import { REMOVE_FRIEND} from "../utils/mutations"; 
+import {GET_USERS } from "../utils/queries"
 import CardOverflow from "@mui/joy/CardOverflow";
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import { Card } from "@mui/joy";
 import Badge from '@mui/joy/Badge';
-import { Divider } from "@mui/material";
+
 
 import Tabs from '@mui/joy/Tabs';
 import TabList from '@mui/joy/TabList';
@@ -30,13 +32,20 @@ import CardActions from '@mui/joy/CardActions';
 import IconButton from '@mui/joy/IconButton';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import CommentIcon from '@mui/icons-material/Comment';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove'; 
+
 
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 
 
+// Makes the first letter of firstname and lastname to always be capital
+const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
  const Profile = ({ updatePostAndCommentsData }) => {
-  const { loading, data, error } = useQuery(GET_ME);
+  const { loading, data, error} = useQuery(GET_ME);
   const [postText, setPostText] = useState("");
   const [addPost] = useMutation(ADD_POST);
   const [commentText, setCommentText] = useState("");
@@ -44,6 +53,9 @@ import EditIcon from '@mui/icons-material/Edit';
   const [removePost] = useMutation(REMOVE_POST);
   const [addComment] = useMutation(ADD_COMMENT);
   const [updatePost] = useMutation(UPDATE_POST);
+  const [removeFriendMutation] = useMutation(REMOVE_FRIEND, {
+    refetchQueries: [{ query: GET_USERS }],
+  });
   const [editPostId, setEditPostId] = useState(null);
   const [editPostText, setEditPostText] = useState("");
 
@@ -133,7 +145,7 @@ import EditIcon from '@mui/icons-material/Edit';
   if (loading) return "Loading...";
 
   if (error) return `Error! ${error.message}`;
-  console.log(data);
+  // console.log(data); gives the information about logged in user
 
   const toggleCommentBox = (postId) => {
     setCommentBoxStates((prevState) => ({
@@ -194,6 +206,19 @@ import EditIcon from '@mui/icons-material/Edit';
       console.error("Error updating post:", error);
     }
   };
+
+  // Function to handle removing a friend
+const handleRemoveFriend = (friendId) => {
+  removeFriendMutation({
+    variables: { friendId },
+  })
+    .then(() => {
+      console.log("Friend removed successfully");
+    })
+    .catch((error) => {
+      console.error("Failed to remove friend:", error.message);
+    });
+};
 
   return (
     <>
@@ -482,14 +507,79 @@ import EditIcon from '@mui/icons-material/Edit';
             textAlign: 'center',
             marginTop: '20px'
           }}>
-          {data.me.friends.length ? (
+           {data.me.friends.length ? (
             data.me.friends.map((friend) => (
-              <div key={friend._id}>
-                <h3>{friend.firstname}</h3>
+              <div
+                style={{
+                  width: "95%",
+                  overflow: "auto",
+                  resize: "horizontal",
+                  resize: "none",
+                  margin: "auto",
+                  marginBottom: "20px",
+                  marginTop: "20px",
+                  backgroundColor: "transparent",
+                }}
+                key={friend._id}
+              >
+                <Card
+                  sx={{
+                    width: "100%",
+                    overflow: "auto",
+                    resize: "horizontal",
+                    backgroundColor: "transparent",
+                    border: "solid",
+                    borderRadius: "10px",
+                    borderColor: "#006EB3",
+                    resize: "none",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: "15px",
+                      }}
+                    >
+                      <Avatar
+                        src={friend.image}
+                        size="lg"
+                        sx={{ "--Avatar-size": "50px", border: "solid", borderColor: "#2ACAEA" }}
+                      />
+                      <Typography
+                        variant="body1"
+                        sx={{ marginLeft: "5px", fontSize: "20px", color: "#2ACAEA", fontFamily: "monospace" }}
+                      >
+                        {capitalizeFirstLetter(friend.firstname)} {capitalizeFirstLetter(friend.lastname)}
+                      </Typography>
+                    </Box>
+                    <CardActions buttonFlex="0 1 120px" sx={{ padding: "15px" }}>
+                      <IconButton
+                        variant="solid"
+                        color="danger"
+                        onClick={() => handleRemoveFriend(friend._id)}
+                        sx={{ marginRight: "10px", paddingLeft: "20px", paddingRight: "20px" }}
+                      >
+                        <PersonRemoveIcon />
+                        Remove
+                      </IconButton>
+                    </CardActions>
+                  </Box>
+                </Card>
               </div>
             ))
           ) : (
-            <Typography style={{width: '80%', backgroundColor: 'transparent', margin: 'auto', fontSize: '25px', border: 'solid', borderRadius: '10px', borderColor: '#006EB3'}}>Make Some Friends! Its Empty Here Right Now! </Typography>
+            <Typography variant="body2" sx={{ textAlign: "center", marginTop: "20px" }}>
+              No friends found
+            </Typography>
           )}
         </Sheet>
 
