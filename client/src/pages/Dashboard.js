@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { GET_ME, GET_USERS } from '../utils/queries';
+import {  GET_USERS } from '../utils/queries';
 import { REMOVE_COMMENT } from "../utils/mutations";
 import { useMutation } from "@apollo/client";
-import { Link, useParams, Navigate } from 'react-router-dom';
 import { CssVarsProvider} from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
 import AspectRatio from '@mui/joy/AspectRatio';
@@ -54,33 +54,6 @@ const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-// function ColorSchemeToggle() {
-//   const { mode, setMode } = useColorScheme();
-//   const [mounted, setMounted] = useState(false);
-//   React.useEffect(() => {
-//     setMounted(true);
-//   }, []);
-//   if (!mounted) {
-//     return <IconButton size="sm" variant="outlined" color="primary" />;
-//   }
-//   return (
-//     <IconButton
-//       id="toggle-mode"
-//       size="sm"
-//       variant="outlined"
-//       color="primary"
-//       onClick={() => {
-//         if (mode === 'light') {
-//           setMode('dark');
-//         } else {
-//           setMode('light');
-//         }
-//       }}
-//     >
-//       {mode === 'light' ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
-//     </IconButton>
-//   );
-// }
 
 export const Dashboard = () => {
 
@@ -109,8 +82,7 @@ export const Dashboard = () => {
   const users = data?.users || [];
 
   const filteredUsers = users.filter((user) => user._id !== loggedInUser);
-  const friendsArray = users.filter((user) => user.friends); 
-  
+
   if (loading) {
     return <div>Loading...</div>;
   }

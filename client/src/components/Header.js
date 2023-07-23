@@ -1,4 +1,5 @@
 import React from "react";
+import { Grid } from "@mui/material";
 import { Link } from 'react-router-dom';
 import Box from '@mui/joy/Box';
 import { useColorScheme } from '@mui/joy/styles';
@@ -10,7 +11,6 @@ import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 
 // Icons import
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import HomeIcon from '@mui/icons-material/Home';
@@ -19,33 +19,39 @@ import Auth from '../utils/auth'
 // custom
 import Layout from '../containers/Layout';
 
-function ColorSchemeToggle() {
-    const { mode, setMode } = useColorScheme();
-    const [mounted, setMounted] = React.useState(false);
-    React.useEffect(() => {
-      setMounted(true);
-    }, []);
-    if (!mounted) {
-      return <IconButton size="sm" variant="outlined" color="primary" />;
-    }
-    return (
-      <IconButton
-        id="toggle-mode"
-        size="sm"
-        variant="outlined"
-        color="primary"
-        onClick={() => {
-          if (mode === 'light') {
-            setMode('dark');
-          } else {
-            setMode('light');
-          }
-        }}
-      >
-        {mode === 'light' ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
-      </IconButton>
-    );
+const ColorSchemeToggle = ({ onClick, ...props }) => {
+  const { mode, setMode } = useColorScheme();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return <IconButton size="sm" variant="plain" color="neutral" disabled />;
   }
+
+  return (
+    <IconButton
+      id="toggle-mode"
+      size="sm"
+      variant="plain"
+      color="neutral"
+      aria-label="toggle light/dark mode"
+      {...props}
+      onClick={(event) => {
+        if (mode === "light") {
+          setMode("dark");
+        } else {
+          setMode("light");
+        }
+        onClick?.(event);
+      }}
+    >
+      {mode === "light" ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
+    </IconButton>
+  );
+};
 
 export const Header = () => {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -82,12 +88,8 @@ export const Header = () => {
             >
               <MenuIcon />
             </IconButton>
-            <IconButton
-              size="sm"
-              sx={{ display: { xs: 'none', sm: 'inline-flex' } }}
-            >
-              <ColorSchemeToggle />
-            </IconButton>
+            <ColorSchemeToggle />
+
             <Typography component="h1" fontWeight="xl">
               Dashboard
             </Typography>

@@ -121,7 +121,14 @@ const Connect = ({
                         </Typography>
                       </Box>
                     </Box>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Box sx={{ display: "flex", justifyContent: 'space-between' ,alignItems: "center" }}>
+                      <IconButton
+                        variant="plain"
+                        color="neutral"
+                        onClick={() => handlePersonIconClick(user)}
+                      >
+                        <PersonIcon /> View Profile
+                      </IconButton>
                       <IconButton
                         variant="plain"
                         color="neutral"
@@ -130,13 +137,6 @@ const Connect = ({
                         }
                       >
                         <PersonAddIcon />
-                      </IconButton>
-                      <IconButton
-                        variant="plain"
-                        color="neutral"
-                        onClick={() => handlePersonIconClick(user)}
-                      >
-                        <PersonIcon />
                       </IconButton>
                     </Box>
                   </Card>

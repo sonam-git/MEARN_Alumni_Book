@@ -6,6 +6,7 @@ import { GET_USERS } from "../utils/queries";
 import Auth from "../utils/auth";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
+
 // Makes the first letter of firstname and lastname to always be capital
 const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -55,7 +56,7 @@ const FriendList = ({ friends }) => {
               <Box
                 sx={{
                   p: 2,
-                  bgcolor: "black",
+                  bgcolor: "none",
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
