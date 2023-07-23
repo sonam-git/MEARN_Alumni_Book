@@ -4,6 +4,7 @@ import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardOverflow from "@mui/joy/CardOverflow";
 import Typography from "@mui/joy/Typography";
+import FriendList from './FriendList';
 
 import IconButton from "@mui/joy/IconButton";
 import ViewCompactAltIcon from "@mui/icons-material/ViewCompactAlt";

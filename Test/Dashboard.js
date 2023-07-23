@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import { useQuery } from '@apollo/client';
-import {  GET_USERS } from '../utils/queries';
+import {  GET_USERS , GET_ME} from '../utils/queries';
 import { Link, useParams, Navigate } from 'react-router-dom';
-import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
+import { CssVarsProvider } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
 import AspectRatio from '@mui/joy/AspectRatio';
 import Box from '@mui/joy/Box';
@@ -21,14 +21,10 @@ import Card from '@mui/joy/Card';
 import CardOverflow from '@mui/joy/CardOverflow';
 import CardCover from '@mui/joy/CardCover';
 import articleOneImage from '../assets/images/article-one.webp';
-import Avatar from '@mui/joy/Avatar';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { REMOVE_COMMENT } from "../utils/mutations";
-import { useMutation } from "@apollo/client";
+import Auth from '../utils/auth' //Authentication
+
 
 // Icons import
-import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
-import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import PersonIcon from '@mui/icons-material/Person';
 import CloseIcon from '@mui/icons-material/Close';
 import InfoIcon from '@mui/icons-material/Info';
@@ -46,106 +42,47 @@ import Connect from '../components/Connect';
 import PostList from '../components/PostList';
 import Profile from '../pages/Profile';
 import FriendList from '../components/FriendList';
-import Auth from '../utils/auth'
 
-function ColorSchemeToggle() {
-  const { mode, setMode } = useColorScheme();
-  const [mounted, setMounted] = useState(false);
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-  if (!mounted) {
-    return <IconButton size="sm" variant="outlined" color="primary" />;
-  }
-  return (
-    <IconButton
-      id="toggle-mode"
-      size="sm"
-      variant="outlined"
-      color="primary"
-      onClick={() => {
-        if (mode === 'light') {
-          setMode('dark');
-        } else {
-          setMode('light');
-        }
-      }}
-    >
-      {mode === 'light' ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
-    </IconButton>
-  );
-}
 
 export const Dashboard = () => {
-
-  const [removeComment] = useMutation(REMOVE_COMMENT);
-
  
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-
   const [showConnect, setShowConnect] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [showPostList, setShowPostList] = useState(true);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [postAndCommentsData, setPostAndCommentsData] = useState(null);
-  const [selectedItem, setSelectedItem] = useState('PostList');
   const [showFriends, setShowFriends] = useState(false); // Initialize showFriends state to false
+  const [selectedItem, setSelectedItem] = useState('PostList');
   const [selectedFriendId, setSelectedFriendId] = useState(null);
   const [showFriendsOfFriend, setShowFriendsOfFriend] = useState(false);
 
-  // logged in user variable
+// logged in user variable
   const loggedInUser = Auth.loggedIn() ? Auth.getProfile().data._id : null;
 
   const { username } = useParams();
 
   const { loading, data } = useQuery(GET_USERS,
     {
-      variables: { username: username }
+      variables: { username },
     });
+ 
 
   const users = data?.users || [];
+  console.log(users)
 
-  
   const filteredUsers = users.filter((user) => user._id !== loggedInUser);
   const friendsArray = users.filter((user) => user.friends); 
   console.log(friendsArray)
-
-  if (Auth.loggedIn() && Auth.getProfile().data._id === username) {
-    return <Navigate to="/me" />;
-  }
+  
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  const updatePostAndCommentsData = (data) => {
-    setPostAndCommentsData(data);
-  };
-
   const handlePersonIconClick = (user) => {
     setSelectedUser(user);
   };
-
-  const handleDeleteComment = async (postId, commentId) => {
-    try {
-      // Execute the removeComment mutation and pass the commentId as a variable
-      await removeComment({
-        variables: { postId, commentId },
-      });
-
-      // Perform any necessary actions after successful deletion, such as updating the UI
-      console.log("Comment deleted successfully");
-      window.location.reload();
-    } catch (error) {
-      // Handle any errors that occur during the deletion process
-      console.error("Error deleting comment:", error);
-    }
-  };
-
-  // const handleShowLogin = () => {
-  //   setShowLogin(true);
-  // };
 
   const handleItemClick = (item) => {
     setSelectedItem(item);
@@ -171,6 +108,7 @@ export const Dashboard = () => {
     setShowPostList(false);
     setShowConnect(false);
   };
+
   const handleShowFriends = () => {
     setSelectedFriendId(null); // Reset selectedFriendId when showing the main friends list
     setShowFriends(!true);
@@ -186,6 +124,7 @@ export const Dashboard = () => {
     event.preventDefault();
     setIsSheetOpen(false);
   }
+
   const handleFriendClick = (friendId) => {
     setSelectedFriendId(friendId); // Set the selectedFriendId to the clicked friend's id
     setShowFriends(false); // Hide the main friends list
@@ -242,6 +181,7 @@ export const Dashboard = () => {
                 </ListItemContent>
               </ListItemButton >
               </ListItem>
+
               <ListItem>
                 <ListItemButton onClick={() => handleItemClick('connect')}>
                   <ListItemDecorator>
@@ -256,20 +196,22 @@ export const Dashboard = () => {
                   >Connect With Alumnis</ListItemContent>
                 </ListItemButton>
               </ListItem>
+
               <ListItem>
-                <ListItemButton onClick={() => handleItemClick('aboutus')}>
+                <ListItemButton onClick={() => handleItemClick('profile')}>
                   <ListItemDecorator sx={{ color: 'neutral.500' }}>
                     <InfoIcon/>
                   </ListItemDecorator>
                   <ListItemContent 
-                  selected={selectedItem === 'aboutus'}
+                  selected={selectedItem === 'profile'}
                   onClick={handleShowProfile}
                   sx={{
-                    color: selectedItem === 'aboutus' ? '#2ACAEA' : 'white', 
+                    color: selectedItem === 'profile' ? '#2ACAEA' : 'white', 
                    }}
                   >Profile</ListItemContent>
                 </ListItemButton>
               </ListItem>
+
               <ListItem>
                 <ListItemButton onClick={() => handleItemClick('contact')}>
                   <ListItemDecorator sx={{ color: 'neutral.500' }}>
@@ -279,11 +221,12 @@ export const Dashboard = () => {
                       selected={selectedItem === 'contact'}
                       onClick={handleShowConnect}
                       sx={{
-                        color: selectedItem === 'contact' ? '#2ACAEA' : '#29b6f6', 
+                        color: selectedItem === 'contact' ? '#2ACAEA' : 'white', 
                       }}
                      >Contacts</ListItemContent>
                   </ListItemButton>
                 </ListItem>
+
               </List>
             </ListItem>
 
@@ -300,85 +243,14 @@ export const Dashboard = () => {
             <Connect
             users={filteredUsers}
             handlePersonIconClick={handlePersonIconClick}
-            loggedInUser={loggedInUser} // Pass the loggedInUser prop here
+            loggedInUser={Auth.loggedIn} // Pass the loggedInUser prop here
             title="Some Users"
               />
           )
         )}
         {showPostList && <PostList/>}
-        {showProfile && 
-        <Profile
-          updatePostAndCommentsData={updatePostAndCommentsData}
-        />}
+        {showProfile && <Profile/>}
         </Layout.Main>
-
-        {showProfile && postAndCommentsData && (
-          <Sheet
-            sx={{
-              display: { xs: 'none', sm: 'initial' },
-              borderLeft: '1px solid',
-              borderColor: 'neutral.outlinedBorder',
-            }}
-          >
-            <div key={postAndCommentsData.post._id}>
-              <Box sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px',  }}>
-                  <Avatar src={postAndCommentsData.me.image} size="lg" sx={{ '--Avatar-size': '50px',}} />
-              </Box>
-                <Typography sx={{ flex: 1 }}>
-                  {postAndCommentsData.post.postAuthor}
-                </Typography>
-              </Box>
-              {/* Add other components and details related to the selected post */}
-            </div>
-
-            <Divider />
-            <Typography sx={{ fontSize: '12px', padding: '10px', fontFamily: 'monospace' }}>Posted: {new Date(parseInt(postAndCommentsData.post.createdAt)).toLocaleDateString()}</Typography>
-            <Box
-              sx={{
-                gap: 2,
-                p: 2,
-                display: 'grid',
-                gridTemplateColumns: 'auto 1fr',
-                '& > *:nth-of-ty(odd)': { color: 'text.secondary' },
-              }}
-            > 
-              <Typography level="h6" fontWeight="lg" color="primary" sx={{ width: '100%' }}>
-                  {postAndCommentsData.post.postText}
-              </Typography>
-
-            </Box>
-
-            <Divider />
-
-            {postAndCommentsData.post.comments?.length === 0 ? (
-                <Typography
-                  sx={{
-                    textAlign: 'center',
-                    margin: 'auto',
-                    mt: 3,
-                  }}
-                >No Comments Yet!</Typography>
-              ) : (
-                <>
-                  {postAndCommentsData.post.comments.map((comment) => (
-                    <div key={comment._id} style={{ display: 'flex', justifyContent: 'space-between', padding: '15px', border: 'solid', borderRadius: '10px', width: '90%', margin: 'auto', marginTop: '15px'}}>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px',  }}>
-                        <Avatar src={postAndCommentsData.me.image} size="lg" sx={{ '--Avatar-size': '50px',}} />
-                      </Box>
-                      <Typography variant="body1" sx={{mt: '10px', fontFamily: 'monospace', width: "85%" }} color="primary">
-                        <span style={{ fontWeight: 'bold', fontStyle: 'italic', }}>{comment.commentAuthor}</span> - <span style={{ color: 'white' }}>{comment.commentText}</span>
-                        <Typography variant="body2" sx={{ marginRight: 'auto', display: 'flex', fontSize: '12px' }}>Posted: {new Date(parseInt(comment.createdAt)).toLocaleDateString()}</Typography>
-                      </Typography>
-                      <IconButton variant="outlined" color='danger' sx={{ padding: '5px', height: '20px', border: 'none' }} onClick={() => handleDeleteComment(postAndCommentsData.post._id, comment._id)}>
-                        <DeleteIcon/> 
-                      </IconButton>
-                    </div>
-                  ))}
-                </>
-              )}
-          </Sheet>
-        )}
 
         {/* Right Side Profile View for Connect Page */}
         {showConnect && selectedUser &&  ( 
@@ -413,16 +285,16 @@ export const Dashboard = () => {
           >
              <Typography level="body2">Username</Typography>
             <Typography level="body2" textColor="text.primary">
-              {selectedUser.username}
+              :  {selectedUser.username}
             </Typography>
 
             <Typography level="body2">Email</Typography>
             <Typography level="body2" textColor="text.primary">
-            {selectedUser.email}
+            : {selectedUser.email}
             </Typography>
-
           </Box>
           <Divider />
+
           <Box sx={{ py: 2, px: 1 }}>
             <Button variant="plain" size="sm" startDecorator={<PersonIcon />} onClick={handleShowFriends}>
             {showFriends ? 'Close Friends List' : 'View Friends List'}
@@ -440,10 +312,10 @@ export const Dashboard = () => {
       )}
           </Box>
         </Sheet>
-
         )}
 
-         {/* Right Side Profile View for Explore Page*/}
+
+         {/* Right Side Profile View for PostList Page*/}
          { showPostList &&  ( 
         <Sheet
           sx={{
@@ -466,7 +338,6 @@ export const Dashboard = () => {
             }}
             >
           <Divider />
-
             {/* Article One */}
             <Card variant="outlined">
               <CardOverflow
@@ -618,7 +489,7 @@ export const Dashboard = () => {
             <Connect
             users={filteredUsers}
             handlePersonIconClick={handlePersonIconClick}
-            loggedInUser={loggedInUser} // Pass the loggedInUser prop here
+            loggedInUser={Auth.loggedIn} // Pass the loggedInUser prop here
             title="Some Users"
               />
           )
@@ -650,7 +521,7 @@ export const Dashboard = () => {
 
         )}
 
-         {/* Right Side Profile View for postlist Page*/}
+         {/* Right Side Profile View for PostList Page*/}
          { showPostList &&  ( 
         <Sheet
           sx={{

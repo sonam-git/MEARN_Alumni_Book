@@ -40,10 +40,12 @@ const userSchema = new Schema({
       ref: 'Post',
     },
   ],
-  friends:[{
+  friends:[
+    {
     type: Schema.Types.ObjectId,
       ref: 'User',
-  }]
+  }
+]
 });
 // middleware function is defined to execute before saving a user document.
 userSchema.pre('save', async function (next) {
