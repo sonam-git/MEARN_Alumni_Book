@@ -1,5 +1,5 @@
-import { Typography, Grid, Box } from "@mui/material";
 import React from "react";
+import { Typography, Grid, Box } from "@mui/material";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 // Makes the first letter of firstname and lastname to always be capital
@@ -29,7 +29,7 @@ const FriendList = ({ friends }) => {
                 border: 1
               }}
             >
-              <Typography >
+              <Typography>
                 {capitalizeFirstLetter(friend.firstname)}{" "}
                 {capitalizeFirstLetter(friend.lastname)}
               </Typography>
@@ -43,7 +43,3 @@ const FriendList = ({ friends }) => {
 };
 
 export default FriendList;
-
-
-
-

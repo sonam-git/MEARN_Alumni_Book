@@ -91,8 +91,6 @@ export const Dashboard = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [postAndCommentsData, setPostAndCommentsData] = useState(null);
   const [showFriends, setShowFriends] = useState(false); // Initialize showFriends state to false
-  const [selectedFriendId, setSelectedFriendId] = useState(null);
-  const [showFriendsOfFriend, setShowFriendsOfFriend] = useState(false);
   const [selectedItem, setSelectedItem] = useState('PostList');
 
   // logged in user variable
@@ -172,9 +170,7 @@ export const Dashboard = () => {
     setShowConnect(false);
   };
   const handleShowFriends = () => {
-    setSelectedFriendId(null); // Reset selectedFriendId when showing the main friends list
-    setShowFriends(!true);
-    setShowFriendsOfFriend(false); // Hide friends of the clicked friend when showing the main friends list
+    setShowFriends(!showFriends);
   };
 
   // const handlePersonAddIconClick = (event) => {
@@ -186,11 +182,8 @@ export const Dashboard = () => {
     event.preventDefault();
     setIsSheetOpen(false);
   }
-  const handleFriendClick = (friendId) => {
-    setSelectedFriendId(friendId); // Set the selectedFriendId to the clicked friend's id
-    setShowFriends(false); // Hide the main friends list
-    setShowFriendsOfFriend(true);
-  };
+  
+  
   return (
     <CssVarsProvider disableTransitionOnChange theme={filesTheme}>
       <CssBaseline />
@@ -419,7 +412,6 @@ export const Dashboard = () => {
             <Typography level="body2" textColor="text.primary">
             {selectedUser.email}
             </Typography>
-
           </Box>
           <Divider />
           <Box sx={{ py: 2, px: 1 }}>
@@ -428,8 +420,7 @@ export const Dashboard = () => {
             </Button>
             <Divider sx={{marginBottom: 2}}></Divider>
             {showFriends && <FriendList
-            friends={friendsArray} 
-            onFriendClick={handleFriendClick}
+            friends={selectedUser.friends} 
             />}
           </Box>
         </Sheet>
