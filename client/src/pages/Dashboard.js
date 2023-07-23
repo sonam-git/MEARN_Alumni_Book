@@ -51,6 +51,11 @@ import Profile from './Profile';
 import FriendList from '../components/FriendList';
 import Auth from '../utils/auth'
 
+// Makes the first letter of firstname and lastname to always be capital 
+const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
 function ColorSchemeToggle() {
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = useState(false);
@@ -382,7 +387,7 @@ export const Dashboard = () => {
           }}
         >
           <Box sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
-            <Typography sx={{ flex: 1 }} key={users._id}>{selectedUser.firstname} {selectedUser.lastname}</Typography>
+            <Typography sx={{ flex: 1 , fontWeight: 'bold'}} key={users._id}>{capitalizeFirstLetter(selectedUser.firstname)} {capitalizeFirstLetter(selectedUser.lastname)}</Typography>
           </Box>
           <Divider />
           <AspectRatio ratio="21/18">
@@ -403,12 +408,12 @@ export const Dashboard = () => {
               '& > *:nth-of-ty(odd)': { color: 'text.secondary' },
             }}
           >
-             <Typography level="body2">Username</Typography>
+             <Typography level="body2" sx={{fontWeight: 'bold'}}>Username</Typography>
             <Typography level="body2" textColor="text.primary">
               {selectedUser.username}
             </Typography>
 
-            <Typography level="body2">Email</Typography>
+            <Typography level="body2" sx={{fontWeight: 'bold'}}>Email</Typography>
             <Typography level="body2" textColor="text.primary">
             {selectedUser.email}
             </Typography>
