@@ -6,9 +6,9 @@ import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardOverflow from "@mui/joy/CardOverflow";
 import { useQuery, gql } from '@apollo/client';
-import { Divider } from '@mui/material';
-import { GET_POSTS } from '../utils/queries';
-import Auth from '../utils/auth'
+import {  Divider } from '@mui/material';
+import Auth from '../utils/auth';
+import { Button } from '@material-ui/core';
 
 // Makes the first letter of firstname and lastname to always be capital 
 const capitalizeFirstLetter = (string) => {
@@ -99,7 +99,11 @@ const posts = [...data.posts].sort((a, b) => parseInt(b.createdAt) - parseInt(a.
                     <Typography>-- {post.postText}</Typography>
                   </Box>
                   <Divider/>
+                 
+                  <Box sx={{ display: "flex", alignItems: "center",justifyContent: 'space-between'}}>
                   <Typography variant="body2">{new Date(parseInt(post.createdAt)).toLocaleDateString()}</Typography>
+                  <Button variant="outlined" style={{background: 'white', size: 'sm'}}>Comment</Button>
+                  </Box>
                 </Card>
               ))}
           </Box>
