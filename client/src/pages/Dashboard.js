@@ -253,7 +253,7 @@ export const Dashboard = () => {
               <ListItem>
                 <ListItemButton onClick={() => handleItemClick('aboutus')}>
                   <ListItemDecorator sx={{ color: 'neutral.500' }}>
-                    <InfoIcon/>
+                    <PersonIcon/>
                   </ListItemDecorator>
                   <ListItemContent 
                   selected={selectedItem === 'aboutus'}
