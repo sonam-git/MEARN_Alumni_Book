@@ -168,20 +168,6 @@ export const Header = () => {
                 Home
               </IconButton>
               </Link>
-              <Link to="/Profile" >
-              <IconButton
-                size="sm"
-                variant="outlined"
-                color="primary"
-                aria-label="Apps"
-                style={{
-                  padding: '10px',
-                }}
-              >
-                <ManageAccountsIcon style={{ marginRight: '5px' }} />
-                Profile
-              </IconButton>
-              </Link>
               <IconButton
                 size="sm"
                 variant="outlined"

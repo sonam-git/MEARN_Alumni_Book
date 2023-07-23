@@ -15,6 +15,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import { Dashboard } from '@material-ui/icons';
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
+import PostList from "./components/PostList";
 
 
 
@@ -62,6 +63,8 @@ function App() {
             <Route path="/signup" element={<Signup />} />
 
             <Route path="/Dashboard" element={<Dashboard />} />
+            
+            <Route path="/Dashboard/PostList" component={PostList} />
 
             <Route path="/Profile/:userId" element={<Profile />} />
 

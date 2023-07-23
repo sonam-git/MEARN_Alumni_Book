@@ -246,7 +246,7 @@ const resolvers = {
       }
     },
     //removes a post by its postId
-    removePost: async (parent, { userId, postId }, context) => {
+    removePost: async (parent, { postId }, context) => {
       if (context.user) {
         try {
           await Post.findOneAndDelete({
@@ -254,7 +254,7 @@ const resolvers = {
             postAuthor: context.user.username,
           });
 
-          if (!post) {
+          if (!postId) {
             throw new Error("Post not found or you are not the author.");
           }
 
