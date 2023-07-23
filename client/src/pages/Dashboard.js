@@ -31,8 +31,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 // import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import PersonIcon from '@mui/icons-material/Person';
 
-import CloseIcon from '@mui/icons-material/Close';
-import ExploreIcon from '@mui/icons-material/Explore';
 import InfoIcon from '@mui/icons-material/Info';
 import MessageIcon from '@mui/icons-material/Message';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
@@ -112,8 +110,6 @@ export const Dashboard = () => {
 
   const filteredUsers = users.filter((user) => user._id !== loggedInUser);
   const friendsArray = users.filter((user) => user.friends); 
-  console.log(friendsArray)
-
   
   if (loading) {
     return <div>Loading...</div>;
@@ -478,7 +474,7 @@ export const Dashboard = () => {
             <Button variant="plain" size="sm" startDecorator={<PersonIcon />} onClick={handleShowFriends}>
             {showFriends ? 'Close Friends List' : 'View Friends List'}
             </Button>
-            <Divider sx={{marginBottom: 2}}></Divider>
+            <Divider sx={{marginBottom: 2, marginTop: 2}}></Divider>
             {showFriends && (<FriendList
             friends={selectedUser.friends} 
             />)}
