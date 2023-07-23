@@ -63,7 +63,7 @@ function App() {
 
             <Route path="/Dashboard" element={<Dashboard />} />
 
-            <Route path="/Profile" element={<Profile />} />
+            <Route path="/Profile/:userId" element={<Profile />} />
 
           </Routes>
         </>

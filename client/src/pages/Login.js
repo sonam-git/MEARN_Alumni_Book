@@ -100,7 +100,9 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
           variables: { email: formState.email, password: formState.password , persistent: formState.persistent},
         });
         const token = mutationResponse.data.login.token;
+        const userId = mutationResponse.data.login.user._id; 
         Auth.login(token);
+        localStorage.setItem("userId", userId);
         setIsLoggedIn(true);
       } catch (e) {
         console.log(e);

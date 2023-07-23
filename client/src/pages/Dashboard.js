@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { useQuery } from '@apollo/client';
 import {  QUERY_PROFILES, GET_ME, GET_USER } from '../utils/queries';
-import { Link, useParams, Navigate } from 'react-router-dom';
+import { Link, useParams, Navigate,BrowserRouter as Router, Route,} from 'react-router-dom';
 import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
 import AspectRatio from '@mui/joy/AspectRatio';
@@ -75,8 +75,29 @@ function ColorSchemeToggle() {
   );
 }
 
-export const Dashboard = () => {
+// The Friend component, which is a link to the Profile page for that friend
+const Friend = ({ friend, onClick }) => (
+  <Link to={`/profile/${friend.id}`} onClick={() => onClick(friend)}>
+    {friend.name}
+  </Link>
+);
 
+// The Profile component, which displays information based on the friend ID in the route
+const Profile = ({ match }) => {
+  const friendId = match.params.id;
+  // Use this friendId to load the appropriate friend's information...
+};
+
+export const Dashboard = () => {
+<Router>
+    {/* Your other dashboard code... */}
+
+    {/* For each friend, render a Friend component */}
+    {friends.map(friend => <Friend friend={friend} />)}
+
+    {/* When the route matches "/profile/:id", render the Profile component */}
+    <Route path="/profile/:id" component={Profile} />
+  </Router>
   const [showLogin, setShowLogin] = useState(false);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -103,7 +124,7 @@ export const Dashboard = () => {
     }
   );
 
-  const profile = data1?.me || data1?.user || {};
+  // const profile = data1?.me || data1?.user || {};
 
   const filteredUsers = users.filter((user) => user._id !== profile._id);
 
@@ -229,18 +250,20 @@ export const Dashboard = () => {
                 </ListItemButton>
               </ListItem>
               <ListItem>
-                <ListItemButton onClick={() => handleItemClick('aboutus')}>
+                <ListItemButton>
                   <ListItemDecorator sx={{ color: 'neutral.500' }}>
                     <InfoIcon/>
                   </ListItemDecorator>
+                  <Link to="/profile">
                   <ListItemContent 
-                  selected={selectedItem === 'aboutus'}
+                  selected={selectedItem === 'profile'}
                   onClick={handleShowProfile}
                   sx={{
-                    color: selectedItem === 'aboutus' ? '#2ACAEA' : 'white', 
+                    color: selectedItem === 'profile' ? '#2ACAEA' : 'white', 
                    }}
                   >Profile</ListItemContent>
-                </ListItemButton>
+                </Link>
+              </ListItemButton>
               </ListItem>
               <ListItem>
                 <ListItemButton onClick={() => handleItemClick('contact')}>
@@ -270,6 +293,7 @@ export const Dashboard = () => {
             <div>Loading....</div>
           ) : (
             <Connect
+            userId={userId}
             users={filteredUsers}
             handlePersonIconClick={handlePersonIconClick}
             loggedInUser={profile} // Pass the loggedInUser prop here

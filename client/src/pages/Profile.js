@@ -11,15 +11,20 @@ import Button from "@mui/material/Button";
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
-import { GET_ME } from "../utils/queries";
+import { GET_USER } from "../utils/queries";
 import { ADD_POST } from "../utils/mutations";
 import { REMOVE_POST } from "../utils/mutations";
 import { ADD_COMMENT } from "../utils/mutations";
 import { REMOVE_COMMENT } from "../utils/mutations";
 import { UPDATE_POST } from "../utils/mutations";
+import AuthService from "../utils/auth";
+import { useParams } from 'react-router-dom';
 
-export const Profile = () => {
-  const { loading, data, error } = useQuery(GET_ME);
+export const Profile = ({ match }) => {
+const { userId } = useParams();
+  const { loading, data, error } = useQuery(GET_USER, {
+    variables: { userId }, // Fetch user based on provided ID
+  });
   const [postText, setPostText] = useState("");
   const [addPost] = useMutation(ADD_POST);
   const [commentText, setCommentText] = useState("");
@@ -30,7 +35,9 @@ export const Profile = () => {
   const [updatePost] = useMutation(UPDATE_POST);
   const [editPostId, setEditPostId] = useState(null);
   const [editPostText, setEditPostText] = useState("");
-
+  const authService = AuthService;
+  const userProfile = authService.getProfile();
+  const loggedInUserId = userProfile?._id;
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
@@ -47,6 +54,7 @@ export const Profile = () => {
   if (loading) return "Loading...";
 
   if (error) return `Error! ${error.message}`;
+  const { user } = data;
   console.log(data);
 
   const toggleCommentBox = (postId) => {
@@ -171,38 +179,38 @@ export const Profile = () => {
               {data.me.posts.length ? (
                 data.me.posts.map((post) => (
                   <div key={post._id}>
-                       {editPostId === post._id ? (
-                    <>
-                    <TextField
-                      value={editPostText}
-                    onChange={(e) => setEditPostText(e.target.value)}
-                    />
-                    <Button onClick={handlePostUpdate}>Save</Button>
-                   </>
-                    ) : (
-                    <>
-                    <h3>{post.postText}</h3>
-                    <p>Author: {post.postAuthor}</p>
-                    {post.postAuthor === data.me.username && (
+                    {editPostId === post._id ? (
                       <>
-                        <button
-                          className="deleteButton"
-                          onClick={() => handleDeletePost(post._id)}
-                        >
-                          Delete
-                        </button>
-                        <button
-                          className="editButton"
-                          onClick={() => {
-                            setEditPostId(post._id);
-                            setEditPostText(post.postText);
-                          }}
-                        >
-                          Edit
-                        </button>
+                        <TextField
+                          value={editPostText}
+                          onChange={(e) => setEditPostText(e.target.value)}
+                        />
+                        <Button onClick={handlePostUpdate}>Save</Button>
                       </>
-                    )}
-                    </>
+                    ) : (
+                      <>
+                        <h3>{post.postText}</h3>
+                        <p>Author: {post.postAuthor}</p>
+                        {data.user._id === loggedInUserId && (
+                          <>
+                            <button
+                              className="deleteButton"
+                              onClick={() => handleDeletePost(post._id)}
+                            >
+                              Delete
+                            </button>
+                            <button
+                              className="editButton"
+                              onClick={() => {
+                                setEditPostId(post._id);
+                                setEditPostText(post.postText);
+                              }}
+                            >
+                              Edit
+                            </button>
+                          </>
+                        )}
+                      </>
                     )}
 
                     <button
@@ -272,7 +280,14 @@ export const Profile = () => {
             {data.me.friends.length ? (
               data.me.friends.map((friend) => (
                 <div key={friend._id}>
-                  <h3>{friend.firstname}</h3>
+                  <button
+                    onClick={() => {
+                      <Profile username={friend.username} />;
+                    }}
+                  >
+              
+                    {`${friend.firstname} ${friend.lastname}`}
+                  </button>
                 </div>
               ))
             ) : (
