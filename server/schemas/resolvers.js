@@ -3,12 +3,12 @@ const { AuthenticationError } = require("apollo-server-express");
 const cloudinary = require("cloudinary").v2;
 const { User, Post } = require("../models");
 const { signToken } = require("../utils/auth");
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-cloudinary.config({ 
-  cloud_name: 'dnuanxqxg', 
-  api_key: '768784817278892', 
-  api_secret: 'u9P50V-GFNRIGKXjX4GzcQdYSB4' 
+cloudinary.config({
+  cloud_name: "dnuanxqxg",
+  api_key: "768784817278892",
+  api_secret: "u9P50V-GFNRIGKXjX4GzcQdYSB4",
 });
 
 const resolvers = {
@@ -52,7 +52,7 @@ const resolvers = {
         if (post) {
           return post;
         } else {
-          throw new Error('Post not found');
+          throw new Error("Post not found");
         }
       } catch (err) {
         throw new Error(err);
@@ -93,33 +93,36 @@ const resolvers = {
     },
 
     // creates a new user with the provided information
-    addUser: async (parent,{ firstname, lastname, username, email, password, image}) => {
-
-try{
-  let imageUrl = null;
-  // Upload the image to Cloudinary only if an image was provided
-  if (image) {
-    const { secure_url: uploadedImageUrl } = await cloudinary.uploader.upload(image, {
-      upload_preset: 'logging_preset', // Replace 'logging_preset' with your upload preset name
-    });
-    imageUrl = uploadedImageUrl;
-  }
-    // Create the user with the provided information
-    const user = await User.create({
-        firstname,
-        lastname,
-        username,
-        email,
-        password,
-        image: imageUrl,
-      });
-      // signs a token for authentication, and returns the token and user.
-      const token = signToken(user);
-      return { token, user };
-    } catch (error) {
-      console.error(error);
-      throw new Error('Failed to create user');
-    }
+    addUser: async (
+      parent,
+      { firstname, lastname, username, email, password, image }
+    ) => {
+      try {
+        let imageUrl = null;
+        // Upload the image to Cloudinary only if an image was provided
+        if (image) {
+          const { secure_url: uploadedImageUrl } =
+            await cloudinary.uploader.upload(image, {
+              upload_preset: "logging_preset", // Replace 'logging_preset' with your upload preset name
+            });
+          imageUrl = uploadedImageUrl;
+        }
+        // Create the user with the provided information
+        const user = await User.create({
+          firstname,
+          lastname,
+          username,
+          email,
+          password,
+          image: imageUrl,
+        });
+        // signs a token for authentication, and returns the token and user.
+        const token = signToken(user);
+        return { token, user };
+      } catch (error) {
+        console.error(error);
+        throw new Error("Failed to create user");
+      }
     },
 
     // add friend to your friend list
@@ -172,8 +175,8 @@ try{
     // creates a new post with the provided text and the authenticated user's username,
     addPost: async (parent, { postText }, context) => {
       if (context.user) {
-        if (postText.trim() === '') {
-          throw new Error('Post body must not be empty');
+        if (postText.trim() === "") {
+          throw new Error("Post body must not be empty");
         }
         const post = await Post.create({
           postText,
@@ -190,7 +193,7 @@ try{
       }
       throw new AuthenticationError("You need to be logged in!");
     },
-    
+
     //adds a new comment to a post
     addComment: async (parent, { postId, commentText }, context) => {
       if (context.user) {
@@ -198,7 +201,11 @@ try{
           { _id: postId },
           {
             $addToSet: {
-              comments: { _id: new mongoose.Types.ObjectId(), commentText, commentAuthor: context.user.username },
+              comments: {
+                _id: new mongoose.Types.ObjectId(),
+                commentText,
+                commentAuthor: context.user.username,
+              },
             },
           },
           {
@@ -215,24 +222,24 @@ try{
       if (!context.user) {
         throw new AuthenticationError("You need to be logged in!");
       }
-  
+
       try {
         // Find the post by postId
         const post = await Post.findById(postId);
-  
+
         if (!post) {
           throw new Error("Post not found.");
         }
-  
+
         // Check if the current user is the author of the post
         if (post.postAuthor !== context.user.username) {
           throw new AuthenticationError("You are not the author of this post.");
         }
-  
+
         // Update the postText
         post.postText = postText;
         await post.save();
-  
+
         return post;
       } catch (error) {
         throw new Error("Failed to update the post.");
@@ -241,20 +248,30 @@ try{
     //removes a post by its postId
     removePost: async (parent, { userId, postId }, context) => {
       if (context.user) {
-        return User.findOneAndUpdate(
-          { _id: userId },
-          {
-            $pull: {
-              posts: {
-                _id: postId,
-                postAuthor: context.user.username,
-              },
-            },
-          },
-          { new: true }
-        );
+        try {
+          await Post.findOneAndDelete({
+            _id: postId,
+            postAuthor: context.user.username,
+          });
+
+          if (!post) {
+            throw new Error("Post not found or you are not the author.");
+          }
+
+          await User.findOneAndUpdate(
+            { _id: context.user._id },
+            { $pull: { posts: postId } } // Use postId instead of post._id
+          );
+
+          return true;
+        } catch (error) {
+          console.error("Error deleting post:", error);
+          return false;
+        }
+      } else {
+        throw new AuthenticationError("You need to be logged in!");
       }
-  },
+    },
     //removes a comment from a post
     removeComment: async (parent, { postId, commentId }, context) => {
       if (context.user) {
@@ -276,10 +293,10 @@ try{
 
     // count the like for the post
     likePost: async (_, { postId }, context) => {
-     // Check if the user is authenticated
-  if (!context.user) {
-    throw new AuthenticationError("You need to like this post.");
-  }
+      // Check if the user is authenticated
+      if (!context.user) {
+        throw new AuthenticationError("You need to like this post.");
+      }
       const post = await Post.findById(postId);
 
       if (post) {
@@ -290,13 +307,13 @@ try{
           // Not liked, like post
           post.likes.push({
             username,
-            createdAt: new Date().toISOString()
+            createdAt: new Date().toISOString(),
           });
         }
         await post.save();
         return post;
-      } else throw new UserInputError('Post not found');
-    }
+      } else throw new UserInputError("Post not found");
+    },
   },
 };
 // export module

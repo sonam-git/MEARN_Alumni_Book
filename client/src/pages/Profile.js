@@ -412,6 +412,6 @@ export const Profile = ({ updatePostAndCommentsData, updateDeletePost }) => {
        
     </>
   );
-}
+};
 
 export default Profile;
