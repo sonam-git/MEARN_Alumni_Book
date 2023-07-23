@@ -4,6 +4,7 @@ import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardOverflow from "@mui/joy/CardOverflow";
 import Typography from "@mui/joy/Typography";
+import FriendList from './FriendList';
 
 import IconButton from "@mui/joy/IconButton";
 import ViewCompactAltIcon from "@mui/icons-material/ViewCompactAlt";
@@ -63,7 +64,7 @@ const Connect = ({ users, handlePersonIconClick, loggedInUser }) => {
           {/* Profiles Individual cards */}
           {filteredUsers &&
             shuffledUsers.map((user) => (
-              user && user._id !== loggedInUser._id && (
+              user && user._id !== loggedInUser._id ? (
               <Card
                 variant="outlined"
                 sx={{
@@ -108,7 +109,7 @@ const Connect = ({ users, handlePersonIconClick, loggedInUser }) => {
                   </IconButton>
                   </Box>
               </Card>
-              ) 
+              ) : null
             ))}
         </Box>
       </>

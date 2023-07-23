@@ -324,7 +324,7 @@ export const Signup = () => {
 
             {error && (
               <div className="my-3 p-3 bg-danger text-white">
-                {'Username/Email Already Taken. Please Try Again!'}
+                {'Username & Email Already Taken. Please Try Again!'}
               </div>
             )}
 

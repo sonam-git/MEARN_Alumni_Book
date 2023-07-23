@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
 import { useQuery } from '@apollo/client';
-import {  QUERY_PROFILES, GET_ME, GET_USER } from '../utils/queries';
+import {  QUERY_PROFILES, GET_ME, GET_USER, GET_USERS  } from '../utils/queries';
 import { Link, useParams, Navigate,BrowserRouter as Router, Route,} from 'react-router-dom';
 import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
+import { REMOVE_COMMENT } from "../utils/mutations";
+import { useMutation } from "@apollo/client";
 import CssBaseline from '@mui/joy/CssBaseline';
 import AspectRatio from '@mui/joy/AspectRatio';
 import Box from '@mui/joy/Box';
@@ -21,12 +23,12 @@ import Card from '@mui/joy/Card';
 import CardOverflow from '@mui/joy/CardOverflow';
 import CardCover from '@mui/joy/CardCover';
 import articleOneImage from '../assets/images/article-one.webp';
-import articleTwoImage from '../assets/images/article-two.jpeg';
-import articleThreeImage from '../assets/images/article-three.jpg';
+import Avatar from '@mui/joy/Avatar';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 // Icons import
-import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
-import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
+// import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
+// import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import PersonIcon from '@mui/icons-material/Person';
 
 import CloseIcon from '@mui/icons-material/Close';
@@ -38,42 +40,49 @@ import ViewCompactAltIcon from '@mui/icons-material/ViewCompactAlt';
 import sideImage from '../assets/images/importance.jpg';
 import sideImage1 from '../assets/images/opportunities.jpg'
 
+
 // custom
 import filesTheme from '../containers/Theme';
 import Header from '../components/Header';
 import Layout from '../containers/Layout';
 import Connect from '../components/Connect';
 import PostList from '../components/PostList';
-import Profile from '../pages/Profile';
+import Profile from './Profile';
+import FriendList from '../components/FriendList';
 import Auth from '../utils/auth'
 
-function ColorSchemeToggle() {
-  const { mode, setMode } = useColorScheme();
-  const [mounted, setMounted] = useState(false);
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-  if (!mounted) {
-    return <IconButton size="sm" variant="outlined" color="primary" />;
-  }
-  return (
-    <IconButton
-      id="toggle-mode"
-      size="sm"
-      variant="outlined"
-      color="primary"
-      onClick={() => {
-        if (mode === 'light') {
-          setMode('dark');
-        } else {
-          setMode('light');
-        }
-      }}
-    >
-      {mode === 'light' ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
-    </IconButton>
-  );
-}
+// Makes the first letter of firstname and lastname to always be capital 
+const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
+// function ColorSchemeToggle() {
+//   const { mode, setMode } = useColorScheme();
+//   const [mounted, setMounted] = useState(false);
+//   React.useEffect(() => {
+//     setMounted(true);
+//   }, []);
+//   if (!mounted) {
+//     return <IconButton size="sm" variant="outlined" color="primary" />;
+//   }
+//   return (
+//     <IconButton
+//       id="toggle-mode"
+//       size="sm"
+//       variant="outlined"
+//       color="primary"
+//       onClick={() => {
+//         if (mode === 'light') {
+//           setMode('dark');
+//         } else {
+//           setMode('light');
+//         }
+//       }}
+//     >
+//       {mode === 'light' ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
+//     </IconButton>
+//   );
+// }
 
 // The Friend component, which is a link to the Profile page for that friend
 const Friend = ({ friend, onClick }) => (
@@ -83,10 +92,10 @@ const Friend = ({ friend, onClick }) => (
 );
 
 // The Profile component, which displays information based on the friend ID in the route
-const Profile = ({ match }) => {
-  const friendId = match.params.id;
-  // Use this friendId to load the appropriate friend's information...
-};
+// const Profile = ({ match }) => {
+//   const friendId = match.params.id;
+//   // Use this friendId to load the appropriate friend's information...
+// };
 
 export const Dashboard = () => {
 <Router>
@@ -98,35 +107,37 @@ export const Dashboard = () => {
     {/* When the route matches "/profile/:id", render the Profile component */}
     <Route path="/profile/:id" component={Profile} />
   </Router>
+  const [removeComment] = useMutation(REMOVE_COMMENT);
   const [showLogin, setShowLogin] = useState(false);
-
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-
   const [showConnect, setShowConnect] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-  const [showExplore, setShowExplore] = useState(true);
-
+  const [showPostList, setShowPostList] = useState(true);
   const [selectedUser, setSelectedUser] = useState(null);
-  
+  const [postAndCommentsData, setPostAndCommentsData] = useState(null);
+  const [showFriends, setShowFriends] = useState(false); // Initialize showFriends state to false
+  const [selectedItem, setSelectedItem] = useState('PostList');
 
-  const [selectedItem, setSelectedItem] = useState('explore');
+  // logged in user variable
+  const loggedInUser = Auth.loggedIn() ? Auth.getProfile().data._id : null;
 
   const { username } = useParams();
 
-  const { loading, data } = useQuery(QUERY_PROFILES);
+  const { loading, data } = useQuery(GET_USERS,
+    {
+      variables: { username },
+    });
+
   const users = data?.users || [];
 
-  const { loading1, data1 } = useQuery(
-    username ? GET_USER : GET_ME,
-    {
-      variables: { username: username }
-    }
-  );
+  const filteredUsers = users.filter((user) => user._id !== loggedInUser);
+  const friendsArray = users.filter((user) => user.friends); 
+  console.log(friendsArray)
 
   // const profile = data1?.me || data1?.user || {};
 
-  const filteredUsers = users.filter((user) => user._id !== profile._id);
+  // const filteredUsers = users.filter((user) => user._id !== profile._id);
 
   if (Auth.loggedIn() && Auth.getProfile().data._id === username) {
     return <Navigate to="/me" />;
@@ -136,14 +147,29 @@ export const Dashboard = () => {
     return <div>Loading...</div>;
   }
 
+  const updatePostAndCommentsData = (data) => {
+    setPostAndCommentsData(data);
+  };
+
   const handlePersonIconClick = (user) => {
     setSelectedUser(user);
   };
 
-  const handleLogout = (event) => {
-    event.preventDefault();
-    Auth.logout();
-  }
+  const handleDeleteComment = async (postId, commentId) => {
+    try {
+      // Execute the removeComment mutation and pass the commentId as a variable
+      await removeComment({
+        variables: { postId, commentId },
+      });
+
+      // Perform any necessary actions after successful deletion, such as updating the UI
+      console.log("Comment deleted successfully");
+      window.location.reload();
+    } catch (error) {
+      // Handle any errors that occur during the deletion process
+      console.error("Error deleting comment:", error);
+    }
+  };
 
   // const handleShowLogin = () => {
   //   setShowLogin(true);
@@ -156,13 +182,13 @@ export const Dashboard = () => {
   const handleShowConnect = (event) => {
     event.preventDefault();
     setShowConnect(true);
-    setShowExplore(false);
+    setShowPostList(false);
     setShowProfile(false);
   };
 
-  const handleShowExplore = (event) => {
+  const handleShowPostList = (event) => {
     event.preventDefault();
-    setShowExplore(true);
+    setShowPostList(true);
     setShowConnect(false);
     setShowProfile(false);
   };
@@ -170,10 +196,12 @@ export const Dashboard = () => {
   const handleShowProfile = (event) => {
     event.preventDefault();
     setShowProfile(true);
-    setShowExplore(false);
+    setShowPostList(false);
     setShowConnect(false);
   };
-
+  const handleShowFriends = () => {
+    setShowFriends(!showFriends);
+  };
 
   // const handlePersonAddIconClick = (event) => {
   //   event.preventDefault();
@@ -184,11 +212,12 @@ export const Dashboard = () => {
     event.preventDefault();
     setIsSheetOpen(false);
   }
-
+  
+  
   return (
     <CssVarsProvider disableTransitionOnChange theme={filesTheme}>
       <CssBaseline />
-      {Auth.loggedIn() ? (
+      {loggedInUser ? (
         // If user is logged In
       <Layout.Root
         sx={{
@@ -226,7 +255,7 @@ export const Dashboard = () => {
                 </ListItemDecorator>
                 <ListItemContent
                   selected={selectedItem === 'post'}
-                  onClick={handleShowExplore}
+                  onClick={handleShowPostList}
                   sx={{
                      color: selectedItem === 'post' ? '#2ACAEA' : 'white', 
                     }}
@@ -252,7 +281,7 @@ export const Dashboard = () => {
               <ListItem>
                 <ListItemButton>
                   <ListItemDecorator sx={{ color: 'neutral.500' }}>
-                    <InfoIcon/>
+                    <PersonIcon/>
                   </ListItemDecorator>
                   <Link to="/profile">
                   <ListItemContent 
@@ -274,7 +303,7 @@ export const Dashboard = () => {
                       selected={selectedItem === 'contact'}
                       onClick={handleShowConnect}
                       sx={{
-                        color: selectedItem === 'contact' ? '#2ACAEA' : 'white', 
+                        color: selectedItem === 'contact' ? '#2ACAEA' : '#29b6f6', 
                       }}
                      >Contacts</ListItemContent>
                   </ListItemButton>
@@ -296,14 +325,85 @@ export const Dashboard = () => {
             userId={userId}
             users={filteredUsers}
             handlePersonIconClick={handlePersonIconClick}
-            loggedInUser={profile} // Pass the loggedInUser prop here
+            loggedInUser={loggedInUser} // Pass the loggedInUser prop here
             title="Some Users"
               />
           )
         )}
-        {showExplore && <PostList/>}
-        {showProfile && <Profile/>}
+        {showPostList && <PostList/>}
+        {showProfile && 
+        <Profile
+          updatePostAndCommentsData={updatePostAndCommentsData}
+        />}
         </Layout.Main>
+
+        {showProfile && postAndCommentsData && (
+          <Sheet
+            sx={{
+              display: { xs: 'none', sm: 'initial' },
+              borderLeft: '1px solid',
+              borderColor: 'neutral.outlinedBorder',
+            }}
+          >
+            <div key={postAndCommentsData.post._id}>
+              <Box sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px',  }}>
+                  <Avatar src={postAndCommentsData.me.image} size="lg" sx={{ '--Avatar-size': '50px',}} />
+              </Box>
+                <Typography sx={{ flex: 1 }}>
+                  {postAndCommentsData.post.postAuthor}
+                </Typography>
+              </Box>
+              {/* Add other components and details related to the selected post */}
+            </div>
+
+            <Divider />
+            <Typography sx={{ fontSize: '12px', padding: '10px', fontFamily: 'monospace' }}>Posted: {new Date(parseInt(postAndCommentsData.post.createdAt)).toLocaleDateString()}</Typography>
+            <Box
+              sx={{
+                gap: 2,
+                p: 2,
+                display: 'grid',
+                gridTemplateColumns: 'auto 1fr',
+                '& > *:nth-of-ty(odd)': { color: 'text.secondary' },
+              }}
+            > 
+              <Typography level="h6" fontWeight="lg" color="primary" sx={{ width: '100%' }}>
+                  {postAndCommentsData.post.postText}
+              </Typography>
+
+            </Box>
+
+            <Divider />
+
+            {postAndCommentsData.post.comments?.length === 0 ? (
+                <Typography
+                  sx={{
+                    textAlign: 'center',
+                    margin: 'auto',
+                    mt: 3,
+                  }}
+                >No Comments Yet!</Typography>
+              ) : (
+                <>
+                  {postAndCommentsData.post.comments.map((comment) => (
+                    <div key={comment._id} style={{ display: 'flex', justifyContent: 'space-between', padding: '15px', border: 'solid', borderRadius: '10px', width: '90%', margin: 'auto', marginTop: '15px'}}>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px',  }}>
+                        <Avatar src={postAndCommentsData.me.image} size="lg" sx={{ '--Avatar-size': '50px',}} />
+                      </Box>
+                      <Typography variant="body1" sx={{mt: '10px', fontFamily: 'monospace', width: "85%" }} color="primary">
+                        <span style={{ fontWeight: 'bold', fontStyle: 'italic', }}>{comment.commentAuthor}</span> - <span style={{ color: 'white' }}>{comment.commentText}</span>
+                        <Typography variant="body2" sx={{ marginRight: 'auto', display: 'flex', fontSize: '12px' }}>Posted: {new Date(parseInt(comment.createdAt)).toLocaleDateString()}</Typography>
+                      </Typography>
+                      <IconButton variant="outlined" color='danger' sx={{ padding: '5px', height: '20px', border: 'none' }} onClick={() => handleDeleteComment(postAndCommentsData.post._id, comment._id)}>
+                        <DeleteIcon/> 
+                      </IconButton>
+                    </div>
+                  ))}
+                </>
+              )}
+          </Sheet>
+        )}
 
         {/* Right Side Profile View for Connect Page */}
         {showConnect && selectedUser &&  ( 
@@ -315,7 +415,7 @@ export const Dashboard = () => {
           }}
         >
           <Box sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
-            <Typography sx={{ flex: 1 }} key={profile._id}>{selectedUser.firstname} {selectedUser.lastname}</Typography>
+            <Typography sx={{ flex: 1 , fontWeight: 'bold'}} key={users._id}>{capitalizeFirstLetter(selectedUser.firstname)} {capitalizeFirstLetter(selectedUser.lastname)}</Typography>
           </Box>
           <Divider />
           <AspectRatio ratio="21/18">
@@ -336,29 +436,32 @@ export const Dashboard = () => {
               '& > *:nth-of-ty(odd)': { color: 'text.secondary' },
             }}
           >
-             <Typography level="body2">Username</Typography>
+             <Typography level="body2" sx={{fontWeight: 'bold'}}>Username</Typography>
             <Typography level="body2" textColor="text.primary">
               {selectedUser.username}
             </Typography>
 
-            <Typography level="body2">Email</Typography>
+            <Typography level="body2" sx={{fontWeight: 'bold'}}>Email</Typography>
             <Typography level="body2" textColor="text.primary">
             {selectedUser.email}
             </Typography>
-
           </Box>
           <Divider />
           <Box sx={{ py: 2, px: 1 }}>
-            <Button variant="plain" size="sm" startDecorator={<PersonIcon />}>
-              View Friends List
+            <Button variant="plain" size="sm" startDecorator={<PersonIcon />} onClick={handleShowFriends}>
+            {showFriends ? 'Close Friends List' : 'View Friends List'}
             </Button>
+            <Divider sx={{marginBottom: 2}}></Divider>
+            {showFriends && (<FriendList
+            friends={selectedUser.friends} 
+            />)}
           </Box>
         </Sheet>
 
         )}
 
-         {/* Right Side Profile View for Explore Page*/}
-         { showExplore &&  ( 
+         {/* Right Side Profile View for PostList Page*/}
+         { showPostList &&  ( 
         <Sheet
           sx={{
             display: { xs: 'none', sm: 'initial' },
@@ -421,89 +524,6 @@ export const Dashboard = () => {
                 </Box>
               </Box>
             </Card>
-
-            {/* Article Two */}
-            <Card variant="outlined">
-              <CardOverflow
-                sx={{
-                  borderBottom: '.5px solid',
-                  borderColor: 'neutral.outlinedBorder',
-                }}
-              >
-                <AspectRatio ratio="16/9" color="primary">
-                <CardCover
-                sx={{
-                  backgroundImage: `url(${articleTwoImage})`,
-                  backgroundSize: 'cover',
-                  transition: 'transform 0.3s ease',
-                      '&:hover': {
-                     transform: 'scale(1.05)',
-                      },
-                }}
-                >
-                  <Link
-                    to="https://www.jamesgmartin.center/2023/05/undoing-diversity-equity-and-inclusion-requires-alumni-effort/" 
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-              
-                  </Link>
-                 
-                </CardCover>
-                </AspectRatio>
-              </CardOverflow>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Box sx={{ flex: 1 }}>
-                  <Typography>Undoing “Diversity, Equity, and Inclusion” Requires Alumni Effort</Typography>
-                  <Typography level="body3" mt={0.5}>
-                    Created By: Garland Tucker
-                  </Typography>
-                  <Typography level="body3" mt={0.5}>
-                    Created: Monday, May 29th 2023
-                  </Typography>
-                </Box>
-              </Box>
-            </Card>
-
-            {/* Article Three */}
-            <Card variant="outlined">
-              <CardOverflow
-                sx={{
-                  borderBottom: '.5px solid',
-                  borderColor: 'neutral.outlinedBorder',
-                }}
-              >
-                <AspectRatio ratio="16/9" color="primary">
-                <CardCover
-                sx={{
-                  backgroundImage: `url(${articleThreeImage})`,
-                  backgroundSize: 'cover',
-                  transition: 'transform 0.3s ease',
-                      '&:hover': {
-                     transform: 'scale(1.05)',
-                      },
-                }}
-                >
-                  <Link
-                  to="https://www.bu.edu/articles/2023/5-tips-for-life-after-college-a-guide-to-living-life-as-an-alumni/" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  ></Link>
-                </CardCover>
-                </AspectRatio>
-              </CardOverflow>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Box sx={{ flex: 1 }}>
-                  <Typography>5 Tips for Life After College: A Guide To Living Life As An Alumni</Typography>
-                  <Typography level="body3" mt={0.5}>
-                    Created By: Jada Warmington
-                  </Typography>
-                  <Typography level="body3" mt={0.5}>
-                    Posted: Tuesday, May 16th 2023
-                  </Typography>
-                </Box>
-              </Box>
-            </Card>
           </Box>
         </Sheet>
 
@@ -548,7 +568,7 @@ export const Dashboard = () => {
                 </ListItemDecorator>
                 <ListItemContent
                   selected={selectedItem === 'post'}
-                  onClick={handleShowExplore}
+                  onClick={handleShowPostList}
                   sx={{
                      color: selectedItem === 'post' ? '#2ACAEA' : 'white', 
                     }}
@@ -615,12 +635,12 @@ export const Dashboard = () => {
             <Connect
             users={filteredUsers}
             handlePersonIconClick={handlePersonIconClick}
-            loggedInUser={profile} // Pass the loggedInUser prop here
+            loggedInUser={loggedInUser} // Pass the loggedInUser prop here
             title="Some Users"
               />
           )
         )}
-        {showExplore && <PostList/>}
+        {showPostList && <PostList/>}
         </Layout.Main>
 
         {/* Right Side Profile View for Connect Page */}
@@ -648,7 +668,7 @@ export const Dashboard = () => {
         )}
 
          {/* Right Side Profile View for Explore Page*/}
-         { showExplore &&  ( 
+         { showPostList &&  ( 
         <Sheet
           sx={{
             display: { xs: 'none', sm: 'initial' },
