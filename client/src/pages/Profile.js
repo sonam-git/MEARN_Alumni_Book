@@ -414,4 +414,8 @@ export const Profile = ({ updatePostAndCommentsData, updateDeletePost }) => {
   );
 };
 
+<<<<<<< HEAD
 export default Profile;
+=======
+export default Profile;
+>>>>>>> origin/main

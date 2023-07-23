@@ -1,11 +1,13 @@
 import * as React from 'react';
 import Typography from '@mui/joy/Typography';
+import Avatar from '@mui/joy/Avatar';
 import MessageIcon from '@mui/icons-material/Message';
 import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardOverflow from "@mui/joy/CardOverflow";
 import { useQuery, gql } from '@apollo/client';
 import { Divider } from '@mui/material';
+import { GET_POSTS } from '../utils/queries';
 import Auth from '../utils/auth'
 
 // Makes the first letter of firstname and lastname to always be capital 
@@ -26,7 +28,6 @@ export const PostList = () => {
       }
     }
   `;
-
   // Fetch the posts using useQuery
   const { loading, error, data } = useQuery(GET_POSTS);
 
@@ -81,17 +82,24 @@ const posts = [...data.posts].sort((a, b) => parseInt(b.createdAt) - parseInt(a.
                     {/* <img src={post.image} alt="Post Image" style={{ width: '100%', height: '275px'}} /> */}
                   </CardOverflow>
                   <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Avatar
+                      size="lg"
+                      src={post.image}
+                      sx={{ '--Avatar-size': '45px', border: '4px solid white', marginRight: '20px',}}
+                    />
                     <Box sx={{ flex: 1 , fontWeight: 'bold'}}>
+
                       <Typography >{capitalizeFirstLetter(post.postAuthor)}</Typography>
                     </Box>
                     {/* Display the post date */}
-                    <Typography variant="body2">{new Date(parseInt(post.createdAt)).toLocaleDateString()}</Typography>
                   </Box>
                   <Divider/>
                   <Box sx={{ display: "flex", alignItems: "center" }}>
                     {/* Display the post text */}
                     <Typography>-- {post.postText}</Typography>
                   </Box>
+                  <Divider/>
+                  <Typography variant="body2">{new Date(parseInt(post.createdAt)).toLocaleDateString()}</Typography>
                 </Card>
               ))}
           </Box>

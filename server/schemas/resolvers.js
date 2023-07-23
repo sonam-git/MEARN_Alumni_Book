@@ -63,7 +63,7 @@ const resolvers = {
     me: async (parent, _args, context) => {
       if (context.user) {
         return User.findOne({ _id: context.user._id })
-          .select("firstname lastname username email")
+          .select("firstname lastname username email image")
           .populate("posts")
           .populate("friends");
       }
@@ -246,7 +246,7 @@ const resolvers = {
       }
     },
     //removes a post by its postId
-    removePost: async (parent, { postId }, context) => {
+    removePost: async (parent, { userId, postId }, context) => {
       if (context.user) {
         try {
           await Post.findOneAndDelete({
