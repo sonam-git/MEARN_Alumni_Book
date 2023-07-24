@@ -16,6 +16,7 @@ import { ADD_COMMENT } from "../utils/mutations";
 import { UPDATE_POST } from "../utils/mutations";
 import { REMOVE_FRIEND } from "../utils/mutations";
 import { GET_USERS } from "../utils/queries";
+import { GET_POST_WITH_COMMENTS } from "../utils/queries"
 import CardOverflow from "@mui/joy/CardOverflow";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import { Card } from "@mui/joy";
@@ -47,7 +48,7 @@ const Profile = ({ updatePostAndCommentsData }) => {
   const [commentText, setCommentText] = useState("");
   const [commentBoxStates, setCommentBoxStates] = useState({});
   const [removePost] = useMutation(REMOVE_POST,{ refetchQueries: [{ query: GET_ME }],});
-  const [addComment] = useMutation(ADD_COMMENT);
+  const [addComment] = useMutation(ADD_COMMENT,{ refetchQueries: [{ query: GET_POST_WITH_COMMENTS }],});
   const [updatePost] = useMutation(UPDATE_POST, {
     update: (cache, { data: { updatePost } }) => {
       // Update the cached data for the specific post after successful update
@@ -158,7 +159,7 @@ const Profile = ({ updatePostAndCommentsData }) => {
       setPostText("");
       console.log("Post added successfully");
         // Call handleShowMyPost to display the posts after adding a new one
-    handleShowMyPost();
+     handleShowMyPost();
     } catch (err) {
       console.error(err);
     }
@@ -222,6 +223,7 @@ const Profile = ({ updatePostAndCommentsData }) => {
       });
 
       console.log("Comment added successfully");
+      
     } catch (err) {
       console.error("Error adding comment:", err);
     }
@@ -777,8 +779,7 @@ const Profile = ({ updatePostAndCommentsData }) => {
                           paddingRight: "20px",
                         }}
                       >
-                        <PersonRemoveIcon />
-                        Remove
+                        <PersonRemoveIcon /> 
                       </IconButton>
                     </CardActions>
                   </Box>

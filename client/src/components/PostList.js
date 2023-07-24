@@ -9,6 +9,7 @@ import { useQuery, gql } from "@apollo/client";
 import { Divider } from "@mui/material";
 import Auth from "../utils/auth";
 import { Button } from "@material-ui/core";
+import CommentIcon from '@mui/icons-material/Comment';
 
 
 // Makes the first letter of firstname and lastname to always be capital
@@ -115,16 +116,13 @@ export const PostList = () => {
                       justifyContent: "space-between",
                     }}
                   >
-                    <Typography variant="body2">
-                      {new Date(parseInt(post.createdAt)).toLocaleDateString()}
+                    <Typography variant="body2">Posted on : 
+                      { new Date(parseInt(post.createdAt)).toLocaleDateString()}
                     </Typography>
-                    <Button
-                      variant="outlined"
-                      style={{ background: "white", size: "sm" }}
-                    >
-                      Comment
-                    </Button>
+
                   </Box>
+                  <Divider/>
+                  <CommentIcon/>
                 </Card>
               ))}
           </Box>
