@@ -290,7 +290,7 @@ export const Dashboard = () => {
                           <ContactSupportIcon />
                         </ListItemDecorator>
                         <ListItemContent selected={selectedItem === "contact"}>
-                          Contacts
+                          Friends Profile
                         </ListItemContent>
                       </ListItemButton>
                     </ListItem>
@@ -699,19 +699,19 @@ export const Dashboard = () => {
                     </ListItemButton>
                   </ListItem>
                   <ListItem>
-                    <ListItemButton onClick={() => handleItemClick("contact")}>
+                    <ListItemButton onClick={() => handleItemClick("Friends Profile")}>
                       <ListItemDecorator sx={{ color: "neutral.500" }}>
                         <ContactSupportIcon />
                       </ListItemDecorator>
                       <ListItemContent
-                        selected={selectedItem === "contact"}
+                        selected={selectedItem === "Friends Profile"}
                         onClick={handleShowConnect}
                         sx={{
                           color:
                             selectedItem === "contact" ? "#2ACAEA" : "white",
                         }}
                       >
-                        Contacts
+                        Friends Profile
                       </ListItemContent>
                     </ListItemButton>
                   </ListItem>

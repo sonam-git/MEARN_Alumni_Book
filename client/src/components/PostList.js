@@ -1,16 +1,17 @@
-import * as React from 'react';
-import Typography from '@mui/joy/Typography';
-import Avatar from '@mui/joy/Avatar';
-import MessageIcon from '@mui/icons-material/Message';
+import * as React from "react";
+import Typography from "@mui/joy/Typography";
+import Avatar from "@mui/joy/Avatar";
+import MessageIcon from "@mui/icons-material/Message";
 import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardOverflow from "@mui/joy/CardOverflow";
-import { useQuery, gql } from '@apollo/client';
-import {  Divider } from '@mui/material';
-import Auth from '../utils/auth';
-import { Button } from '@material-ui/core';
+import { useQuery, gql } from "@apollo/client";
+import { Divider } from "@mui/material";
+import Auth from "../utils/auth";
+import { Button } from "@material-ui/core";
 
-// Makes the first letter of firstname and lastname to always be capital 
+
+// Makes the first letter of firstname and lastname to always be capital
 const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
@@ -35,21 +36,23 @@ export const PostList = () => {
   if (error) return <p>Error: {error.message}</p>;
 
   // Create a copy of the posts array and then sort the copy by createdAt field (newest to oldest)
-const posts = [...data.posts].sort((a, b) => parseInt(b.createdAt) - parseInt(a.createdAt));
+  const posts = [...data.posts].sort(
+    (a, b) => parseInt(b.createdAt) - parseInt(a.createdAt)
+  );
 
   return (
     <div>
       {Auth.loggedIn() ? (
         <>
-          <Typography 
+          <Typography
             level="h1"
             fontWeight="xl"
             fontSize="clamp(1.875rem, 1.3636rem + 2.1818vw, 3rem)"
             style={{
-              textAlign: 'center',
-              marginBottom: '20px'
+              textAlign: "center",
+              marginBottom: "20px",
             }}
-            startDecorator={<MessageIcon/>}
+            startDecorator={<MessageIcon />}
           >
             Activity Post
           </Typography>
@@ -61,8 +64,8 @@ const posts = [...data.posts].sort((a, b) => parseInt(b.createdAt) - parseInt(a.
               gap: 2,
             }}
           >
-          {/* Posts Individual cards */}
-          {posts &&
+            {/* Posts Individual cards */}
+            {posts &&
               posts.map((post) => (
                 <Card
                   variant="outlined"
@@ -85,40 +88,58 @@ const posts = [...data.posts].sort((a, b) => parseInt(b.createdAt) - parseInt(a.
                     <Avatar
                       size="lg"
                       src={post.image}
-                      sx={{ '--Avatar-size': '45px', border: '4px solid white', marginRight: '20px',}}
+                      sx={{
+                        "--Avatar-size": "45px",
+                        border: "4px solid white",
+                        marginRight: "20px",
+                      }}
                     />
-                    <Box sx={{ flex: 1 , fontWeight: 'bold'}}>
-
-                      <Typography >{capitalizeFirstLetter(post.postAuthor)}</Typography>
+                    <Box sx={{ flex: 1, fontWeight: "bold" }}>
+                      <Typography>
+                        {capitalizeFirstLetter(post.postAuthor)}
+                      </Typography>
                     </Box>
                     {/* Display the post date */}
                   </Box>
-                  <Divider/>
+                  <Divider />
                   <Box sx={{ display: "flex", alignItems: "center" }}>
                     {/* Display the post text */}
                     <Typography>-- {post.postText}</Typography>
                   </Box>
-                  <Divider/>
-                 
-                  <Box sx={{ display: "flex", alignItems: "center",justifyContent: 'space-between'}}>
-                  <Typography variant="body2">{new Date(parseInt(post.createdAt)).toLocaleDateString()}</Typography>
-                  <Button variant="outlined" style={{background: 'white', size: 'sm'}}>Comment</Button>
+                  <Divider />
+
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Typography variant="body2">
+                      {new Date(parseInt(post.createdAt)).toLocaleDateString()}
+                    </Typography>
+                    <Button
+                      variant="outlined"
+                      style={{ background: "white", size: "sm" }}
+                    >
+                      Comment
+                    </Button>
                   </Box>
                 </Card>
               ))}
           </Box>
-      </>
+        </>
       ) : (
         <>
-          <Typography 
+          <Typography
             level="h1"
             fontWeight="xl"
             fontSize="clamp(1.875rem, 1.3636rem + 2.1818vw, 3rem)"
             style={{
-              textAlign: 'center',
-              marginBottom: '20px'
+              textAlign: "center",
+              marginBottom: "20px",
             }}
-            startDecorator={<MessageIcon/>}
+            startDecorator={<MessageIcon />}
           >
             Recent Post
           </Typography>
@@ -130,8 +151,8 @@ const posts = [...data.posts].sort((a, b) => parseInt(b.createdAt) - parseInt(a.
               gap: 2,
             }}
           >
-          {/* Posts Individual cards */}
-          {posts &&
+            {/* Posts Individual cards */}
+            {posts &&
               posts.map((post) => (
                 <Card
                   variant="outlined"
@@ -151,13 +172,17 @@ const posts = [...data.posts].sort((a, b) => parseInt(b.createdAt) - parseInt(a.
                     {/* <img src={post.image} alt="Post Image" style={{ width: '100%', height: '275px'}} /> */}
                   </CardOverflow>
                   <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Box sx={{ flex: 1 , fontWeight: 'bold'}}>
-                      <Typography >{capitalizeFirstLetter(post.postAuthor)}</Typography>
+                    <Box sx={{ flex: 1, fontWeight: "bold" }}>
+                      <Typography>
+                        {capitalizeFirstLetter(post.postAuthor)}
+                      </Typography>
                     </Box>
                     {/* Display the post date */}
-                    <Typography variant="body2">{new Date(parseInt(post.createdAt)).toLocaleDateString()}</Typography>
+                    <Typography variant="body2">
+                      {new Date(parseInt(post.createdAt)).toLocaleDateString()}
+                    </Typography>
                   </Box>
-                  <Divider/>
+                  <Divider />
                   <Box sx={{ display: "flex", alignItems: "center" }}>
                     {/* Display the post text */}
                     <Typography>-- {post.postText}</Typography>
@@ -165,12 +190,10 @@ const posts = [...data.posts].sort((a, b) => parseInt(b.createdAt) - parseInt(a.
                 </Card>
               ))}
           </Box>
-      </>
-        
+        </>
       )}
-      
     </div>
   );
-}
+};
 
 export default PostList;

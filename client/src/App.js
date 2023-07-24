@@ -10,7 +10,7 @@ import { setContext } from "@apollo/client/link/context";
 
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
-import Profile from "./pages/Profile";
+import FriendsProfile from "./pages/FriendsProfile";
 
 // import { Dashboard } from '@material-ui/icons';
 import Dashboard from "./pages/Dashboard";
@@ -71,7 +71,7 @@ function App() {
             
             <Route path="/Dashboard/PostList" element={PostList} />
 
-            <Route path="/Profile/:userId" element={<Profile />} />
+            <Route path="/Profile/:userId" element={<FriendsProfile />} />
 
           </Routes>
         </>
