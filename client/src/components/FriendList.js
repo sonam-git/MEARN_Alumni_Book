@@ -45,6 +45,7 @@ const FriendList = ({ friends }) => {
             gap: 2,
             borderRadius: 15,
             border: 1,
+            borderColor: '#006EB3'
           }}
         >
           <Typography>No Friends for this User</Typography>
@@ -63,6 +64,7 @@ const FriendList = ({ friends }) => {
                   gap: 2,
                   borderRadius: 15,
                   border: 1,
+                  borderColor: '#006EB3'
                 }}
               >
                 <Typography>

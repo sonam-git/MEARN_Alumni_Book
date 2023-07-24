@@ -23,6 +23,7 @@ import ListItemDecorator from "@mui/joy/ListItemDecorator";
 import Avatar from "@mui/joy/Avatar";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useUser } from "../utils/UserProvider";
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
 // Icons import
 // import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
@@ -67,6 +68,7 @@ export const Dashboard = () => {
   const [showFriendProfile, setShowFriendProfile] = useState(true);
   const [selectedUser, setSelectedUser] = useState(null);
   const [postAndCommentsData, setPostAndCommentsData] = useState(null);
+  const [activityPostAndCommentsData, setActivityPostAndCommentsData] = useState(null);
   const [showFriends, setShowFriends] = useState(false); // Initialize showFriends state to false
   const [selectedItem, setSelectedItem] = useState("post");
 
@@ -90,6 +92,11 @@ export const Dashboard = () => {
   const updatePostAndCommentsData = (data) => {
     setPostAndCommentsData(data);
   };
+
+  const updateActivityPostAndCommentsData = (data) => {
+    setActivityPostAndCommentsData(data);
+  };
+
 
   const handlePersonIconClick = (user) => {
     setSelectedUser(user);
@@ -333,7 +340,9 @@ export const Dashboard = () => {
                   title="Some Users"
                 />
               ))}
-            {showPostList && <PostList />}
+            {showPostList && (
+            <PostList updateActivityPostAndCommentsData={updateActivityPostAndCommentsData} />
+            )}
             {showProfile && (
               <Profile updatePostAndCommentsData={updatePostAndCommentsData} />
             )}
@@ -554,20 +563,27 @@ export const Dashboard = () => {
               }}
             >
               <Box sx={{ p: 2, display: "flex", alignItems: "center" }}>
-                <Typography
-                  sx={{ flex: 1, fontWeight: "bold" }}
-                  key={users._id}
-                >
-                  {capitalizeFirstLetter(selectedUser.firstname)}{" "}
-                  {capitalizeFirstLetter(selectedUser.lastname)}
-                </Typography>
+              <Typography
+                sx={{
+                  display: "flex",
+                  alignItems: "center", // Align flex items vertically in the center
+                  fontWeight: "bold",
+                  fontFamily: 'monospace',
+                  fontSize: '20px',
+                }}
+                key={users._id}
+              >
+                <AccountBoxIcon sx={{ marginRight: "8px" }} /> {/* Add margin to create space between the icon and the name */}
+                {capitalizeFirstLetter(selectedUser.firstname)}{" "}
+                {capitalizeFirstLetter(selectedUser.lastname)}
+              </Typography>
               </Box>
               <Divider />
               <AspectRatio ratio="21/18">
                 <img src={selectedUser.image} alt="User Avatar" />
               </AspectRatio>
               <Box sx={{ p: 2, display: "flex", gap: 1, alignItems: "center" }}>
-                <Typography level="body2" mr={1}>
+                <Typography level="body2" mr={1} sx={{fontFamily: 'monospace', fontSize: '15px'}}>
                   Profile Description
                 </Typography>
               </Box>
@@ -582,16 +598,16 @@ export const Dashboard = () => {
                 }}
               >
                 <Typography level="body2" sx={{ fontWeight: "bold" }}>
-                  Username
+                  Username:
                 </Typography>
-                <Typography level="body2" textColor="text.primary">
+                <Typography level="body2" textColor="text.primary" sx={{fontFamily: 'monospace', fontSize: '15px'}}>
                   {selectedUser.username}
                 </Typography>
 
                 <Typography level="body2" sx={{ fontWeight: "bold" }}>
-                  Email
+                  Email:
                 </Typography>
-                <Typography level="body2" textColor="text.primary">
+                <Typography level="body2" textColor="text.primary" sx={{fontFamily: 'monospace', fontSize: '15px'}}>
                   {selectedUser.email}
                 </Typography>
               </Box>
@@ -612,34 +628,185 @@ export const Dashboard = () => {
           )}
 
           {/* Right Side Profile View for PostList Page*/}
-          {showPostList && isSheetOpen && (
-            <Sheet
-              sx={{
-                display: { xs: "none", sm: "initial" },
-                position: "fixed",
-                top: 60,
-                right: 0,
-                bottom: 0,
-                width: "400px", // Set the desired width for the right panel
-                borderLeft: "1px solid",
-                borderColor: "neutral.outlinedBorder",
-                overflowY: "auto", // Add scrollbar if content exceeds the panel height
-              }}
-            >
-              <Box sx={{ p: 2, display: "flex", alignItems: "center" }}>
-                <Typography sx={{ flex: 1 }}>More Article</Typography>
-              </Box>
-              <Box
+            {showPostList && activityPostAndCommentsData && (
+              <Sheet
                 sx={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-                  gap: 2,
+                  display: { xs: "none", sm: "initial" },
+                  position: "fixed",
+                  top: 60,
+                  right: 0,
+                  bottom: 0,
+                  width: "415px", // Set the desired width for the right panel
+                  borderLeft: "1px solid",
+                  borderColor: "neutral.outlinedBorder",
+                  overflowY: "auto", // Add scrollbar if content exceeds the panel height
                 }}
               >
-                <Divider />
-              </Box>
-            </Sheet>
-          )}
+                {/* Render the selected post */}
+               
+              <div key={activityPostAndCommentsData.post._id}>
+                <Box sx={{ p: 2, display: "flex", alignItems: "center" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: "10px",
+                    }}
+                  >
+                    <Avatar
+                      src={activityPostAndCommentsData.postAuthorUser.image}
+                      size="lg"
+                      sx={{
+                        "--Avatar-size": "50px",
+                        border: "solid",
+                        borderColor: "#2ACAEA",
+                      }}
+                    />
+                  </Box>
+                  
+                  <Typography
+                    sx={{ flex: 1, color: "#2ACAEA", fontFamily: "monospace" }}
+                  >
+                    {activityPostAndCommentsData.post.postAuthor}
+                  </Typography>
+                </Box>
+                {/* Add other components and details related to the selected post */}
+                <Box
+                  sx={{
+                    padding: "10px",
+                    border: "solid",
+                    borderRadius: "10px",
+                    borderColor: "#006EB3",
+                    width: "98%",
+                    margin: "auto",
+                    marginBottom: "15px",
+                  }}
+                >
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontSize: "12px",
+                      padding: "15px",
+                      fontFamily: "monospace",
+                    }}
+                  >
+                    Posted: {new Date(parseInt(activityPostAndCommentsData.post.createdAt)).toLocaleDateString()}
+                  </Typography>
+                  <Box
+                    sx={{
+                      gap: 2,
+                      p: 2,
+                      display: "grid",
+                      gridTemplateColumns: "auto 1fr",
+                      "& > *:nth-of-ty(odd)": { color: "text.secondary" },
+                    }}
+                  >
+                    <Typography
+                      level="h6"
+                      fontWeight="lg"
+                      color="primary"
+                      sx={{ width: "100%" }}
+                    >
+                      {activityPostAndCommentsData.post.postText}
+                    </Typography>
+                  </Box>
+                </Box>
+
+                {/* Comments */}
+                <hr />
+                <Typography
+                  level="h1"
+                  fontWeight="m"
+                  fontSize="clamp(1rem, 1rem + 2.1818vw, 1rem)"
+                  style={{
+                    textAlign: "center",
+                  }}
+                >
+                  Comments
+                </Typography>
+                <hr />
+
+                {activityPostAndCommentsData.post.comments?.length === 0 ? (
+                  <Typography
+                    sx={{
+                      textAlign: "center",
+                      margin: "auto",
+                      mt: 3,
+                    }}
+                  >
+                    No Comments Yet!
+                  </Typography>
+                ) : (
+                  <>
+                    {activityPostAndCommentsData.post.comments.map((comment) => (
+                      <div
+                        key={comment._id}
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          padding: "10px",
+                          border: "solid",
+                          borderRadius: "10px",
+                          borderColor: "#2ACAEA",
+                          width: "80%",
+                          margin: "auto",
+                          marginTop: "15px",
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            padding: "10px",
+                          }}
+                        >
+                          <Avatar
+                             src={
+                              activityPostAndCommentsData.commentAuthorUsers.find(
+                                (user) => user.username === comment.commentAuthor
+                              ).image
+                            }
+                            size="lg"
+                            sx={{
+                              "--Avatar-size": "35px",
+                              border: "solid",
+                              borderColor: "#2ACAEA",
+                            }}
+                          />
+                        </Box>
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            mt: "10px",
+                            fontFamily: "monospace",
+                            width: "85%",
+                          }}
+                          color="primary"
+                        >
+                          <span style={{ fontWeight: "bold", fontStyle: "italic" }}>
+                            {comment.commentAuthor}
+                          </span>{" "}
+                          - <span style={{ color: "white" }}>{comment.commentText}</span>
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              marginRight: "auto",
+                              display: "flex",
+                              fontSize: "12px",
+                            }}
+                          >
+                            Posted: {new Date(parseInt(comment.createdAt)).toLocaleDateString()}
+                          </Typography>
+                        </Typography>
+                      </div>
+                    ))}
+                  </>
+                )}
+              </div>
+      </Sheet>
+)}
         </Layout.Root>
       ) : (
         // If user is not logged In

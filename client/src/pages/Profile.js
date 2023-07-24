@@ -107,30 +107,32 @@ const Profile = ({ updatePostAndCommentsData }) => {
     setShowCreatePost(false);
     setShowFriendsList(true);
   };
-
-  // Function to update the data in Dashboard.js
   const handleCommentsIconClick = (postId) => {
-    if (!loading && data) {
-      // Find the specific post using postId
-      const me = data.me;
-      const post = data.me.posts.find((post) => post._id === postId);
-     
-      if (post) {
-        // Fetch comments data for the specific post
-        const commentsData = post.comments;
+      if (!loading && data) {
+        // Find the specific post using postId
+        const me = data.me;
+        const post = data.me.posts.find((post) => post._id === postId);
+    
+        if (post) {
+          // Fetch comments data for the specific post
+          const commentsData = post.comments;
 
-        const postAndCommentsData = {
+       
+    
+          const postAndCommentsData = {
           // Create the postAndCommentsData objec
-          me: me,
-          postId: postId,
-          post: post,
-          comments: commentsData,
-        };
-        // Pass the data to the Dashboard.js component by calling the function
-        updatePostAndCommentsData(postAndCommentsData);
+            me: me,
+            postId: postId,
+            post: post,
+            comments: commentsData,
+
+          };
+          // Pass the data to the Dashboard.js component by calling the function
+          updatePostAndCommentsData(postAndCommentsData);
+        }
       }
-    }
-  };
+    };
+  
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
