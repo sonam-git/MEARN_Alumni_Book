@@ -3,10 +3,11 @@ import Typography from "@mui/joy/Typography";
 import Textarea from '@mui/joy/Textarea';
 import FormControl from "@mui/joy/FormControl";
 import MessageIcon from "@mui/icons-material/Message";
+import Avatar from "@mui/joy/Avatar";
 import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardOverflow from "@mui/joy/CardOverflow";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery} from "@apollo/client";
 import { Divider } from "@mui/material";
 import Auth from "../utils/auth";
 import { GET_USERS } from "../utils/queries";
@@ -37,6 +38,7 @@ export const PostList = ({ updateActivityPostAndCommentsData }) => {
     if (!loading && data?.users) {
       // Find the specific post using postId
       const users = data.users;
+      console.log(users)
       const post = users
         .flatMap((user) => user.posts) // Flatten the posts array from all users
         .find((post) => post._id === postId);
@@ -126,112 +128,146 @@ export const PostList = ({ updateActivityPostAndCommentsData }) => {
           >
             {/* Posts Individual cards */}
             {posts &&
-              posts.map((post) => (
-               
-                <Box
-                sx={{
-                  p: 2,
-                  width: '100%', 
-                  bgcolor: "none",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  gap: 2,
-                  borderRadius: 15,
-                  border: 2,
-                  marginTop: '20px',
-                  borderColor: '#006EB3',
-                }}
-                key={post._id}
-              >
-                  <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <Typography variant="body1" sx={{ fontSize: '20px', color: '#2ACAEA', fontFamily: 'monospace' }}>
-                        {post.postAuthor}
-                      </Typography>
-                    </Box>
-                    {/* Display the comment icon */}
-                    <IconButton
-                      variant="outlined"
-                      color="primary"
-                      sx={{ padding: '7px', color: 'gray' }}
-                      onClick={() => {
-                        handleActivityCommentsIconClick(post._id);
-                        toggleCommentBox(post._id);
-                      }}
-                    >
-                      <Badge color="neutral" badgeContent={post.comments.length} size="sm">
-                        <CommentIcon />
-                      </Badge>
-                    </IconButton>
-                  </Box>
+              posts.map((post) => {
+                // Find the post author's user object using the post's postAuthor field
+                const postAuthorUser = data.users.find(
+                  (user) => user.username === post.postAuthor
+                );
 
-                  <hr style={{ borderColor: '#006EB3', width: '100%',}} />
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    {/* Display the post text */}
-                    <CheckIcon/>
-                    <Typography level="h4" fontWeight="lg" color="primary" sx={{ padding: '15px'}}>{post.postText}</Typography>
-                    <Typography variant="body2" sx={{ marginLeft: 'auto', display: 'flex', fontSize: '12px' }}>Posted:{new Date(parseInt(post.createdAt)).toLocaleDateString()}</Typography>
-                  </Box>
-                
-
+                return (
                   <Box
                     sx={{
-                      display: "flex",
-                      alignItems: "center",
+                      p: 2,
+                      width: "100%",
+                      bgcolor: "none",
                       justifyContent: "space-between",
+                      alignItems: "center",
+                      gap: 2,
+                      borderRadius: 15,
+                      border: 2,
+                      marginTop: "20px",
+                      borderColor: "#006EB3",
                     }}
+                    key={post._id}
                   >
-                  </Box>
-                  {commentBoxStates[post._id] && (
-                  <div
-                  sx={{
-                    width: '100%', 
-                  }}
-                  >
-                  <FormControl>
-                      <Textarea
-                         id={`comment-textfield-${post._id}`}
-                         label="Add a comment"
-                         value={commentText}
-                         placeholder="Add a comment......."
-                         sx={{
-                          height: '150px',
-                          margin: 'auto',
-                          width: '95%', 
-                          marginTop: '20px', 
-                          border: 'solid',
-                          borderColor: '#2ACAEA',
-                          padding: '15px',
-                         }}
-                         onChange={(event) => setCommentText(event.target.value)}
-                          endDecorator={
-                          <Box
-                            sx={{
-                              display: 'flex',
-                              gap: 'var(--Textarea-paddingBlock)',
-                              pt: 'var(--Textarea-paddingBlock)',
-                              borderTop: '2px solid',
-                              borderColor: 'divider',
-                              flex: 'auto',
-                            }}
-                          >
-                          <IconButton
-                          onClick={() => {
-                            handleCommentSubmit(post._id);
-                            toggleCommentBox(post._id);
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                        {/* Use the user's image URL in the Avatar component */}
+                        <Avatar
+                          size="lg"
+                          src={postAuthorUser?.image} // Use the image URL from the user object
+                          sx={{
+                            "--Avatar-size": "45px",
+                            border: "4px solid white",
+                            marginRight: "20px",
                           }}
-                          variant="outlined" sx={{ marginLeft: '10px', padding: '7px', color: 'gray' }}
-                          >Add Comment
-                            </IconButton>
-                          </Box>
-                        }
-                      />
-                    </FormControl>
-                  </div>
-                )}
-                </Box>
-                
-              ))}
+                        />
+                        <Typography
+                          variant="body1"
+                          sx={{ fontSize: "20px", color: "#2ACAEA", fontFamily: "monospace" }}
+                        >
+                          {post.postAuthor}
+                        </Typography>
+                      </Box>
+                      {/* Display the comment icon */}
+                      <IconButton
+                        variant="outlined"
+                        color="primary"
+                        sx={{ padding: "7px", color: "gray" }}
+                        onClick={() => {
+                          handleActivityCommentsIconClick(post._id);
+                          toggleCommentBox(post._id);
+                        }}
+                      >
+                        <Badge color="neutral" badgeContent={post.comments.length} size="sm">
+                          <CommentIcon />
+                        </Badge>
+                      </IconButton>
+                    </Box>
+
+                    <hr style={{ borderColor: "#006EB3", width: "100%" }} />
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      {/* Display the post text */}
+                      <CheckIcon />
+                      <Typography
+                        level="h4"
+                        fontWeight="lg"
+                        color="primary"
+                        sx={{ padding: "15px" }}
+                      >
+                        {post.postText}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ marginLeft: "auto", display: "flex", fontSize: "12px" }}
+                      >
+                        Posted: {new Date(parseInt(post.createdAt)).toLocaleDateString()}
+                      </Typography>
+                    </Box>
+
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                  {/* ... (other code) */}
+                  </Box>
+                    {commentBoxStates[post._id] && (
+                      <div sx={{ width: "100%" }}>
+                        <FormControl>
+                          <Textarea
+                            id={`comment-textfield-${post._id}`}
+                            label="Add a comment"
+                            value={commentText}
+                            placeholder="Add a comment......."
+                            sx={{
+                              height: "150px",
+                              margin: "auto",
+                              width: "95%",
+                              marginTop: "20px",
+                              border: "solid",
+                              borderColor: "#2ACAEA",
+                              padding: "15px",
+                            }}
+                            onChange={(event) => setCommentText(event.target.value)}
+                            endDecorator={
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  gap: "var(--Textarea-paddingBlock)",
+                                  pt: "var(--Textarea-paddingBlock)",
+                                  borderTop: "2px solid",
+                                  borderColor: "divider",
+                                  flex: "auto",
+                                }}
+                              >
+                                <IconButton
+                                  onClick={() => {
+                                    handleCommentSubmit(post._id);
+                                    toggleCommentBox(post._id);
+                                  }}
+                                  variant="outlined"
+                                  sx={{ marginLeft: "10px", padding: "7px", color: "gray" }}
+                                >
+                                  Add Comment
+                                </IconButton>
+                              </Box>
+                            }
+                          />
+                        </FormControl>
+                      </div>
+                    )}
+                  </Box>
+                );
+              })}
           </Box>
         </>
       ) : (
