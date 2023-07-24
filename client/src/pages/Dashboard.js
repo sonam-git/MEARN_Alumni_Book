@@ -54,7 +54,7 @@ const capitalizeFirstLetter = (string) => {
 
 export const Dashboard = () => {
   const { userId: userIdFromContext } = useUser();
-  console.log(userIdFromContext);
+  console.log(userIdFromContext);  //gives you user id
   
   const [removeComment] = useMutation(REMOVE_COMMENT);
   const [showLogin, setShowLogin] = useState(false);
