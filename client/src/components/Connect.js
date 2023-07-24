@@ -32,6 +32,8 @@ const Connect = ({
     refetchQueries: [{ query: GET_USERS }], // Refetch the users after adding a friend
   });
 
+  const [friendsList, setFriendsList] = useState([]);
+
   // Function to handle adding a friend
   const handleAddFriend = (friendId) => {
     addFriendMutation({
@@ -39,6 +41,8 @@ const Connect = ({
     })
       .then(() => {
         console.log("Friend added successfully");
+        // Step 3: Update the state with the new friend added
+        setFriendsList([...friendsList, friendId]);
       })
       .catch((error) => {
         console.error("Failed to add friend:", error.message);
@@ -96,13 +100,16 @@ const Connect = ({
                     sx={{
                       "--Card-radius": (theme) => theme.vars.radius.sm,
                       boxShadow: "none",
+                      border: 'solid',
+                      borderColor: '#006EB3'
                     }}
                     key={user._id}
                   >
                     <CardOverflow
                       sx={{
                         borderBottom: ".5px solid",
-                        borderColor: "neutral.outlinedBorder",
+                        borderBottom: 'solid',
+                        borderColor: '#006EB3' 
                       }}
                     >
                       <AspectRatio ratio="16/13" color="primary">
@@ -113,9 +120,9 @@ const Connect = ({
                         />
                       </AspectRatio>
                     </CardOverflow>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Box sx={{ display: "flex", alignItems: "center"}}>
                       <Box sx={{ flex: 1 }}>
-                        <Typography>
+                        <Typography sx={{fontFamily: 'monospace', fontSize: '17px'}}>
                           {capitalizeFirstLetter(user.firstname)}{" "}
                           {capitalizeFirstLetter(user.lastname)}
                         </Typography>
@@ -125,6 +132,7 @@ const Connect = ({
                       <IconButton
                         variant="plain"
                         color="neutral"
+                        sx={{ color: '#006EB3'}}
                         onClick={() => handlePersonIconClick(user)}
                       >
                         <PersonIcon /> View Profile
