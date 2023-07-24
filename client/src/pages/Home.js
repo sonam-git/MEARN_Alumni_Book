@@ -1,5 +1,6 @@
 import React from "react";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
+import { useMediaQuery } from "@mui/material";
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import CssBaseline from "@mui/joy/CssBaseline";
 import Box from "@mui/joy/Box";
@@ -15,6 +16,7 @@ import { Link } from "react-router-dom";
 import { Grid } from "@material-ui/core";
 import Hero from "../assets/images/AB_Logo2.png";
 import HeroDark from "../assets/images/AB_Dark_logo.png";
+
 
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
@@ -77,7 +79,7 @@ export const Home = () => {
           display: "flex",
           justifyContent: "flex-end",
           backdropFilter: "blur(4px)",
-          backgroundColor: "rgba(255 255 255 / 0.6)",
+          backgroundColor: "lightblue",             // "rgba(255 255 255 / 0.6)"
           [theme.getColorSchemeSelector("dark")]: {
             backgroundColor: "rgba(19 19 24 / 0.4)",
           },
@@ -100,7 +102,7 @@ export const Home = () => {
               py: 3,
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
+              
             }}
           >
             {/* Logo */}
@@ -133,7 +135,7 @@ export const Home = () => {
             {/* Hero image display */}
             <div style={{ display: "flex", justifyContent: "center" }}>
               <div style={{ textAlign: "center" }}>
-                <HeroImage />
+                <HeroImage  />
               </div>
             </div>
             <Grid container spacing={2}>
@@ -185,6 +187,31 @@ export const Home = () => {
 // Function to Display Hero image/ Logo depending on the light or dark mode
 const HeroImage = () => {
   const { mode } = useColorScheme();
+  // Define different sizes for the hero image based on screen width
+  const heroImageSizes = {
+    xs: { width: "100%", height: "auto", maxWidth: "300px", maxHeight: "200px" },
+    sm: { width: "100%", height: "auto", maxWidth: "400px", maxHeight: "250px" },
+    md: { width: "100%", height: "auto", maxWidth: "600px", maxHeight: "375px" },
+    lg: { width: "100%", height: "auto", maxWidth: "800px", maxHeight: "500px" },
+    xl: { width: "100%", height: "auto", maxWidth: "1000px", maxHeight: "625px" },
+  };
+
+  // Get the current screen width using useMediaQuery
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  const isMediumScreen = useMediaQuery((theme) => theme.breakpoints.between("sm", "md"));
+  const isLargeScreen = useMediaQuery((theme) => theme.breakpoints.up("lg"));
+  const isXLargeScreen = useMediaQuery((theme) => theme.breakpoints.up("xl"));
+
+  const getHeroImageSize = () => {
+    // Choose the appropriate hero image size based on screen width
+    if (isSmallScreen) return heroImageSizes.xs;
+    if (isMediumScreen) return heroImageSizes.sm;
+    if (isLargeScreen) return heroImageSizes.md;
+    if (isXLargeScreen) return heroImageSizes.lg;
+    return heroImageSizes.xl;
+  };
+
+  const heroImageSize = getHeroImageSize();
 
   return (
     <>
@@ -193,8 +220,7 @@ const HeroImage = () => {
           src={HeroDark}
           alt="Alumni Book Logo"
           style={{
-            width: "800px",
-            height: "500px",
+            ...heroImageSize,
           }}
         />
       ) : (
@@ -202,8 +228,7 @@ const HeroImage = () => {
           src={Hero}
           alt="Alumni Book Logo"
           style={{
-            width: "800px",
-            height: "500px",
+            ...heroImageSize,
           }}
         />
       )}

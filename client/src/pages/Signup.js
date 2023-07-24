@@ -26,56 +26,40 @@ import Axios from 'axios';
 // allows toggling between light and dark modes.
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
-  const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => {
     setMounted(true);
   }, []);
   if (!mounted) {
-    return <IconButton size="sm" variant="plain" color="neutral" disabled />
-    ;
+    return <IconButton size="sm" variant="plain" color="neutral" disabled />;
   }
   return (
-    <div style={{ position: 'fixed', top: '100px', right: '10px' }}>
-    <Grid container spacing={1} alignItems="center">
-      <Grid item>
-    <IconButton
-      id="toggle-mode"
-      size="sm"
-      variant="plain"
-      color="neutral"
-      aria-label="toggle light/dark mode"
-      {...props}
-      onClick={(event) => {
-        if (mode === "light") {
-          setMode("dark");
-        } else {
-          setMode("light");
-        }
-        onClick?.(event);
-      }}
-    >
-      {mode === "light" ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
-    </IconButton>
-    </Grid>
-    <Grid item>
-    <Link to="/">
-  <IconButton
-    size="sm"
-    variant="outlined"
-    color="primary"
-    style={{
-      padding: "10px",
-    }}
-  >
-    <HomeIcon
-      style={{
-        marginRight: "5px",
-      }}
-    />
-    Home
-  </IconButton>
-</Link>
-    </Grid>
+    <div style={{ position: "fixed", top: "15px", right: "10px" }}>
+      <Grid container spacing={1} alignItems="center">
+        <Grid item>
+          <IconButton
+            id="toggle-mode"
+            size="sm"
+            variant="plain"
+            color="neutral"
+            aria-label="toggle light/dark mode"
+            {...props}
+            onClick={(event) => {
+              if (mode === "light") {
+                setMode("dark");
+              } else {
+                setMode("light");
+              }
+              onClick?.(event);
+            }}
+          >
+            {mode === "light" ? (
+              <DarkModeRoundedIcon />
+            ) : (
+              <LightModeRoundedIcon />
+            )}
+          </IconButton>
+        </Grid>
     </Grid>
     </div>
   );
@@ -178,7 +162,7 @@ export const Signup = () => {
           display: "flex",
           justifyContent: "flex-end",
           backdropFilter: "blur(4px)",
-          backgroundColor: "rgba(255 255 255 / 0.6)",
+          backgroundColor: "lightblue",
           [theme.getColorSchemeSelector("dark")]: {
             backgroundColor: "rgba(19 19 24 / 0.4)",
           },
@@ -195,25 +179,40 @@ export const Signup = () => {
             px: 2,
           }}
         >
-          <Box
-            component="header"
-            sx={{
-              py: 3,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            {/* Logo */}
-            <img src={Logo} alt="Logo" width={250} height={150} />
+   <Grid container spacing={2}>
+    <Grid item xs={2}>
+    <Link to="/">
+  <IconButton
+    size="sm"
+    variant="outlined"
+    color="primary"
+    style={{
+      padding: "10px",
+      marginTop: "10px",
+    }}
+  >
+    <HomeIcon/>
+   
+  </IconButton>
+</Link>
+    </Grid>
+    <Grid item xs={8}>
+              <Typography level="h4" sx={{ my: 2, mb: 3, textAlign: 'center', fontFamily: 'monospace' }}>
+                Welcome New User
+              </Typography>
+            </Grid>
+            <Grid item xs={2}>
             <ColorSchemeToggle />
-          </Box>
+            </Grid>
+    </Grid>
+  {/* Logo */} 
+  <img src={Logo} alt="Logo" width={350} height={250}  style={{margin: 'auto'}}/>
+      
           <Box
             component="main"
             sx={{
               my: "auto",
-              py: 2,
-              pb: 5,
+              pb: 25,
               display: "flex",
               flexDirection: "column",
               gap: 2,
@@ -231,16 +230,7 @@ export const Signup = () => {
               },
             }}
           >
-            <div>
-              <Typography component="h1" fontSize="xl2" fontWeight="lg">
-                Sign Up Here!
-              </Typography>
-              <Typography level="body2" sx={{ my: 1, mb: 3 }}>
-                Welcome New User!
-              </Typography>
-            </div>
-
-
+         
             {/* Signup Form */}
             { data ? (
               <p>
@@ -249,34 +239,34 @@ export const Signup = () => {
             ) : (
 
             <form onSubmit={handleFormSubmit}>
-            <div style={{ display: 'flex', }}>
+           
                 <FormControl required >
-                  <FormLabel>First Name</FormLabel>
+                  
                   <Input
-                    placeholder="First"
+                    placeholder="FirstName"
                     name="firstname"
                     type="firstname"
                     id="firstname"
                     onChange={handleChange}
-                    style={{width: '80%'}}
+                    
                   />
                 </FormControl>
                 <FormControl required>
-                  <FormLabel>Last Name</FormLabel>
+                  
                   <Input
-                    placeholder="Last"
+                    placeholder="LastName"
                     name="lastname"
                     type="lastname"
                     id="lastname"
                     onChange={handleChange}
-                    style={{width: '80%'}}
+                  
                   />
                 </FormControl>
-              </div>
+              
               <FormControl required>
-                <FormLabel>Username</FormLabel>
+               
                 <Input
-                  placeholder="Username"
+                  placeholder="UserName"
                   name="username"
                   type="username"
                   id="username"
@@ -284,7 +274,7 @@ export const Signup = () => {
                 />
               </FormControl>
               <FormControl required>
-                <FormLabel>Email</FormLabel>
+                
                 <Input
                   placeholder="Email"
                   name="email"
@@ -294,7 +284,7 @@ export const Signup = () => {
                 />
               </FormControl>
               <FormControl required>
-                <FormLabel>Password</FormLabel>
+                
                 <Input
                   placeholder="Password"
                   name="password"
@@ -304,7 +294,7 @@ export const Signup = () => {
                 />
               </FormControl>
               <FormControl required>
-              <FormLabel>Upload Image</FormLabel>
+              <FormLabel >Upload Profile Photo</FormLabel>
                 <Input
                   name="image"
                   type="file"
@@ -315,10 +305,6 @@ export const Signup = () => {
                 {loading ? <CircularProgress size={24} /> : "Sign Up"}
                 </Button>
                 <Link to="/login"><Button style={{ width: "100%" }}>← Go to Login</Button></Link>
-                <Link to="/Dashboard" >
-                  <Button
-                 style={{ width: "100%", margin: 'auto' }}>
-                 Continue Without Sign Up</Button></Link>
               </form>
             )}
 

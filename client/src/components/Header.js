@@ -59,10 +59,10 @@ export const Header = () => {
     Auth.logout();
   };
 
-  const handleHome = (event) => {
-    event.preventDefault();
-    window.location.reload();
-  }
+  // const handleHome = (event) => {
+  //   event.preventDefault();
+  //   window.location.reload();
+  // }
 
   // Get the login status using Auth.loggedIn()
   const isLoggedIn = Auth.loggedIn();
@@ -155,7 +155,7 @@ export const Header = () => {
           {isLoggedIn ? (
             <>
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1.5 }}>
-            <Link to="/dashboard" >
+            {/* <Link to="/dashboard" >
              <IconButton
                 size="sm"
                 variant="outlined"
@@ -168,7 +168,7 @@ export const Header = () => {
                 <HomeIcon style={{ marginRight: '5px' }} />
                 Home
               </IconButton>
-              </Link>
+              </Link> */}
               <IconButton
                 size="sm"
                 variant="outlined"

@@ -16,6 +16,7 @@ import { ADD_COMMENT } from "../utils/mutations";
 import { UPDATE_POST } from "../utils/mutations";
 import { REMOVE_FRIEND } from "../utils/mutations";
 import { GET_USERS } from "../utils/queries";
+import { GET_POST_WITH_COMMENTS } from "../utils/queries"
 import CardOverflow from "@mui/joy/CardOverflow";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import { Card } from "@mui/joy";
@@ -47,7 +48,7 @@ const Profile = ({ updatePostAndCommentsData }) => {
   const [commentText, setCommentText] = useState("");
   const [commentBoxStates, setCommentBoxStates] = useState({});
   const [removePost] = useMutation(REMOVE_POST,{ refetchQueries: [{ query: GET_ME }],});
-  const [addComment] = useMutation(ADD_COMMENT);
+  const [addComment] = useMutation(ADD_COMMENT,{ refetchQueries: [{ query: GET_POST_WITH_COMMENTS }],});
   const [updatePost] = useMutation(UPDATE_POST, {
     update: (cache, { data: { updatePost } }) => {
       // Update the cached data for the specific post after successful update
@@ -106,30 +107,32 @@ const Profile = ({ updatePostAndCommentsData }) => {
     setShowCreatePost(false);
     setShowFriendsList(true);
   };
-
-  // Function to update the data in Dashboard.js
   const handleCommentsIconClick = (postId) => {
-    if (!loading && data) {
-      // Find the specific post using postId
-      const me = data.me;
-      const post = data.me.posts.find((post) => post._id === postId);
-     
-      if (post) {
-        // Fetch comments data for the specific post
-        const commentsData = post.comments;
+      if (!loading && data) {
+        // Find the specific post using postId
+        const me = data.me;
+        const post = data.me.posts.find((post) => post._id === postId);
+    
+        if (post) {
+          // Fetch comments data for the specific post
+          const commentsData = post.comments;
 
-        const postAndCommentsData = {
+       
+    
+          const postAndCommentsData = {
           // Create the postAndCommentsData objec
-          me: me,
-          postId: postId,
-          post: post,
-          comments: commentsData,
-        };
-        // Pass the data to the Dashboard.js component by calling the function
-        updatePostAndCommentsData(postAndCommentsData);
+            me: me,
+            postId: postId,
+            post: post,
+            comments: commentsData,
+
+          };
+          // Pass the data to the Dashboard.js component by calling the function
+          updatePostAndCommentsData(postAndCommentsData);
+        }
       }
-    }
-  };
+    };
+  
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -158,7 +161,7 @@ const Profile = ({ updatePostAndCommentsData }) => {
       setPostText("");
       console.log("Post added successfully");
         // Call handleShowMyPost to display the posts after adding a new one
-    handleShowMyPost();
+     handleShowMyPost();
     } catch (err) {
       console.error(err);
     }
@@ -222,6 +225,7 @@ const Profile = ({ updatePostAndCommentsData }) => {
       });
 
       console.log("Comment added successfully");
+      
     } catch (err) {
       console.error("Error adding comment:", err);
     }
@@ -777,8 +781,7 @@ const Profile = ({ updatePostAndCommentsData }) => {
                           paddingRight: "20px",
                         }}
                       >
-                        <PersonRemoveIcon />
-                        Remove
+                        <PersonRemoveIcon /> 
                       </IconButton>
                     </CardActions>
                   </Box>
