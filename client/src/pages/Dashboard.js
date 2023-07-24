@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { GET_USERS } from "../utils/queries";
+import { GET_USERS,GET_ME } from "../utils/queries";
 import { REMOVE_COMMENT } from "../utils/mutations";
 import { useMutation } from "@apollo/client";
 import { CssVarsProvider } from "@mui/joy/styles";
@@ -44,7 +44,8 @@ import Connect from "../components/Connect";
 import PostList from "../components/PostList";
 import Profile from "./Profile";
 import FriendList from "../components/FriendList";
-import FriendProfile from "./FriendProfile";
+import FriendProfileList from "../components/FriendsProfileList";
+// import FriendProfile from "./FriendProfile";
 import Auth from "../utils/auth";
 
 // Makes the first letter of firstname and lastname to always be capital
@@ -73,8 +74,10 @@ export const Dashboard = () => {
   const loggedInUser = Auth.loggedIn() ? Auth.getProfile().data._id : null;
 
   const { username } = useParams();
-
-  const { loading, data } = useQuery(GET_USERS, {
+  const {loading:loadingMe,error:errorMe,data:dataMe}=useQuery(GET_ME);
+  const meData = dataMe;
+  console.log(meData);
+  const { loading, data } = useQuery(GET_USERS, { 
     variables: { username },
   });
 
@@ -280,16 +283,12 @@ export const Dashboard = () => {
                         </ListItemContent>
                       </ListItemButton>
                     </ListItem>
+
+
                     {/* Friends */}
                     <ListItem>
                       <ListItemButton
-                        component={Link}
-                        to={
-                          userIdFromContext
-                            ? `/FriendProfile/${userIdFromContext}`
-                            : `/`
-                        }
-                        onClick={() => handleItemClick("Friends")}
+                       
                         sx={{
                           color:
                             selectedItem === "Friends" ? "#2ACAEA" : "#009DFF",
@@ -303,7 +302,14 @@ export const Dashboard = () => {
                         <ListItemDecorator sx={{ color: "neutral.500" }}>
                           <ContactSupportIcon />
                         </ListItemDecorator>
-                        <ListItemContent
+                        <ListItemContent 
+                        component={Link}
+                        to={
+                          userIdFromContext
+                            ? `/FriendProfile/${userIdFromContext}`
+                            : `/`
+                        }
+                        // onClick={() => handleItemClick("Friends")}
                           selected={selectedItem === "Friends"}
                           onClick={handleShowFriendProfile}
                         >
@@ -331,13 +337,14 @@ export const Dashboard = () => {
                   title="Some Users"
                 />
               ))}
-            {showPostList && <PostList />}
+            {showPostList  }
+            {/* && <PostList /> */}
             {showProfile && (
               <Profile updatePostAndCommentsData={updatePostAndCommentsData} />
+              
             )}
             {showFriendProfile && (
-              <FriendProfile  />
-
+              <FriendProfileList friends={meData.me.friends} />
             )}
           </Layout.Main>
 
@@ -640,6 +647,8 @@ export const Dashboard = () => {
           )}
         </Layout.Root>
       ) : (
+
+
         // If user is not logged In
         <Layout.Root
           sx={{
@@ -655,6 +664,9 @@ export const Dashboard = () => {
           }}
         >
           <Header />
+
+
+
           {/* Side Bar Navigations */}
           <Layout.SideNav>
             <List
@@ -758,6 +770,9 @@ export const Dashboard = () => {
             {showPostList && <PostList />}
           </Layout.Main>
 
+
+
+
           {/* Right Side Profile View for Connect Page */}
           {showConnect && (
             <Sheet
@@ -780,6 +795,9 @@ export const Dashboard = () => {
               />
             </Sheet>
           )}
+
+
+
 
           {/* Right Side Profile View for Explore Page*/}
           {showPostList && (

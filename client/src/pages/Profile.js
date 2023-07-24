@@ -689,7 +689,7 @@ const Profile = ({ updatePostAndCommentsData }) => {
           </Box>
         </Sheet>
       )}
-
+{/* displaying friends list  */}
       {showFriendsList && (
         <Sheet
           style={{
