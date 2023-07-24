@@ -4,8 +4,6 @@
 
 ## Description.
 
-just a test push
-
 ## Table of Contents:
 - [Overview](#Overview)
 - [The Challenge](#The-Challenge)
@@ -78,8 +76,32 @@ Given that I am logged in, I want to be able to update my profile image.
 
 
 ## Screenshots:
-### Figure 1. 
-![]()
+### Figure 1. Home
+![](./client/src/assets/images/screenshots/Screenshot%202023-07-24%20at%203.27.57%20PM.png)
+
+### Figure 2. Sign up
+![](./client/src/assets/images/screenshots/signup.png)
+
+### Figure 3. Login
+![](./client/src/assets/images/screenshots/login.png)
+
+### Figure 4. Activity / Posts
+![](./client/src/assets/images/screenshots/activity.png)
+
+### Figure 5. Connect With Alumnis
+![](./client/src/assets/images/screenshots/Connect.png)
+
+### Figure 6. Create Post
+![](./client/src/assets/images/screenshots/createpost.png)
+
+### Figure 7. Friend List
+![](./client/src/assets/images/screenshots/friendlist.png)
+
+### Figure 8. Light Mode
+![](./client/src/assets/images/screenshots/lightmode.png)
+
+### Figure 9. Comment Post
+![](./client/src/assets/images/screenshots/activity_post.png)
 
 
 ## Installation Process:
