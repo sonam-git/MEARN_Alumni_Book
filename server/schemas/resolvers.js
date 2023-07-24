@@ -157,15 +157,16 @@ const resolvers = {
           "You must be logged in to remove a friend"
         );
       }
-
       try {
-        // Find the current user and remove the friend by their ID
-        const user = await User.findByIdAndUpdate(
-          context.user._id,
-          { $pull: { friends: friendId } },
-          { new: true }
-        );
-
+        // Find the current user and populate the friends field with user details
+        const user = await User.findById(context.user._id).populate("friends");
+    
+        // Remove the friend from the friends array
+        user.friends.pull(friendId);
+    
+        // Save the updated user data
+        await user.save();
+    
         return user;
       } catch (error) {
         throw new Error("Failed to remove friend");

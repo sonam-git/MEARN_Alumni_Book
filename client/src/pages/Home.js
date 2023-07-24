@@ -11,7 +11,6 @@ import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
 import DarkModePicture from "../assets/images/darkmode-pic.webp";
 import LightModePicture from "../assets/images/lightmode-pic.jpg";
-// import Logo from '../assets/images/AB_Logo.png';
 import { Link } from "react-router-dom";
 import { Grid } from "@material-ui/core";
 import Hero from "../assets/images/AB_Logo2.png";
@@ -20,12 +19,15 @@ import HeroDark from "../assets/images/AB_Dark_logo.png";
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = React.useState(false);
+
   React.useEffect(() => {
     setMounted(true);
   }, []);
+
   if (!mounted) {
     return <IconButton size="sm" variant="plain" color="neutral" disabled />;
   }
+
   return (
     <IconButton
       id="toggle-mode"
@@ -63,8 +65,8 @@ export const Home = () => {
         }}
       />
       <Box
-      // home page content theme
-      // styling for the opacity image
+        // home page content theme
+        // styling for the opacity image
         sx={(theme) => ({
           width:
             "clamp(100vw - var(--Cover-width), (var(--Collapsed-breakpoint) - 100vw) * 999, 100vw)",
@@ -79,7 +81,6 @@ export const Home = () => {
           [theme.getColorSchemeSelector("dark")]: {
             backgroundColor: "rgba(19 19 24 / 0.4)",
           },
-          
         })}
       >
         <Box
@@ -138,12 +139,12 @@ export const Home = () => {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <Link to="/login">
-                  <Button fullWidth>← Login</Button>
+                  <Button style={{ width: "100%" }}>← Login</Button>
                 </Link>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Link to="/signup">
-                  <Button fullWidth>← Sign Up</Button>
+                  <Button style={{ width: "100%" }}>← Sign Up</Button>
                 </Link>
               </Grid>
             </Grid>

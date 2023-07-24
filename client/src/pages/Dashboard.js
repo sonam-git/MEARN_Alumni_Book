@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { GET_ME, GET_USERS } from "../utils/queries";
 import { REMOVE_COMMENT } from "../utils/mutations";
-import { useMutation } from "@apollo/client";
 import { Link, useParams } from "react-router-dom";
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -55,34 +55,6 @@ import Auth from "../utils/auth";
 const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
-
-// function ColorSchemeToggle() {
-//   const { mode, setMode } = useColorScheme();
-//   const [mounted, setMounted] = useState(false);
-//   React.useEffect(() => {
-//     setMounted(true);
-//   }, []);
-//   if (!mounted) {
-//     return <IconButton size="sm" variant="outlined" color="primary" />;
-//   }
-//   return (
-//     <IconButton
-//       id="toggle-mode"
-//       size="sm"
-//       variant="outlined"
-//       color="primary"
-//       onClick={() => {
-//         if (mode === 'light') {
-//           setMode('dark');
-//         } else {
-//           setMode('light');
-//         }
-//       }}
-//     >
-//       {mode === 'light' ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
-//     </IconButton>
-//   );
-// }
 
 export const Dashboard = () => {
   const { userId: userIdFromContext } = useUser();
@@ -610,7 +582,7 @@ export const Dashboard = () => {
                 >
                   {showFriends ? "Close Friends List" : "View Friends List"}
                 </Button>
-                <Divider sx={{ marginBottom: 2 }}></Divider>
+                <Divider sx={{ marginBottom: 2, marginTop: 2 }}></Divider>
                 {showFriends && <FriendList friends={selectedUser.friends} />}
               </Box>
             </Sheet>
@@ -642,49 +614,6 @@ export const Dashboard = () => {
                 }}
               >
                 <Divider />
-
-                {/* Article One */}
-                <Card variant="outlined">
-                  <CardOverflow
-                    sx={{
-                      borderBottom: ".5px solid",
-                      borderColor: "neutral.outlinedBorder",
-                    }}
-                  >
-                    <AspectRatio ratio="16/9" color="primary">
-                      <CardCover
-                        sx={{
-                          backgroundImage: `url(${articleOneImage})`,
-                          backgroundSize: "cover",
-                          transition: "transform 0.3s ease",
-                          "&:hover": {
-                            transform: "scale(1.05)",
-                          },
-                        }}
-                      >
-                        <Link
-                          to="https://www.news-herald.com/2023/04/11/alumni-should-have-active-role-in-inspiring-current-hs-sports-programs-opinion/"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        ></Link>
-                      </CardCover>
-                    </AspectRatio>
-                  </CardOverflow>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Box sx={{ flex: 1 }}>
-                      <Typography>
-                        Alumni should have active role in inspiring current HS
-                        sports programs | Opinion
-                      </Typography>
-                      <Typography level="body3" mt={0.5}>
-                        Created By: Chris Lillstrung
-                      </Typography>
-                      <Typography level="body3" mt={0.5}>
-                        Created: Saturday, July 15th 2023
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Card>
               </Box>
             </Sheet>
           )}

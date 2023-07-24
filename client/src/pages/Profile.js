@@ -15,6 +15,8 @@ import { ADD_POST } from "../utils/mutations";
 import { REMOVE_POST } from "../utils/mutations";
 import { ADD_COMMENT } from "../utils/mutations";
 import { UPDATE_POST } from "../utils/mutations";
+import { REMOVE_FRIEND} from "../utils/mutations"; 
+import {GET_USERS } from "../utils/queries"
 import CardOverflow from "@mui/joy/CardOverflow";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import { Card } from "@mui/joy";
@@ -35,6 +37,8 @@ import CommentIcon from "@mui/icons-material/Comment";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
 import AuthService from "../utils/auth";
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove'; 
+
 
 const Profile = ({ updatePostAndCommentsData }) => {
   const { loading: loadingMe, data: dataMe, error: errorMe } = useQuery(GET_ME);
@@ -57,6 +61,9 @@ const Profile = ({ updatePostAndCommentsData }) => {
   const [removePost] = useMutation(REMOVE_POST);
   const [addComment] = useMutation(ADD_COMMENT);
   const [updatePost] = useMutation(UPDATE_POST);
+  const [removeFriendMutation] = useMutation(REMOVE_FRIEND, {
+    refetchQueries: [{ query: GET_USERS }],
+  });
   const [editPostId, setEditPostId] = useState(null);
   const [editPostText, setEditPostText] = useState("");
 
@@ -220,6 +227,19 @@ const Profile = ({ updatePostAndCommentsData }) => {
       console.error("Error updating post:", error);
     }
   };
+
+  // Function to handle removing a friend
+const handleRemoveFriend = (friendId) => {
+  removeFriendMutation({
+    variables: { friendId },
+  })
+    .then(() => {
+      console.log("Friend removed successfully");
+    })
+    .catch((error) => {
+      console.error("Failed to remove friend:", error.message);
+    });
+};
 
   return (
     <>
