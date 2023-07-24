@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_POST_WITH_COMMENTS, GET_USERS } from "../utils/queries";
 import { REMOVE_COMMENT } from "../utils/mutations";
@@ -23,7 +23,7 @@ import ListItemDecorator from "@mui/joy/ListItemDecorator";
 import Avatar from "@mui/joy/Avatar";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useUser } from "../utils/UserProvider";
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
 
 // Icons import
 // import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
@@ -56,8 +56,8 @@ const capitalizeFirstLetter = (string) => {
 
 export const Dashboard = () => {
   const { userId: userIdFromContext } = useUser();
-  console.log(userIdFromContext);  //gives you user id
-  
+  console.log(userIdFromContext); //gives you user id
+
   const [removeComment] = useMutation(REMOVE_COMMENT);
   const [showLogin, setShowLogin] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -68,7 +68,8 @@ export const Dashboard = () => {
   const [showFriendProfile, setShowFriendProfile] = useState(true);
   const [selectedUser, setSelectedUser] = useState(null);
   const [postAndCommentsData, setPostAndCommentsData] = useState(null);
-  const [activityPostAndCommentsData, setActivityPostAndCommentsData] = useState(null);
+  const [activityPostAndCommentsData, setActivityPostAndCommentsData] =
+    useState(null);
   const [showFriends, setShowFriends] = useState(false); // Initialize showFriends state to false
   const [selectedItem, setSelectedItem] = useState("post");
 
@@ -97,7 +98,6 @@ export const Dashboard = () => {
     setActivityPostAndCommentsData(data);
   };
 
-
   const handlePersonIconClick = (user) => {
     setSelectedUser(user);
   };
@@ -108,11 +108,11 @@ export const Dashboard = () => {
       await removeComment({
         variables: { postId, commentId },
         refetchQueries: [
-        {
-          query: GET_POST_WITH_COMMENTS,
-          variables: { postId }, // Refetch the post and its comments after deletion
-        },
-      ],
+          {
+            query: GET_POST_WITH_COMMENTS,
+            variables: { postId }, // Refetch the post and its comments after deletion
+          },
+        ],
       });
       // Perform any necessary actions after successful deletion, such as updating the UI
       console.log("Comment deleted successfully");
@@ -135,7 +135,7 @@ export const Dashboard = () => {
     setShowConnect(true);
     setShowPostList(false);
     setShowProfile(false);
-    setShowFriendProfile(false)
+    setShowFriendProfile(false);
   };
 
   const handleShowPostList = (event) => {
@@ -143,7 +143,7 @@ export const Dashboard = () => {
     setShowPostList(true);
     setShowConnect(false);
     setShowProfile(false);
-    setShowFriendProfile(false)
+    setShowFriendProfile(false);
   };
 
   const handleShowProfile = (event) => {
@@ -151,14 +151,14 @@ export const Dashboard = () => {
     setShowProfile(true);
     setShowPostList(false);
     setShowConnect(false);
-    setShowFriendProfile(false)
+    setShowFriendProfile(false);
   };
   const handleShowFriendProfile = (event) => {
     event.preventDefault();
     setShowProfile(false);
     setShowPostList(false);
     setShowConnect(false);
-    setShowFriendProfile(true)
+    setShowFriendProfile(true);
   };
 
   const handleShowFriends = () => {
@@ -268,7 +268,7 @@ export const Dashboard = () => {
                         </ListItemContent>
                       </ListItemButton>
                     </ListItem>
-                   <ListItem>
+                    <ListItem>
                       <ListItemButton
                         onClick={() => handleItemClick("aboutus")}
                         sx={{
@@ -292,11 +292,15 @@ export const Dashboard = () => {
                         </ListItemContent>
                       </ListItemButton>
                     </ListItem>
-        {/* Friends */}
+                    {/* Friends */}
                     <ListItem>
                       <ListItemButton
-                        component ={Link}
-                        to={userIdFromContext ? `/Profile/${userIdFromContext}` : `/`}
+                        component={Link}
+                        to={
+                          userIdFromContext
+                            ? `/Profile/${userIdFromContext}`
+                            : `/`
+                        }
                         onClick={() => handleItemClick("Friends")}
                         sx={{
                           color:
@@ -319,7 +323,6 @@ export const Dashboard = () => {
                         </ListItemContent>
                       </ListItemButton>
                     </ListItem>
-
                   </List>
                 </ListItem>
               </List>
@@ -341,15 +344,16 @@ export const Dashboard = () => {
                 />
               ))}
             {showPostList && (
-            <PostList updateActivityPostAndCommentsData={updateActivityPostAndCommentsData} />
+              <PostList
+                updateActivityPostAndCommentsData={
+                  updateActivityPostAndCommentsData
+                }
+              />
             )}
             {showProfile && (
               <Profile updatePostAndCommentsData={updatePostAndCommentsData} />
             )}
-            {showFriendProfile && (
-              <FriendProfile  />
-
-            )}
+            {showFriendProfile && <FriendProfile />}
           </Layout.Main>
 
           {showProfile && postAndCommentsData && (
@@ -544,7 +548,7 @@ export const Dashboard = () => {
                   ))}
                 </>
               )}
-              </Sheet>
+            </Sheet>
           )}
 
           {/* Right Side Profile View for Connect Page */}
@@ -563,27 +567,32 @@ export const Dashboard = () => {
               }}
             >
               <Box sx={{ p: 2, display: "flex", alignItems: "center" }}>
-              <Typography
-                sx={{
-                  display: "flex",
-                  alignItems: "center", // Align flex items vertically in the center
-                  fontWeight: "bold",
-                  fontFamily: 'monospace',
-                  fontSize: '20px',
-                }}
-                key={users._id}
-              >
-                <AccountBoxIcon sx={{ marginRight: "8px" }} /> {/* Add margin to create space between the icon and the name */}
-                {capitalizeFirstLetter(selectedUser.firstname)}{" "}
-                {capitalizeFirstLetter(selectedUser.lastname)}
-              </Typography>
+                <Typography
+                  sx={{
+                    display: "flex",
+                    alignItems: "center", // Align flex items vertically in the center
+                    fontWeight: "bold",
+                    fontFamily: "monospace",
+                    fontSize: "20px",
+                  }}
+                  key={users._id}
+                >
+                  <AccountBoxIcon sx={{ marginRight: "8px" }} />{" "}
+                  {/* Add margin to create space between the icon and the name */}
+                  {capitalizeFirstLetter(selectedUser.firstname)}{" "}
+                  {capitalizeFirstLetter(selectedUser.lastname)}
+                </Typography>
               </Box>
               <Divider />
               <AspectRatio ratio="21/18">
                 <img src={selectedUser.image} alt="User Avatar" />
               </AspectRatio>
               <Box sx={{ p: 2, display: "flex", gap: 1, alignItems: "center" }}>
-                <Typography level="body2" mr={1} sx={{fontFamily: 'monospace', fontSize: '15px'}}>
+                <Typography
+                  level="body2"
+                  mr={1}
+                  sx={{ fontFamily: "monospace", fontSize: "15px" }}
+                >
                   Profile Description
                 </Typography>
               </Box>
@@ -600,14 +609,22 @@ export const Dashboard = () => {
                 <Typography level="body2" sx={{ fontWeight: "bold" }}>
                   Username:
                 </Typography>
-                <Typography level="body2" textColor="text.primary" sx={{fontFamily: 'monospace', fontSize: '15px'}}>
+                <Typography
+                  level="body2"
+                  textColor="text.primary"
+                  sx={{ fontFamily: "monospace", fontSize: "15px" }}
+                >
                   {selectedUser.username}
                 </Typography>
 
                 <Typography level="body2" sx={{ fontWeight: "bold" }}>
                   Email:
                 </Typography>
-                <Typography level="body2" textColor="text.primary" sx={{fontFamily: 'monospace', fontSize: '15px'}}>
+                <Typography
+                  level="body2"
+                  textColor="text.primary"
+                  sx={{ fontFamily: "monospace", fontSize: "15px" }}
+                >
                   {selectedUser.email}
                 </Typography>
               </Box>
@@ -628,22 +645,22 @@ export const Dashboard = () => {
           )}
 
           {/* Right Side Profile View for PostList Page*/}
-            {showPostList && activityPostAndCommentsData && (
-              <Sheet
-                sx={{
-                  display: { xs: "none", sm: "initial" },
-                  position: "fixed",
-                  top: 60,
-                  right: 0,
-                  bottom: 0,
-                  width: "415px", // Set the desired width for the right panel
-                  borderLeft: "1px solid",
-                  borderColor: "neutral.outlinedBorder",
-                  overflowY: "auto", // Add scrollbar if content exceeds the panel height
-                }}
-              >
-                {/* Render the selected post */}
-               
+          {showPostList && activityPostAndCommentsData && (
+            <Sheet
+              sx={{
+                display: { xs: "none", sm: "initial" },
+                position: "fixed",
+                top: 60,
+                right: 0,
+                bottom: 0,
+                width: "415px", // Set the desired width for the right panel
+                borderLeft: "1px solid",
+                borderColor: "neutral.outlinedBorder",
+                overflowY: "auto", // Add scrollbar if content exceeds the panel height
+              }}
+            >
+              {/* Render the selected post */}
+
               <div key={activityPostAndCommentsData.post._id}>
                 <Box sx={{ p: 2, display: "flex", alignItems: "center" }}>
                   <Box
@@ -664,7 +681,7 @@ export const Dashboard = () => {
                       }}
                     />
                   </Box>
-                  
+
                   <Typography
                     sx={{ flex: 1, color: "#2ACAEA", fontFamily: "monospace" }}
                   >
@@ -691,7 +708,10 @@ export const Dashboard = () => {
                       fontFamily: "monospace",
                     }}
                   >
-                    Posted: {new Date(parseInt(activityPostAndCommentsData.post.createdAt)).toLocaleDateString()}
+                    Posted:{" "}
+                    {new Date(
+                      parseInt(activityPostAndCommentsData.post.createdAt)
+                    ).toLocaleDateString()}
                   </Typography>
                   <Box
                     sx={{
@@ -739,74 +759,88 @@ export const Dashboard = () => {
                   </Typography>
                 ) : (
                   <>
-                    {activityPostAndCommentsData.post.comments.map((comment) => (
-                      <div
-                        key={comment._id}
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          padding: "10px",
-                          border: "solid",
-                          borderRadius: "10px",
-                          borderColor: "#2ACAEA",
-                          width: "80%",
-                          margin: "auto",
-                          marginTop: "15px",
-                        }}
-                      >
-                        <Box
-                          sx={{
+                    {activityPostAndCommentsData.post.comments.map(
+                      (comment) => (
+                        <div
+                          key={comment._id}
+                          style={{
                             display: "flex",
                             justifyContent: "space-between",
-                            alignItems: "center",
                             padding: "10px",
+                            border: "solid",
+                            borderRadius: "10px",
+                            borderColor: "#2ACAEA",
+                            width: "80%",
+                            margin: "auto",
+                            marginTop: "15px",
                           }}
                         >
-                          <Avatar
-                             src={
-                              activityPostAndCommentsData.commentAuthorUsers.find(
-                                (user) => user.username === comment.commentAuthor
-                              ).image
-                            }
-                            size="lg"
+                          <Box
                             sx={{
-                              "--Avatar-size": "35px",
-                              border: "solid",
-                              borderColor: "#2ACAEA",
-                            }}
-                          />
-                        </Box>
-                        <Typography
-                          variant="body1"
-                          sx={{
-                            mt: "10px",
-                            fontFamily: "monospace",
-                            width: "85%",
-                          }}
-                          color="primary"
-                        >
-                          <span style={{ fontWeight: "bold", fontStyle: "italic" }}>
-                            {comment.commentAuthor}
-                          </span>{" "}
-                          - <span style={{ color: "white" }}>{comment.commentText}</span>
-                          <Typography
-                            variant="body2"
-                            sx={{
-                              marginRight: "auto",
                               display: "flex",
-                              fontSize: "12px",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              padding: "10px",
                             }}
                           >
-                            Posted: {new Date(parseInt(comment.createdAt)).toLocaleDateString()}
+                            <Avatar
+                              src={
+                                activityPostAndCommentsData.commentAuthorUsers.find(
+                                  (user) =>
+                                    user.username === comment.commentAuthor
+                                ).image
+                              }
+                              size="lg"
+                              sx={{
+                                "--Avatar-size": "35px",
+                                border: "solid",
+                                borderColor: "#2ACAEA",
+                              }}
+                            />
+                          </Box>
+                          <Typography
+                            variant="body1"
+                            sx={{
+                              mt: "10px",
+                              fontFamily: "monospace",
+                              width: "85%",
+                            }}
+                            color="primary"
+                          >
+                            <span
+                              style={{
+                                fontWeight: "bold",
+                                fontStyle: "italic",
+                              }}
+                            >
+                              {comment.commentAuthor}
+                            </span>{" "}
+                            -{" "}
+                            <span style={{ color: "white" }}>
+                              {comment.commentText}
+                            </span>
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                marginRight: "auto",
+                                display: "flex",
+                                fontSize: "12px",
+                              }}
+                            >
+                              Posted:{" "}
+                              {new Date(
+                                parseInt(comment.createdAt)
+                              ).toLocaleDateString()}
+                            </Typography>
                           </Typography>
-                        </Typography>
-                      </div>
-                    ))}
+                        </div>
+                      )
+                    )}
                   </>
                 )}
               </div>
-      </Sheet>
-)}
+            </Sheet>
+          )}
         </Layout.Root>
       ) : (
         // If user is not logged In
@@ -823,9 +857,7 @@ export const Dashboard = () => {
             }),
           }}
         >
-         
-          <Home/>
-      
+          <Home />
         </Layout.Root>
       )}
     </CssVarsProvider>
