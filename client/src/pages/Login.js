@@ -38,7 +38,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
     return <IconButton size="sm" variant="plain" color="neutral" disabled />;
   }
   return (
-    <div style={{ position: "fixed", top: "100px", right: "10px" }}>
+    <div style={{ position: "fixed", top: "15px", right: "10px" }}>
       <Grid container spacing={1} alignItems="center">
         <Grid item>
           <IconButton
@@ -64,25 +64,6 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
             )}
           </IconButton>
         </Grid>
-        <Grid item>
-        <Link to="/">
-  <IconButton
-    size="sm"
-    variant="outlined"
-    color="primary"
-    style={{
-      padding: "10px",
-    }}
-  >
-    <HomeIcon
-      style={{
-        marginRight: "5px",
-      }}
-    />
-    Home
-  </IconButton>
-</Link>
-    </Grid>
     </Grid>
     </div>
   );
@@ -161,7 +142,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
           display: "flex",
           justifyContent: "flex-end",
           backdropFilter: "blur(4px)",
-          backgroundColor: "rgba(255 255 255 / 0.6)",
+          backgroundColor: "lightblue",
           [theme.getColorSchemeSelector("dark")]: {
             backgroundColor: "rgba(19 19 24 / 0.4)",
           },
@@ -178,32 +159,41 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
             px: 2,
           }}
         >
-           <div>
-              <Typography level="h4" sx={{ my: 1, mb: 3, textAlign: 'center', fontFamily: 'monospace' }}>
+  <Grid container spacing={2}>
+    <Grid item xs={2}>
+    <Link to="/">
+  <IconButton
+    size="sm"
+    variant="outlined"
+    color="primary"
+    style={{
+      padding: "10px",
+      marginTop: "10px",
+    }}
+  >
+    <HomeIcon/>
+   
+  </IconButton>
+</Link>
+    </Grid>
+    <Grid item xs={8}>
+              <Typography level="h4" sx={{ my: 2, mb: 3, textAlign: 'center', fontFamily: 'monospace' }}>
                 Welcome Back User
               </Typography>
-            </div>
-          <Box
-            component="header"
-            sx={{
-              py: 3,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-         
-               {/* Logo */}
-               <img src={Logo} alt="Logo" width={250} height={150} />
-          
+            </Grid>
+            <Grid item xs={2}>
             <ColorSchemeToggle />
-          </Box>
+            </Grid>
+    </Grid>
+           
+     
+{/* Logo */} <img src={Logo} alt="Logo" width={350} height={250}  style={{margin: 'auto'}}/>
+      
           <Box
             component="main"
             sx={{
               my: "auto",
-              py: 2,
-              pb: 5,
+              pb: 25,
               display: "flex",
               flexDirection: "column",
               gap: 2,

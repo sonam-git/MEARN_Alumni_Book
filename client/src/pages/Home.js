@@ -17,6 +17,7 @@ import { Grid } from "@material-ui/core";
 import Hero from "../assets/images/AB_Logo2.png";
 import HeroDark from "../assets/images/AB_Dark_logo.png";
 
+
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = React.useState(false);
@@ -78,7 +79,7 @@ export const Home = () => {
           display: "flex",
           justifyContent: "flex-end",
           backdropFilter: "blur(4px)",
-          backgroundColor: "rgba(255 255 255 / 0.6)",
+          backgroundColor: "lightblue",             // "rgba(255 255 255 / 0.6)"
           [theme.getColorSchemeSelector("dark")]: {
             backgroundColor: "rgba(19 19 24 / 0.4)",
           },
@@ -134,7 +135,7 @@ export const Home = () => {
             {/* Hero image display */}
             <div style={{ display: "flex", justifyContent: "center" }}>
               <div style={{ textAlign: "center" }}>
-                <HeroImage />
+                <HeroImage  />
               </div>
             </div>
             <Grid container spacing={2}>
