@@ -7,10 +7,10 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
-
+import Profile from "./pages/Profile";
 
 // import { Dashboard } from '@material-ui/icons';
 import Dashboard from "./pages/Dashboard";
@@ -19,8 +19,6 @@ import PostList from "./components/PostList";
 import UserProvider from "./utils/UserProvider";
 import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 // import { Dashboard } from '@material-ui/icons';
-import Dashboard from "./pages/Dashboard";
-import Login from "./pages/Login";
 
 
 
