@@ -311,13 +311,12 @@ export const Signup = () => {
                   onChange={handleChange}
                 />
               </FormControl>
-                <Button type="submit" fullWidth>
+                <Button type="submit" style={{ width: "100%" }}>
                 {loading ? <CircularProgress size={24} /> : "Sign Up"}
                 </Button>
-                <Link to="/login"><Button fullWidth>← Go to Login</Button></Link>
+                <Link to="/login"><Button style={{ width: "100%" }}>← Go to Login</Button></Link>
                 <Link to="/Dashboard" 
-                 fullWidth
-                 style={{margin: 'auto'}}
+                 style={{ width: "100%", margin: 'auto' }}
                  >Continue Without Sign Up!</Link>
               </form>
             )}

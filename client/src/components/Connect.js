@@ -97,7 +97,7 @@ const Connect = ({
                       "--Card-radius": (theme) => theme.vars.radius.sm,
                       boxShadow: "none",
                     }}
-                    key={users._id}
+                    key={user._id}
                   >
                     <CardOverflow
                       sx={{

@@ -65,8 +65,8 @@ export const Home = () => {
         }}
       />
       <Box
-      // home page content theme
-      // styling for the opacity image
+        // home page content theme
+        // styling for the opacity image
         sx={(theme) => ({
           width:
             "clamp(100vw - var(--Cover-width), (var(--Collapsed-breakpoint) - 100vw) * 999, 100vw)",
@@ -81,7 +81,6 @@ export const Home = () => {
           [theme.getColorSchemeSelector("dark")]: {
             backgroundColor: "rgba(19 19 24 / 0.4)",
           },
-          
         })}
       >
         <Box
@@ -140,12 +139,12 @@ export const Home = () => {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <Link to="/login">
-                  <Button fullWidth>← Login</Button>
+                  <Button style={{ width: "100%" }}>← Login</Button>
                 </Link>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Link to="/signup">
-                  <Button fullWidth>← Sign Up</Button>
+                  <Button style={{ width: "100%" }}>← Sign Up</Button>
                 </Link>
               </Grid>
             </Grid>
