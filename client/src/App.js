@@ -7,16 +7,17 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Signup from "./pages/Signup";
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 // import { Dashboard } from '@material-ui/icons';
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import PostList from "./components/PostList";
-
+import UserProvider from "./utils/UserProvider";
 
 
 // Construct our main GraphQL API endpoint
@@ -52,6 +53,7 @@ Thank you ##############################################################*/
 
 function App() {
   return (
+    <UserProvider>
     <ApolloProvider client={client}>
       <Router>
         <>
@@ -64,7 +66,7 @@ function App() {
 
             <Route path="/Dashboard" element={<Dashboard />} />
             
-            <Route path="/Dashboard/PostList" component={PostList} />
+            <Route path="/Dashboard/PostList" element={PostList} />
 
             <Route path="/Profile/:userId" element={<Profile />} />
 
@@ -72,6 +74,7 @@ function App() {
         </>
       </Router>
     </ApolloProvider>
+    </UserProvider>
   );
 }
 
