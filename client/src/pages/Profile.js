@@ -125,6 +125,8 @@ const capitalizeFirstLetter = (string) => {
         if (post) {
           // Fetch comments data for the specific post
           const commentsData = post.comments;
+
+       
     
           const postAndCommentsData = {
           // Create the postAndCommentsData objec
@@ -132,6 +134,7 @@ const capitalizeFirstLetter = (string) => {
             postId: postId,
             post: post,
             comments: commentsData,
+
           };
           // Pass the data to the Dashboard.js component by calling the function
           updatePostAndCommentsData(postAndCommentsData);
