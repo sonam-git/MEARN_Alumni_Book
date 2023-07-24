@@ -157,6 +157,8 @@ const Profile = ({ updatePostAndCommentsData }) => {
       });
       setPostText("");
       console.log("Post added successfully");
+        // Call handleShowMyPost to display the posts after adding a new one
+    handleShowMyPost();
     } catch (err) {
       console.error(err);
     }
