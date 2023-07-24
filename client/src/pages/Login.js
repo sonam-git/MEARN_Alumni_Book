@@ -24,6 +24,9 @@ import { Grid } from '@mui/material';
 import { Link } from "react-router-dom";
 import Dashboard from "./Dashboard";
 
+import { useUser } from '../utils/UserProvider';
+
+
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = React.useState(false);
@@ -85,6 +88,8 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
 };
 
  export const Login = () => {
+  const { setUserId,user } = useUser();
+  console.log(user);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [formState, setFormState] = useState({
       email: '',
@@ -100,7 +105,10 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
           variables: { email: formState.email, password: formState.password , persistent: formState.persistent},
         });
         const token = mutationResponse.data.login.token;
+        const userId = mutationResponse.data.login.user._id; 
         Auth.login(token);
+        localStorage.setItem("userId", userId);
+        setUserId({userId})
         setIsLoggedIn(true);
       } catch (e) {
         console.log(e);

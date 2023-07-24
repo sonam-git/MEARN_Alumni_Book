@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+import { Link} from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_USERS } from "../utils/queries";
 import { REMOVE_COMMENT } from "../utils/mutations";
@@ -21,6 +22,7 @@ import ListSubheader from "@mui/joy/ListSubheader";
 import ListItemDecorator from "@mui/joy/ListItemDecorator";
 import Avatar from "@mui/joy/Avatar";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useUser } from "../utils/UserProvider";
 
 // Icons import
 // import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
@@ -42,7 +44,7 @@ import Connect from "../components/Connect";
 import PostList from "../components/PostList";
 import Profile from "./Profile";
 import FriendList from "../components/FriendList";
-import FriendsProfile from "./FriendsProfile";
+import FriendProfile from "./FriendProfile";
 import Auth from "../utils/auth";
 
 // Makes the first letter of firstname and lastname to always be capital
@@ -51,6 +53,8 @@ const capitalizeFirstLetter = (string) => {
 };
 
 export const Dashboard = () => {
+  const { userId: userIdFromContext } = useUser();
+  console.log(userIdFromContext);
   const [removeComment] = useMutation(REMOVE_COMMENT);
   const [showLogin, setShowLogin] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -118,6 +122,7 @@ export const Dashboard = () => {
     setShowConnect(true);
     setShowPostList(false);
     setShowProfile(false);
+    setShowFriendProfile(false)
   };
 
   const handleShowPostList = (event) => {
@@ -125,6 +130,7 @@ export const Dashboard = () => {
     setShowPostList(true);
     setShowConnect(false);
     setShowProfile(false);
+    setShowFriendProfile(false)
   };
 
   const handleShowProfile = (event) => {
@@ -132,6 +138,7 @@ export const Dashboard = () => {
     setShowProfile(true);
     setShowPostList(false);
     setShowConnect(false);
+    setShowFriendProfile(false)
   };
   const handleShowFriendProfile = (event) => {
     event.preventDefault();
@@ -145,10 +152,10 @@ export const Dashboard = () => {
     setShowFriends(!showFriends);
   };
 
-  // const handlePersonAddIconClick = (event) => {
-  //   event.preventDefault();
-  //   setIsSheetOpen(true);
-  // };
+  const handlePersonAddIconClick = (event) => {
+    event.preventDefault();
+    setIsSheetOpen(true);
+  };
 
   const handleIsSheetClose = (event) => {
     event.preventDefault();
@@ -248,7 +255,7 @@ export const Dashboard = () => {
                         </ListItemContent>
                       </ListItemButton>
                     </ListItem>
-                    <ListItem>
+                   <ListItem>
                       <ListItemButton
                         onClick={() => handleItemClick("aboutus")}
                         sx={{
@@ -272,18 +279,20 @@ export const Dashboard = () => {
                         </ListItemContent>
                       </ListItemButton>
                     </ListItem>
-{/* Friends */}
+        {/* Friends */}
                     <ListItem>
                       <ListItemButton
+                        component ={Link}
+                        to={userIdFromContext ? `/Profile/${userIdFromContext}` : `/`}
                         onClick={() => handleItemClick("Friends")}
                         sx={{
                           color:
-                            selectedItem === "contact" ? "#2ACAEA" : "#009DFF",
-                          border: selectedItem === "contact" ? "solid" : "",
+                            selectedItem === "Friends" ? "#2ACAEA" : "#009DFF",
+                          border: selectedItem === "Friends" ? "solid" : "",
                           borderRadius:
-                            selectedItem === "contact" ? "10px" : "",
+                            selectedItem === "Friends" ? "10px" : "",
                           borderColor:
-                            selectedItem === "contact" ? "#006EB3" : "",
+                            selectedItem === "Friends" ? "#006EB3" : "",
                         }}
                       >
                         <ListItemDecorator sx={{ color: "neutral.500" }}>
@@ -323,7 +332,8 @@ export const Dashboard = () => {
               <Profile updatePostAndCommentsData={updatePostAndCommentsData} />
             )}
             {showFriendProfile && (
-              <FriendsProfile  />
+              <FriendProfile  />
+
             )}
           </Layout.Main>
 
@@ -519,7 +529,7 @@ export const Dashboard = () => {
                   ))}
                 </>
               )}
-            </Sheet>
+              </Sheet>
           )}
 
           {/* Right Side Profile View for Connect Page */}

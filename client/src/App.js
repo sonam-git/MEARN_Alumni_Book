@@ -7,13 +7,18 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
+
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
+import FriendProfile from "./pages/FriendProfile";
 
-import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 // import { Dashboard } from '@material-ui/icons';
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
+import PostList from "./components/PostList";
+import UserProvider from "./utils/UserProvider";
+import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
+// import { Dashboard } from '@material-ui/icons';
 
 
 
@@ -51,6 +56,7 @@ Thank you ##############################################################*/
 
 function App() {
   return (
+    <UserProvider>
     <ApolloProvider client={client}>
       <Router>
         <>
@@ -62,10 +68,16 @@ function App() {
             <Route path="/signup" element={<Signup />} />
 
             <Route path="/Dashboard" element={<Dashboard />} />
+            
+            <Route path="/Dashboard/PostList" element={PostList} />
+
+            <Route path="/FriendProfile/:userId" element={<FriendProfile />} />
+
           </Routes>
         </>
       </Router>
     </ApolloProvider>
+    </UserProvider>
   );
 }
 

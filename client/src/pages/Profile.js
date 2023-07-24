@@ -245,8 +245,7 @@ const handleRemoveFriend = (friendId) => {
       console.error("Failed to remove friend:", error.message);
     });
 };
-
-  return (
+return (
     <>
     <Typography 
         level="h1"
@@ -498,7 +497,7 @@ const handleRemoveFriend = (friendId) => {
                 border: 'solid',
                 borderColor: '#006EB3',
                 padding: '15px',
-              }}
+                              }}
               onChange={(event) => setPostText(event.target.value)}
                 endDecorator={
                 <Box
