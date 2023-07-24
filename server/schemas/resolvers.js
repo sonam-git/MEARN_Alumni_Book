@@ -193,8 +193,8 @@ const resolvers = {
         return post;
       }
       throw new AuthenticationError("You need to be logged in!");
-    },
-
+  },
+  
     //adds a new comment to a post
     addComment: async (parent, { postId, commentText }, context) => {
       if (context.user) {
@@ -248,31 +248,17 @@ const resolvers = {
     },
     //removes a post by its postId
     removePost: async (parent, { postId }, context) => {
-      if (context.user) {
-        try {
-          await Post.findOneAndDelete({
-            _id: postId,
-            postAuthor: context.user.username,
-          });
-
-          if (!postId) {
-            throw new Error("Post not found or you are not the author.");
-          }
-
-          await User.findOneAndUpdate(
-            { _id: context.user._id },
-            { $pull: { posts: postId } } // Use postId instead of post._id
-          );
-
-          return true;
-        } catch (error) {
-          console.error("Error deleting post:", error);
-          return false;
-        }
-      } else {
-        throw new AuthenticationError("You need to be logged in!");
+      if (!context.user) {
+        throw new AuthenticationError('You need to be logged in!');
+      }
+      try {
+        return Post.findOneAndDelete({_id: postId})
+      } catch (error) {
+        console.error('Error deleting post:', error);
+        throw new Error('Error deleting post.');
       }
     },
+    
     //removes a comment from a post
     removeComment: async (parent, { postId, commentId }, context) => {
       if (context.user) {

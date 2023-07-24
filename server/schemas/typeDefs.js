@@ -55,7 +55,7 @@ type Query {
     addPost(postText: String!): Post
     updatePost(postId: ID!, postText: String!): Post
     addComment(postId: ID!, commentText: String!): Post
-    removePost(postId: ID!): Boolean
+    removePost(postId: ID!): Post
     removeComment(postId: ID!, commentId: ID!): Post
     likePost(postId: ID!): Post!
   }

@@ -157,6 +157,7 @@ const Profile = ({ updatePostAndCommentsData }) => {
       });
   };
 
+const FriendsProfile = () => {
   return (
     <>
       <Typography
@@ -448,5 +449,5 @@ const Profile = ({ updatePostAndCommentsData }) => {
     </>
   );
 };
-
+};
 export default Profile;
