@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Link} from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { GET_USERS } from "../utils/queries";
+import { GET_POST_WITH_COMMENTS, GET_USERS } from "../utils/queries";
 import { REMOVE_COMMENT } from "../utils/mutations";
 import { useMutation } from "@apollo/client";
 import { CssVarsProvider } from "@mui/joy/styles";
@@ -39,6 +39,7 @@ import sideImage1 from "../assets/images/opportunities.jpg";
 
 // custom
 import filesTheme from "../containers/Theme";
+import Home from "./Home";
 import Header from "../components/Header";
 import Layout from "../containers/Layout";
 import Connect from "../components/Connect";
@@ -55,7 +56,7 @@ const capitalizeFirstLetter = (string) => {
 
 export const Dashboard = () => {
   const { userId: userIdFromContext } = useUser();
-  console.log(userIdFromContext);
+  console.log(userIdFromContext);  //gives you user id
   
   const [removeComment] = useMutation(REMOVE_COMMENT);
   const [showLogin, setShowLogin] = useState(false);
@@ -106,11 +107,15 @@ export const Dashboard = () => {
       // Execute the removeComment mutation and pass the commentId as a variable
       await removeComment({
         variables: { postId, commentId },
+        refetchQueries: [
+        {
+          query: GET_POST_WITH_COMMENTS,
+          variables: { postId }, // Refetch the post and its comments after deletion
+        },
+      ],
       });
-
       // Perform any necessary actions after successful deletion, such as updating the UI
       console.log("Comment deleted successfully");
-      window.location.reload();
     } catch (error) {
       // Handle any errors that occur during the deletion process
       console.error("Error deleting comment:", error);
@@ -818,157 +823,9 @@ export const Dashboard = () => {
             }),
           }}
         >
-          <Header />
-          {/* Side Bar Navigations */}
-          <Layout.SideNav>
-            <List
-              size="sm"
-              sx={{ "--ListItem-radius": "8px", "--List-gap": "4px" }}
-            >
-              <ListItem nested>
-                <ListSubheader>Browse</ListSubheader>
-                <List
-                  aria-labelledby="nav-list-browse"
-                  sx={{
-                    "& .JoyListItemButton-root": { p: "8px" },
-                  }}
-                >
-                  <ListItem>
-                    <ListItemButton onClick={() => handleItemClick("post")}>
-                      <ListItemDecorator>
-                        <MessageIcon />
-                      </ListItemDecorator>
-                      <ListItemContent
-                        selected={selectedItem === "post"}
-                        onClick={handleShowPostList}
-                        sx={{
-                          color: selectedItem === "post" ? "#2ACAEA" : "white",
-                        }}
-                      >
-                        Recent Post
-                      </ListItemContent>
-                    </ListItemButton>
-                  </ListItem>
-                  <ListItem>
-                    <ListItemButton onClick={() => handleItemClick("connect")}>
-                      <ListItemDecorator>
-                        <ViewCompactAltIcon />
-                      </ListItemDecorator>
-                      <ListItemContent
-                        selected={selectedItem === "connect"}
-                        onClick={handleShowConnect}
-                        sx={{
-                          color:
-                            selectedItem === "connect" ? "#2ACAEA" : "white",
-                        }}
-                      >
-                        Alumnis
-                      </ListItemContent>
-                    </ListItemButton>
-                  </ListItem>
-                  <ListItem>
-                    <ListItemButton onClick={() => handleItemClick("aboutus")}>
-                      <ListItemDecorator sx={{ color: "neutral.500" }}>
-                        <InfoIcon />
-                      </ListItemDecorator>
-                      <ListItemContent
-                        selected={selectedItem === "aboutus"}
-                        onClick={handleShowConnect}
-                        sx={{
-                          color:
-                            selectedItem === "aboutus" ? "#2ACAEA" : "white",
-                        }}
-                      >
-                        About Us
-                      </ListItemContent>
-                    </ListItemButton>
-                  </ListItem>
-                  <ListItem>
-                    <ListItemButton onClick={() => handleItemClick("contact")}>
-                      <ListItemDecorator sx={{ color: "neutral.500" }}>
-                        <ContactSupportIcon />
-                      </ListItemDecorator>
-                      <ListItemContent
-                        selected={selectedItem === "contact"}
-                        onClick={handleShowConnect}
-                        sx={{
-                          color:
-                            selectedItem === "contact" ? "#2ACAEA" : "white",
-                        }}
-                      >
-                        Contacts
-                      </ListItemContent>
-                    </ListItemButton>
-                  </ListItem>
-                </List>
-              </ListItem>
-            </List>
-          </Layout.SideNav>
-
-          {/* Main Page */}
-          {/* where all the re-renders happens */}
-          <Layout.Main>
-            {showConnect &&
-              (loading ? (
-                <div>Loading....</div>
-              ) : (
-                <Connect
-                  users={filteredUsers}
-                  handlePersonIconClick={handlePersonIconClick}
-                  loggedInUser={loggedInUser} // Pass the loggedInUser prop here
-                  title="Some Users"
-                />
-              ))}
-            {showPostList && <PostList />}
-          </Layout.Main>
-
-          {/* Right Side Profile View for Connect Page */}
-          {showConnect && (
-            <Sheet
-              sx={{
-                display: { xs: "none", sm: "initial" },
-                borderLeft: "1px solid",
-                borderColor: "neutral.outlinedBorder",
-              }}
-            >
-              <Box
-                component="img"
-                src={sideImage}
-                alt="User Avatar"
-                sx={{
-                  filter: "brightness(80%)", // Adjust the percentage to control the level of dimness
-                  objectFit: "cover",
-                  width: "100%",
-                  height: "100%",
-                }}
-              />
-            </Sheet>
-          )}
-
-          {/* Right Side Profile View for Explore Page*/}
-          {showPostList && (
-            <Sheet
-              sx={{
-                display: { xs: "none", sm: "initial" },
-                borderLeft: "1px solid",
-                borderColor: "neutral.outlinedBorder",
-              }}
-            >
-              <AspectRatio ratio="25/60">
-                <Box
-                  component="img"
-                  src={sideImage1}
-                  alt="User Avatar"
-                  sx={{
-                    filter: "brightness(80%)", // Adjust the percentage to control the level of dimness
-                    objectFit: "cover",
-                    width: "100%",
-                    height: "100%",
-                  }}
-                />
-              </AspectRatio>
-            </Sheet>
-          )}
+         
+          <Home/>
+      
         </Layout.Root>
       )}
     </CssVarsProvider>

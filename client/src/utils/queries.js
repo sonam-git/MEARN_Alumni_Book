@@ -171,3 +171,23 @@ export const GET_ME = gql`
     }
   }
 `;
+export const GET_POST_WITH_COMMENTS = gql`
+  query GetPostWithComments($postId: ID!) {
+    post(postId: $postId) {
+      _id
+      postText
+      postAuthor
+      createdAt
+      comments {
+        _id
+        commentText
+        commentAuthor
+        createdAt
+      }
+      likes {
+        username
+        createdAt
+      }
+    }
+  }
+`;

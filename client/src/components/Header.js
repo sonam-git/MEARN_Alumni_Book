@@ -92,7 +92,7 @@ export const Header = () => {
             <Typography component="h1" fontWeight="xl">
               Dashboard
             </Typography>
-            <Input
+            {/* <Input
           size="sm"
           placeholder="Search anything…"
           startDecorator={<SearchRoundedIcon color="primary" />}
@@ -110,7 +110,7 @@ export const Header = () => {
               sm: 'flex',
             },
           }}
-        />
+        /> */}
             </Box>
           </>
         ) : (

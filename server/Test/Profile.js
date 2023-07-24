@@ -129,18 +129,37 @@ const capitalizeFirstLetter = (string) => {
     };
   
 
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
-
-    try {
-      const { data } = await addPost({
-        variables: { postText },
-      });
-      window.location.reload();
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    const handleFormSubmit = async (event) => {
+      event.preventDefault();
+      try {
+        const { data } = await addPost({
+          variables: { postText },
+          update: (cache, { data: { addPost } }) => {
+            try {
+              const existingData = cache.readQuery({ query: GET_POSTS });
+              console.log(existingData)
+              const existingPosts = existingData?.posts || [];
+              const newPost = addPost;
+              console.log(newPost)
+  
+              cache.writeQuery({
+                query: GET_POSTS,
+                data: { posts: [...existingPosts, newPost] },
+                
+              });
+             
+            } catch (error) {
+              console.error("Error updating cache:", error);
+            }
+          },
+        });
+        setPostText("");
+        console.log("Post added successfully");
+      } catch (err) {
+        console.error(err);
+      }
+    };
+  
 
   if (loading) return "Loading...";
 

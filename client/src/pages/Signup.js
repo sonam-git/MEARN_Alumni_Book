@@ -195,6 +195,11 @@ export const Signup = () => {
             px: 2,
           }}
         >
+             <div>
+              <Typography level="h4" sx={{ my: 1, mb: 3, textAlign: 'center', fontFamily: 'monospace' }}>
+                Welcome New User
+              </Typography>
+            </div>
           <Box
             component="header"
             sx={{
@@ -204,6 +209,7 @@ export const Signup = () => {
               justifyContent: "space-between",
             }}
           >
+            
             {/* Logo */}
             <img src={Logo} alt="Logo" width={250} height={150} />
             <ColorSchemeToggle />
@@ -231,16 +237,7 @@ export const Signup = () => {
               },
             }}
           >
-            <div>
-              <Typography component="h1" fontSize="xl2" fontWeight="lg">
-                Sign Up Here!
-              </Typography>
-              <Typography level="body2" sx={{ my: 1, mb: 3 }}>
-                Welcome New User!
-              </Typography>
-            </div>
-
-
+         
             {/* Signup Form */}
             { data ? (
               <p>

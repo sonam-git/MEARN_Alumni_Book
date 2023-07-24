@@ -177,6 +177,11 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
             px: 2,
           }}
         >
+           <div>
+              <Typography level="h4" sx={{ my: 1, mb: 3, textAlign: 'center', fontFamily: 'monospace' }}>
+                Welcome Back User
+              </Typography>
+            </div>
           <Box
             component="header"
             sx={{
@@ -215,14 +220,6 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
               },
             }}
           >
-            <div>
-              <Typography component="h1" fontSize="xl2" fontWeight="lg">
-                Log In Here!
-              </Typography>
-              <Typography level="body2" sx={{ my: 1, mb: 3 }}>
-                Welcome back User!
-              </Typography>
-            </div>
             { isLoggedIn ? (
               <p>Login Success! </p>
             ) : (
@@ -274,10 +271,6 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
               <Link to="/signup">
                 <Button style={{ width: "100%" }} >← Go to Sign Up</Button>
               </Link>
-              <Link to="/Dashboard" >
-                  <Button
-                 style={{ width: "100%", margin: 'auto' }}>
-                 Continue Without Login</Button></Link>
             </form>
             )}
 
