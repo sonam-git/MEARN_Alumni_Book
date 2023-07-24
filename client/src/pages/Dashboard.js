@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_USERS } from "../utils/queries";
 import { REMOVE_COMMENT } from "../utils/mutations";
@@ -19,10 +19,6 @@ import ListItemButton from "@mui/joy/ListItemButton";
 import ListItemContent from "@mui/joy/ListItemContent";
 import ListSubheader from "@mui/joy/ListSubheader";
 import ListItemDecorator from "@mui/joy/ListItemDecorator";
-import Card from "@mui/joy/Card";
-import CardOverflow from "@mui/joy/CardOverflow";
-import CardCover from "@mui/joy/CardCover";
-import articleOneImage from "../assets/images/article-one.webp";
 import Avatar from "@mui/joy/Avatar";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -610,49 +606,6 @@ export const Dashboard = () => {
                 }}
               >
                 <Divider />
-
-                {/* Article One */}
-                <Card variant="outlined">
-                  <CardOverflow
-                    sx={{
-                      borderBottom: ".5px solid",
-                      borderColor: "neutral.outlinedBorder",
-                    }}
-                  >
-                    <AspectRatio ratio="16/9" color="primary">
-                      <CardCover
-                        sx={{
-                          backgroundImage: `url(${articleOneImage})`,
-                          backgroundSize: "cover",
-                          transition: "transform 0.3s ease",
-                          "&:hover": {
-                            transform: "scale(1.05)",
-                          },
-                        }}
-                      >
-                        <Link
-                          to="https://www.news-herald.com/2023/04/11/alumni-should-have-active-role-in-inspiring-current-hs-sports-programs-opinion/"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        ></Link>
-                      </CardCover>
-                    </AspectRatio>
-                  </CardOverflow>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Box sx={{ flex: 1 }}>
-                      <Typography>
-                        Alumni should have active role in inspiring current HS
-                        sports programs | Opinion
-                      </Typography>
-                      <Typography level="body3" mt={0.5}>
-                        Created By: Chris Lillstrung
-                      </Typography>
-                      <Typography level="body3" mt={0.5}>
-                        Created: Saturday, July 15th 2023
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Card>
               </Box>
             </Sheet>
           )}

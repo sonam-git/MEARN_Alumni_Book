@@ -249,7 +249,7 @@ export const Signup = () => {
             ) : (
 
             <form onSubmit={handleFormSubmit}>
-            <div style={{ display: 'flex', columnGap: 3, width: '50%'}}>
+            <div style={{ display: 'flex', }}>
                 <FormControl required >
                   <FormLabel>First Name</FormLabel>
                   <Input
@@ -258,7 +258,7 @@ export const Signup = () => {
                     type="firstname"
                     id="firstname"
                     onChange={handleChange}
-                    style={{width: '92%'}}
+                    style={{width: '80%'}}
                   />
                 </FormControl>
                 <FormControl required>
@@ -269,7 +269,7 @@ export const Signup = () => {
                     type="lastname"
                     id="lastname"
                     onChange={handleChange}
-                    style={{width: '92%'}}
+                    style={{width: '80%'}}
                   />
                 </FormControl>
               </div>
@@ -315,9 +315,10 @@ export const Signup = () => {
                 {loading ? <CircularProgress size={24} /> : "Sign Up"}
                 </Button>
                 <Link to="/login"><Button style={{ width: "100%" }}>← Go to Login</Button></Link>
-                <Link to="/Dashboard" 
-                 style={{ width: "100%", margin: 'auto' }}
-                 >Continue Without Sign Up!</Link>
+                <Link to="/Dashboard" >
+                  <Button
+                 style={{ width: "100%", margin: 'auto' }}>
+                 Continue Without Sign Up</Button></Link>
               </form>
             )}
 
