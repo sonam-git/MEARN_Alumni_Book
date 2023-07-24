@@ -95,12 +95,11 @@ export const GET_USER = gql`
 `;
 
 export const GET_POSTS = gql`
-  query getPosts($username: String) {
-    posts(username: $username) {
+  query getPosts($postId: ID!) {
+    posts(postId: $postId) {
       _id
       postText
       postAuthor
-      image
       createdAt
       comments {
         commentText

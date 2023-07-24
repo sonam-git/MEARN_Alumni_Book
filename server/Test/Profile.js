@@ -9,7 +9,7 @@ import Button from '@mui/joy/Button';
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
-import { GET_ME, GET_POSTS } from "../utils/queries";
+import { GET_ME } from "../utils/queries";
 import { ADD_POST } from "../utils/mutations";
 import { REMOVE_POST } from "../utils/mutations";
 import { ADD_COMMENT } from "../utils/mutations";
@@ -47,23 +47,12 @@ const capitalizeFirstLetter = (string) => {
  const Profile = ({ updatePostAndCommentsData }) => {
   const { loading, data, error} = useQuery(GET_ME);
   const [postText, setPostText] = useState("");
- const [addPost] = useMutation(ADD_POST);
+  const [addPost] = useMutation(ADD_POST);
   const [commentText, setCommentText] = useState("");
   const [commentBoxStates, setCommentBoxStates] = useState({});
   const [removePost] = useMutation(REMOVE_POST);
   const [addComment] = useMutation(ADD_COMMENT);
-  const [updatePost] = useMutation(UPDATE_POST,{
-    update: (cache, { data: { updatePost } }) => {
-      // Update the cached data for the specific post after successful update
-      const { postId, postText } = updatePost;
-      cache.modify({
-        id: cache.identify({ __typename: "Post", _id: postId }),
-        fields: {
-          postText: () => postText,
-        },
-      });
-    },
-  });
+  const [updatePost] = useMutation(UPDATE_POST);
   const [removeFriendMutation] = useMutation(REMOVE_FRIEND, {
     refetchQueries: [{ query: GET_USERS }],
   });
@@ -146,23 +135,8 @@ const capitalizeFirstLetter = (string) => {
     try {
       const { data } = await addPost({
         variables: { postText },
-        update: (cache, { data: { addPost } }) => {
-          try {
-            const existingData = cache.readQuery({ query: GET_POSTS });
-            const existingPosts = existingData?.posts || [];
-            const newPost = addPost;
-  
-            cache.writeQuery({
-              query: GET_POSTS,
-              data: { posts: [...existingPosts, newPost] },
-            });
-          } catch (error) {
-            console.error("Error updating cache:", error);
-          }
-        },
       });
-      setPostText("")
-      console.log("Post added successfully");
+      window.location.reload();
     } catch (err) {
       console.error(err);
     }
@@ -199,7 +173,6 @@ const capitalizeFirstLetter = (string) => {
   };
 
 
-
   const handleCommentSubmit = async (postId) => {
     // Perform any necessary actions with the comment text for the specific post
     console.log(`Comment submitted for post ${postId}:`, commentText);
@@ -218,7 +191,7 @@ const capitalizeFirstLetter = (string) => {
     // Clear the comment textbox for the specific post
     setCommentText("");
   };
-// function to update the post..
+
   const handlePostUpdate = async (postId, postText) => {
     try {
       await updatePost({
@@ -228,6 +201,7 @@ const capitalizeFirstLetter = (string) => {
       console.log("Post updated successfully");
       setEditPostId(null); // Reset the editing post id
       setEditPostText(""); // Clear the post text
+      window.location.reload();
     } catch (error) {
       console.error("Error updating post:", error);
     }

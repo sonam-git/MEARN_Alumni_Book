@@ -42,6 +42,7 @@ import Connect from "../components/Connect";
 import PostList from "../components/PostList";
 import Profile from "./Profile";
 import FriendList from "../components/FriendList";
+import FriendsProfile from "./FriendsProfile";
 import Auth from "../utils/auth";
 
 // Makes the first letter of firstname and lastname to always be capital
@@ -57,6 +58,7 @@ export const Dashboard = () => {
   const [showConnect, setShowConnect] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [showPostList, setShowPostList] = useState(true);
+  const [showFriendProfile, setShowFriendProfile] = useState(true);
   const [selectedUser, setSelectedUser] = useState(null);
   const [postAndCommentsData, setPostAndCommentsData] = useState(null);
   const [showFriends, setShowFriends] = useState(false); // Initialize showFriends state to false
@@ -131,6 +133,14 @@ export const Dashboard = () => {
     setShowPostList(false);
     setShowConnect(false);
   };
+  const handleShowFriendProfile = (event) => {
+    event.preventDefault();
+    setShowProfile(false);
+    setShowPostList(false);
+    setShowConnect(false);
+    setShowFriendProfile(true)
+  };
+
   const handleShowFriends = () => {
     setShowFriends(!showFriends);
   };
@@ -262,9 +272,10 @@ export const Dashboard = () => {
                         </ListItemContent>
                       </ListItemButton>
                     </ListItem>
+{/* Friends */}
                     <ListItem>
                       <ListItemButton
-                        onClick={() => handleItemClick("contact")}
+                        onClick={() => handleItemClick("Friends")}
                         sx={{
                           color:
                             selectedItem === "contact" ? "#2ACAEA" : "#009DFF",
@@ -279,13 +290,14 @@ export const Dashboard = () => {
                           <ContactSupportIcon />
                         </ListItemDecorator>
                         <ListItemContent
-                          selected={selectedItem === "contact"}
-                          onClick={handleShowConnect}
+                          selected={selectedItem === "Friends"}
+                          onClick={handleShowFriendProfile}
                         >
-                          Contacts
+                          Friends Profile
                         </ListItemContent>
                       </ListItemButton>
                     </ListItem>
+
                   </List>
                 </ListItem>
               </List>
@@ -309,6 +321,9 @@ export const Dashboard = () => {
             {showPostList && <PostList />}
             {showProfile && (
               <Profile updatePostAndCommentsData={updatePostAndCommentsData} />
+            )}
+            {showFriendProfile && (
+              <FriendsProfile  />
             )}
           </Layout.Main>
 

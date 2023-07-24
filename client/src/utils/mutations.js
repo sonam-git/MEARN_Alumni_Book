@@ -121,7 +121,7 @@ export const ADD_COMMENT = gql`
 
 export const REMOVE_POST = gql`
   mutation removePost($postId: ID!) {
-    removePost(postId: $postId) 
+    removePost(postId: $postId)
   }
 `;
 
