@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_USERS } from "../utils/queries";
 import { REMOVE_COMMENT } from "../utils/mutations";
@@ -142,7 +142,7 @@ export const Dashboard = () => {
     setShowProfile(false);
     setShowPostList(false);
     setShowConnect(false);
-    setShowFriendProfile(true)
+    setShowFriendProfile(true);
   };
 
   const handleShowFriends = () => {
@@ -252,7 +252,7 @@ export const Dashboard = () => {
                         </ListItemContent>
                       </ListItemButton>
                     </ListItem>
-                   <ListItem>
+                    <ListItem>
                       <ListItemButton
                         onClick={() => handleItemClick("aboutus")}
                         sx={{
@@ -276,11 +276,15 @@ export const Dashboard = () => {
                         </ListItemContent>
                       </ListItemButton>
                     </ListItem>
-        {/* Friends */}
+                    {/* Friends */}
                     <ListItem>
                       <ListItemButton
-                        component ={Link}
-                        to={userIdFromContext ? `/Profile/${userIdFromContext}` : `/`}
+                        component={Link}
+                        to={
+                          userIdFromContext
+                            ? `/FriendProfile/${userIdFromContext}`
+                            : `/`
+                        }
                         onClick={() => handleItemClick("Friends")}
                         sx={{
                           color:
@@ -303,7 +307,6 @@ export const Dashboard = () => {
                         </ListItemContent>
                       </ListItemButton>
                     </ListItem>
-
                   </List>
                 </ListItem>
               </List>
@@ -329,8 +332,9 @@ export const Dashboard = () => {
               <Profile updatePostAndCommentsData={updatePostAndCommentsData} />
             )}
             {showFriendProfile && (
-              <FriendProfile updatePostAndCommentsData={updatePostAndCommentsData} />
-
+              <FriendProfile
+                updatePostAndCommentsData={updatePostAndCommentsData}
+              />
             )}
           </Layout.Main>
 
@@ -359,7 +363,7 @@ export const Dashboard = () => {
                     }}
                   >
                     <Avatar
-                      src={postAndCommentsData.me.image}
+                      src={postAndCommentsData.user.image}
                       size="lg"
                       sx={{
                         "--Avatar-size": "50px",
@@ -526,7 +530,7 @@ export const Dashboard = () => {
                   ))}
                 </>
               )}
-              </Sheet>
+            </Sheet>
           )}
 
           {/* Right Side Profile View for Connect Page */}
