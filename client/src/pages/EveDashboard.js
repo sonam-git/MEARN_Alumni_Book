@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import { Link} from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { GET_USERS } from "../utils/queries";
-import { REMOVE_COMMENT } from "../utils/mutations";
 import { useMutation } from "@apollo/client";
+import { GET_ME, GET_USERS } from "../utils/queries";
+import { REMOVE_COMMENT } from "../utils/mutations";
+import { Link, useParams } from "react-router-dom";
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
 import AspectRatio from "@mui/joy/AspectRatio";
@@ -20,15 +19,21 @@ import ListItemButton from "@mui/joy/ListItemButton";
 import ListItemContent from "@mui/joy/ListItemContent";
 import ListSubheader from "@mui/joy/ListSubheader";
 import ListItemDecorator from "@mui/joy/ListItemDecorator";
+import Card from "@mui/joy/Card";
+import CardOverflow from "@mui/joy/CardOverflow";
+import CardCover from "@mui/joy/CardCover";
+import articleOneImage from "../assets/images/article-one.webp";
 import Avatar from "@mui/joy/Avatar";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useUser } from "../utils/UserProvider";
 
+import { useUser } from "../utils/UserProvider";
 // Icons import
 // import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 // import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import PersonIcon from "@mui/icons-material/Person";
 
+import CloseIcon from "@mui/icons-material/Close";
+import ExploreIcon from "@mui/icons-material/Explore";
 import InfoIcon from "@mui/icons-material/Info";
 import MessageIcon from "@mui/icons-material/Message";
 import ContactSupportIcon from "@mui/icons-material/ContactSupport";
@@ -42,9 +47,10 @@ import Header from "../components/Header";
 import Layout from "../containers/Layout";
 import Connect from "../components/Connect";
 import PostList from "../components/PostList";
-import Profile from "./Profile";
-import FriendList from "../components/FriendList";
 import FriendProfile from "./FriendProfile";
+import Profile from "./Profile";
+
+import FriendList from "../components/FriendList";
 import Auth from "../utils/auth";
 
 // Makes the first letter of firstname and lastname to always be capital
@@ -55,6 +61,7 @@ const capitalizeFirstLetter = (string) => {
 export const Dashboard = () => {
   const { userId: userIdFromContext } = useUser();
   console.log(userIdFromContext);
+ 
   const [removeComment] = useMutation(REMOVE_COMMENT);
   const [showLogin, setShowLogin] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -62,12 +69,11 @@ export const Dashboard = () => {
   const [showConnect, setShowConnect] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [showPostList, setShowPostList] = useState(true);
-  const [showFriendProfile, setShowFriendProfile] = useState(true);
   const [selectedUser, setSelectedUser] = useState(null);
   const [postAndCommentsData, setPostAndCommentsData] = useState(null);
   const [showFriends, setShowFriends] = useState(false); // Initialize showFriends state to false
   const [selectedItem, setSelectedItem] = useState("post");
-
+  const [showFriendProfile, setShowFriendProfile] = useState(true);
   // logged in user variable
   const loggedInUser = Auth.loggedIn() ? Auth.getProfile().data._id : null;
 
@@ -80,11 +86,19 @@ export const Dashboard = () => {
   const users = data?.users || [];
 
   const filteredUsers = users.filter((user) => user._id !== loggedInUser);
+  const friendsArray = users.filter((user) => user.friends);
+  console.log(friendsArray);
 
   if (loading) {
     return <div>Loading...</div>;
   }
-
+const handleShowFriendProfile = (event) => {
+    event.preventDefault();
+    setShowProfile(false);
+    setShowPostList(false);
+    setShowConnect(false);
+    setShowFriendProfile(true)
+  };
   const updatePostAndCommentsData = (data) => {
     setPostAndCommentsData(data);
   };
@@ -137,14 +151,6 @@ export const Dashboard = () => {
     setShowPostList(false);
     setShowConnect(false);
   };
-  const handleShowFriendProfile = (event) => {
-    event.preventDefault();
-    setShowProfile(false);
-    setShowPostList(false);
-    setShowConnect(false);
-    setShowFriendProfile(true)
-  };
-
   const handleShowFriends = () => {
     setShowFriends(!showFriends);
   };
@@ -252,9 +258,11 @@ export const Dashboard = () => {
                         </ListItemContent>
                       </ListItemButton>
                     </ListItem>
-                   <ListItem>
+                    <ListItem>
                       <ListItemButton
-                        onClick={() => handleItemClick("aboutus")}
+                        component={Link}
+                        to={userIdFromContext ? `/Profile/${userIdFromContext}` : `/`}
+                        onClick={() => handleItemClick("Profile")}
                         sx={{
                           color:
                             selectedItem === "aboutus" ? "#2ACAEA" : "#009DFF",
@@ -268,19 +276,13 @@ export const Dashboard = () => {
                         <ListItemDecorator sx={{ color: "neutral.500" }}>
                           <PersonIcon />
                         </ListItemDecorator>
-                        <ListItemContent
-                          selected={selectedItem === "aboutus"}
-                          onClick={handleShowProfile}
-                        >
+                        <ListItemContent selected={selectedItem === "Profile"}>
                           Profile
                         </ListItemContent>
                       </ListItemButton>
                     </ListItem>
-        {/* Friends */}
-                    <ListItem>
+                     <ListItem>
                       <ListItemButton
-                        component ={Link}
-                        to={userIdFromContext ? `/Profile/${userIdFromContext}` : `/`}
                         onClick={() => handleItemClick("Friends")}
                         sx={{
                           color:
@@ -303,7 +305,6 @@ export const Dashboard = () => {
                         </ListItemContent>
                       </ListItemButton>
                     </ListItem>
-
                   </List>
                 </ListItem>
               </List>
@@ -330,7 +331,6 @@ export const Dashboard = () => {
             )}
             {showFriendProfile && (
               <FriendProfile updatePostAndCommentsData={updatePostAndCommentsData} />
-
             )}
           </Layout.Main>
 
@@ -526,7 +526,7 @@ export const Dashboard = () => {
                   ))}
                 </>
               )}
-              </Sheet>
+            </Sheet>
           )}
 
           {/* Right Side Profile View for Connect Page */}
@@ -713,19 +713,19 @@ export const Dashboard = () => {
                     </ListItemButton>
                   </ListItem>
                   <ListItem>
-                    <ListItemButton onClick={() => handleItemClick("contact")}>
+                    <ListItemButton onClick={() => handleItemClick("Friends Profile")}>
                       <ListItemDecorator sx={{ color: "neutral.500" }}>
                         <ContactSupportIcon />
                       </ListItemDecorator>
                       <ListItemContent
-                        selected={selectedItem === "contact"}
+                        selected={selectedItem === "Friends Profile"}
                         onClick={handleShowConnect}
                         sx={{
                           color:
                             selectedItem === "contact" ? "#2ACAEA" : "white",
                         }}
                       >
-                        Contacts
+                        Friends Profile
                       </ListItemContent>
                     </ListItemButton>
                   </ListItem>
