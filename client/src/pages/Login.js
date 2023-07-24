@@ -24,6 +24,7 @@ import { Grid } from '@mui/material';
 import { Link } from "react-router-dom";
 import Dashboard from "./Dashboard";
 
+
 import { useUser } from '../utils/UserProvider';
 
 
@@ -193,7 +194,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
           >
          
                {/* Logo */}
-          <img src={Logo} alt="Logo" width={250} height={150} />
+               <img src={Logo} alt="Logo" width={250} height={150} />
           
             <ColorSchemeToggle />
           </Box>
@@ -220,6 +221,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
               },
             }}
           >
+           
             { isLoggedIn ? (
               <p>Login Success! </p>
             ) : (
