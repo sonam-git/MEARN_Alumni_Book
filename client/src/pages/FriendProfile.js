@@ -18,8 +18,8 @@ import CardOverflow from "@mui/joy/CardOverflow";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import { Card } from "@mui/joy";
 import Badge from "@mui/joy/Badge";
-import HeartCounter from "../utils/heartCounter";
 import useHeartCounter from "../utils/heartCounter";
+import LikeDislike from "../components/likedislike";
 
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
@@ -39,6 +39,7 @@ const capitalizeFirstLetter = (string) => {
 
 const FriendProfile = ({ updateProfilePostAndCommentsData, userId }) => {
   const { loading: loadingMe, error: errorMe, data: dataMe } = useQuery(GET_ME);
+  const { likeCount, userLiked, handleLikeToggle } = useHeartCounter();
   // const { userId } = useParams();
   const {
     loading: loadingUser,
@@ -132,8 +133,6 @@ const FriendProfile = ({ updateProfilePostAndCommentsData, userId }) => {
     // Clear the comment textbox for the specific post
     setCommentText("");
   };
-
-
 
   return (
     <>
@@ -318,12 +317,17 @@ const FriendProfile = ({ updateProfilePostAndCommentsData, userId }) => {
                         > */}
                         {/* <HeartCounter /> */}
                         {/* </Badge> */}
-                        <Badge badgeContent={likeCount} color="primary">
+                        {/* <Badge badgeContent={likeCount} color="primary">
                           <FavoriteBorder
                             color={userLiked ? "primary" : "action"}
                             onClick={handleLikeToggle}
                           />
-                        </Badge>
+                        </Badge> */}
+                        <LikeDislike
+                          likeCount={likeCount}
+                          userLiked={userLiked}
+                          onLikeToggle={handleLikeToggle}
+                        />
                       </IconButton>
                       <IconButton
                         variant="outlined"

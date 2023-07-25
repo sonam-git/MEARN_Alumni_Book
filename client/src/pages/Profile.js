@@ -18,7 +18,6 @@ import { REMOVE_FRIEND } from "../utils/mutations";
 import { GET_USERS } from "../utils/queries";
 import { GET_POST_WITH_COMMENTS } from "../utils/queries";
 import CardOverflow from "@mui/joy/CardOverflow";
-import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import useHeartCounter from "../utils/heartCounter";
 import { Card } from "@mui/joy";
 import Badge from "@mui/joy/Badge";
@@ -33,10 +32,11 @@ import IconButton from "@mui/joy/IconButton";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import CommentIcon from "@mui/icons-material/Comment";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import PersonAddIcon from "@mui/icons-material/PersonAdd"
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
+import LikeDislike from "../components/likedislike";
 
 // Makes the first letter of firstname and lastname to always be capital
 const capitalizeFirstLetter = (string) => {
@@ -502,12 +502,17 @@ const Profile = ({ updatePostAndCommentsData }) => {
                         >
                           <FavoriteBorder color={userLiked ? 'primary' : 'action'} onClick={handleLikeToggle}/>
                         </Badge> */}
-                        <Badge badgeContent={likeCount} color="primary">
+                        {/* <Badge badgeContent={likeCount} color="primary">
                           <FavoriteBorder
                             color={userLiked ? "primary" : "action"}
                             onClick={handleLikeToggle}
                           />
-                        </Badge>
+                        </Badge> */}
+                        <LikeDislike
+                          likeCount={likeCount}
+                          userLiked={userLiked}
+                          onLikeToggle={handleLikeToggle}
+                        />
                       </IconButton>
                       <IconButton
                         variant="outlined"
@@ -785,24 +790,23 @@ const Profile = ({ updatePostAndCommentsData }) => {
                       {/* Check if the friend._id exists in the logged-in user's friends array */}
                       {data.me.friends.find((f) => f._id === friend._id) ? (
                         // If exists, show PersonRemoveIcon
-                      <IconButton
-                        variant="solid"
-                        color="danger"
-                        onClick={() => handleRemoveFriend(friend._id)}
-                        sx={{
-                          marginRight: "10px",
-                          paddingLeft: "20px",
-                          paddingRight: "20px",
-                        }}
-                      >
-                        <PersonRemoveIcon />
-                      </IconButton>
-                       ) : (
+                        <IconButton
+                          variant="solid"
+                          color="danger"
+                          onClick={() => handleRemoveFriend(friend._id)}
+                          sx={{
+                            marginRight: "10px",
+                            paddingLeft: "20px",
+                            paddingRight: "20px",
+                          }}
+                        >
+                          <PersonRemoveIcon />
+                        </IconButton>
+                      ) : (
                         // If not exists, show PersonAddIcon
                         <IconButton
                           variant="solid"
                           color="danger"
-                         
                           sx={{
                             marginRight: "10px",
                             paddingLeft: "20px",
