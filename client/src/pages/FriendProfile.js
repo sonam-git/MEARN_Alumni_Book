@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import { GET_ME, GET_POSTS, GET_USER } from "../utils/queries";
-import { ADD_COMMENT } from "../utils/mutations";
+import { ADD_COMMENT,LIKE_POST } from "../utils/mutations";
 import { GET_USERS } from "../utils/queries";
 import { useParams } from "react-router-dom";
 import { GET_POST_WITH_COMMENTS } from "../utils/queries";
@@ -18,6 +18,8 @@ import CardOverflow from "@mui/joy/CardOverflow";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import { Card } from "@mui/joy";
 import Badge from "@mui/joy/Badge";
+import useHeartCounter from "../utils/heartCounter";
+import LikeDislike from "../components/likedislike";
 
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
@@ -36,6 +38,22 @@ const capitalizeFirstLetter = (string) => {
 };
 
 const FriendProfile = ({ updateProfilePostAndCommentsData, userId }) => {
+  const [likePost, { loading, error }] = useMutation(LIKE_POST);
+
+  const handleLikePostToggle = (postId) => {
+    likePost({
+      variables: {
+        postId: postId,
+      },
+    })
+      .then((result) => {
+        console.log('Post after like:', result.data.likePost);
+      })
+      .catch((error) => {
+        console.error('Error liking post:', error);
+      });
+  };
+
   const { loading: loadingMe, error: errorMe, data: dataMe } = useQuery(GET_ME);
   // const { userId } = useParams();
   const {
@@ -130,8 +148,6 @@ const FriendProfile = ({ updateProfilePostAndCommentsData, userId }) => {
     // Clear the comment textbox for the specific post
     setCommentText("");
   };
-
-
 
   return (
     <>
@@ -309,13 +325,26 @@ const FriendProfile = ({ updateProfilePostAndCommentsData, userId }) => {
                           color: "gray",
                         }}
                       >
-                        <Badge
+                        {/* <Badge
                           color="neutral"
                           badgeContent={dataUser.user.username.length}
                           size="sm"
-                        >
-                          <FavoriteBorder />
-                        </Badge>
+                        > */}
+                        {/* <HeartCounter /> */}
+                        {/* </Badge> */}
+                        {/* <Badge badgeContent={likeCount} color="primary">
+                          <FavoriteBorder
+                            color={userLiked ? "primary" : "action"}
+                            onClick={handleLikeToggle}
+                          />
+                        </Badge> */}
+                        <LikeDislike
+                          postId={post._id}
+                          onLikeToggle={()=> handleLikePostToggle(post._id)}
+                          // likeCount={likeCount}
+                          // userLiked={userLiked}
+                          // onLikeToggle={handleLikeToggle}
+                        />
                       </IconButton>
                       <IconButton
                         variant="outlined"

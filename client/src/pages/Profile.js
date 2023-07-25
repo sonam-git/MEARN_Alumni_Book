@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import { GET_ME, GET_POSTS } from "../utils/queries";
-import { ADD_POST } from "../utils/mutations";
+import { ADD_POST,LIKE_POST } from "../utils/mutations";
 import { REMOVE_POST } from "../utils/mutations";
 import { ADD_COMMENT } from "../utils/mutations";
 import { UPDATE_POST } from "../utils/mutations";
@@ -18,7 +18,7 @@ import { REMOVE_FRIEND } from "../utils/mutations";
 import { GET_USERS } from "../utils/queries";
 import { GET_POST_WITH_COMMENTS } from "../utils/queries";
 import CardOverflow from "@mui/joy/CardOverflow";
-import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
+import useHeartCounter from "../utils/heartCounter";
 import { Card } from "@mui/joy";
 import Badge from "@mui/joy/Badge";
 
@@ -36,6 +36,7 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
+import LikeDislike from "../components/likedislike";
 
 // Makes the first letter of firstname and lastname to always be capital
 const capitalizeFirstLetter = (string) => {
@@ -43,6 +44,24 @@ const capitalizeFirstLetter = (string) => {
 };
 
 const Profile = ({ updatePostAndCommentsData }) => {
+   const [likePost, { loading:loadinglikepost, error:errorlikepost }] = useMutation(LIKE_POST);
+
+  const handleLikePostToggle = (postId) => {
+    likePost({
+      variables: {
+        postId: postId,
+      },
+    })
+      .then((result) => {
+        // The mutation was successful, and the updated post data can be accessed via result.data.likePost
+        console.log('Post after like:', result.data.likePost);
+      })
+      .catch((error) => {
+        // Handle any errors that occurred during the mutation
+        console.error('Error liking post:', errorlikepost);
+      });
+  };
+  
   const { loading, data, error } = useQuery(GET_ME);
   const [postText, setPostText] = useState("");
   const [addPost] = useMutation(ADD_POST, {
@@ -489,13 +508,27 @@ const Profile = ({ updatePostAndCommentsData }) => {
                           color: "gray",
                         }}
                       >
-                        <Badge
-                          color="neutral"
-                          badgeContent={data.me.username.length}
+                        {/* <HeartCounter/> */}
+                        {/* <Badge
+                          color="primary"
+                          badgeContent={likeCount}
                           size="sm"
                         >
-                          <FavoriteBorder />
-                        </Badge>
+                          <FavoriteBorder color={userLiked ? 'primary' : 'action'} onClick={handleLikeToggle}/>
+                        </Badge> */}
+                        {/* <Badge badgeContent={likeCount} color="primary">
+                          <FavoriteBorder
+                            color={userLiked ? "primary" : "action"}
+                            onClick={handleLikeToggle}
+                          />
+                        </Badge> */}
+                        <LikeDislike
+                          postId={post._id}
+                          onLikeToggle={()=> handleLikePostToggle(post._id)}
+                          // likeCount={likeCount}
+                          // userLiked={userLiked}
+                          // onLikeToggle={handleLikeToggle}
+                        />
                       </IconButton>
                       <IconButton
                         variant="outlined"
@@ -533,6 +566,8 @@ const Profile = ({ updatePostAndCommentsData }) => {
                       </Typography>
                     </CardActions>
                   )}
+
+
                   {commentBoxStates[post._id] && (
                     <div>
                       <FormControl>
@@ -579,6 +614,7 @@ const Profile = ({ updatePostAndCommentsData }) => {
                       </FormControl>
                     </div>
                   )}
+
 
                   {editPostId === post._id && (
                     <div>
