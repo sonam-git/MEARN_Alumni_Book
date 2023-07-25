@@ -23,6 +23,7 @@ const FriendProfileList = ({
   updateActivityPostAndCommentsData,
 }) => {
   const [friendClick, setFriendClick] = useState("");
+
   const handleFriendClick = (e) => {
     // e.preventDefault;
     setFriendClick(e.target.id);
@@ -36,6 +37,7 @@ const FriendProfileList = ({
         showPostList={showPostList}
         activityPostAndCommentsData={activityPostAndCommentsData}
         updateActivityPostAndCommentsData={updateActivityPostAndCommentsData}
+        handleFriendClick={handleFriendClick} 
       />
     );
   }

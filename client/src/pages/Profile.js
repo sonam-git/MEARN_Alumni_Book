@@ -19,8 +19,9 @@ import { GET_USERS } from "../utils/queries";
 import { GET_POST_WITH_COMMENTS } from "../utils/queries"
 import CardOverflow from "@mui/joy/CardOverflow";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
-import { Card } from "@mui/joy";
+import { AspectRatio, Card } from "@mui/joy";
 import Badge from "@mui/joy/Badge";
+import FriendProfile from '../pages/FriendProfile'
 
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
@@ -42,7 +43,7 @@ const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-const Profile = ({ updatePostAndCommentsData }) => {
+const Profile = ({ updatePostAndCommentsData, handleShowFriendProfile }) => {
   const { loading, data, error } = useQuery(GET_ME);
   const [postText, setPostText] = useState("");
   const [addPost] = useMutation(ADD_POST,{ refetchQueries: [{ query: GET_ME }],});
@@ -67,12 +68,15 @@ const Profile = ({ updatePostAndCommentsData }) => {
   });
   const [editPostId, setEditPostId] = useState(null);
   const [editPostText, setEditPostText] = useState("");
+  const [profilePostAndCommentsData, setProfilePostAndCommentsData] =
+    useState(null);
 
   const [activeTab, setActiveTab] = useState(1);
 
   const [showMyPost, setShowMyPost] = useState(true); // Initially show My Post tab content
   const [showCreatePost, setShowCreatePost] = useState(false);
   const [showFriendsList, setShowFriendsList] = useState(false);
+  const [showFriendsProfile, setShowFriendsProfile] = useState(false);
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -108,6 +112,36 @@ const Profile = ({ updatePostAndCommentsData }) => {
     setShowCreatePost(false);
     setShowFriendsList(true);
   };
+
+  const handleFriendsProfile = () => {
+    setShowFriendsProfile(true);
+  }
+
+
+  const updateProfilePostAndCommentsData = (data) => {
+    setProfilePostAndCommentsData(data);
+  }
+
+  const [friendClick, setFriendClick] = useState("");
+
+  const handleFriendClick = (e) => {
+    setFriendClick(e.target.id);
+    console.log(friendClick);
+
+  };
+
+  if (friendClick) {
+    return (
+      <FriendProfile
+        userId={friendClick}
+        handleFriendClick={handleFriendClick} 
+        handleShowFriendProfile={handleShowFriendProfile}
+      />
+
+    );
+  }
+
+
   const handleCommentsIconClick = (postId) => {
       if (!loading && data) {
         // Find the specific post using postId
@@ -436,6 +470,7 @@ const Profile = ({ updatePostAndCommentsData }) => {
                     <CardActions
                       buttonFlex="0 1 120px"
                       sx={{ padding: "15px" }}
+                      onClick={handleShowFriendProfile}
                     >
                       {post.postAuthor === data.me.username && (
                         <>
@@ -490,6 +525,7 @@ const Profile = ({ updatePostAndCommentsData }) => {
                           padding: "7px",
                           color: "gray",
                         }}
+                       
                       >
                         <Badge
                           color="neutral"
@@ -746,15 +782,16 @@ const Profile = ({ updatePostAndCommentsData }) => {
                         padding: "15px",
                       }}
                     >
-                      <Avatar
-                        src={friend.image}
-                        size="lg"
-                        sx={{
-                          "--Avatar-size": "50px",
-                          border: "solid",
-                          borderColor: "#2ACAEA",
-                        }}
-                      />
+                        <Avatar
+                          src={friend.image}
+                          size="lg"
+                          sx={{
+                            "--Avatar-size": "50px",
+                            border: "solid",
+                            borderColor: "#2ACAEA",
+                          }}
+                          onClick={handleFriendClick} id={friend._id}
+                        />
                       <Typography
                         variant="body1"
                         sx={{
@@ -762,7 +799,13 @@ const Profile = ({ updatePostAndCommentsData }) => {
                           fontSize: "20px",
                           color: "#2ACAEA",
                           fontFamily: "monospace",
+                          cursor: "pointer", // Add cursor pointer to show it's clickable
+                          "&:hover": {
+                            textDecoration: "underline",
+                            color: '#2ACAEA' // Add underline on hover
+                          },
                         }}
+                        onClick={handleFriendClick} id={friend._id}
                       >
                         {capitalizeFirstLetter(friend.firstname)}{" "}
                         {capitalizeFirstLetter(friend.lastname)}
