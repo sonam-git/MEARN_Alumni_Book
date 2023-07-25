@@ -3,7 +3,7 @@ import  { useState } from 'react';
 import Box from '@mui/joy/Box';
 import { useColorScheme } from '@mui/joy/styles';
 import Typography from '@mui/joy/Typography';
-import { Grid } from "@mui/material";
+import { Grid,Button } from "@mui/material";
 import IconButton from '@mui/joy/IconButton';
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
@@ -112,7 +112,9 @@ const Header = () => {
 {/* Conditionally render the SideNav */}
 {drawerOpen && (
       <>
-      <h1>i am side bar </h1></>
+      <Button>1</Button>
+   
+      </>
       )}
     </Layout.Header>
   );
