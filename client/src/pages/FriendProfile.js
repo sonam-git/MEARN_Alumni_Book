@@ -11,7 +11,6 @@ import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import { GET_ME, GET_POSTS, GET_USER } from "../utils/queries";
 import { ADD_COMMENT } from "../utils/mutations";
-import { REMOVE_FRIEND } from "../utils/mutations";
 import { GET_USERS } from "../utils/queries";
 import { useParams } from "react-router-dom";
 import { GET_POST_WITH_COMMENTS } from "../utils/queries";
@@ -31,21 +30,14 @@ import CardActions from "@mui/joy/CardActions";
 import IconButton from "@mui/joy/IconButton";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import CommentIcon from "@mui/icons-material/Comment";
-import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 // Makes the first letter of firstname and lastname to always be capital
 const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-const FriendProfile = ({
-  updatePostAndCommentsData,
-  userId,
-  showPostList,
-  activityPostAndCommentsData,
-  updateActivityPostAndCommentsData,
-}) => {
-  const { likeCount, userLiked, handleLikeToggle } = useHeartCounter();
+const FriendProfile = ({ updateProfilePostAndCommentsData, userId }) => {
   const { loading: loadingMe, error: errorMe, data: dataMe } = useQuery(GET_ME);
   // const { userId } = useParams();
   const {
@@ -62,10 +54,6 @@ const FriendProfile = ({
   });
   const [commentText, setCommentText] = useState("");
   const [commentBoxStates, setCommentBoxStates] = useState({});
-
-  const [removeFriendMutation] = useMutation(REMOVE_FRIEND, {
-    refetchQueries: [{ query: GET_USERS }],
-  });
 
   const [activeTab, setActiveTab] = useState(1);
 
@@ -106,7 +94,7 @@ const FriendProfile = ({
         // Fetch comments data for the specific post
         const commentsData = post.comments;
 
-        const postAndCommentsData = {
+        const profilePostAndCommentsData = {
           // Create the postAndCommentsData objec
           user: dataUser.user,
           postId: postId,
@@ -114,7 +102,7 @@ const FriendProfile = ({
           comments: commentsData,
         };
         // Pass the data to the Dashboard.js component by calling the function
-        updatePostAndCommentsData(postAndCommentsData);
+        updateProfilePostAndCommentsData(profilePostAndCommentsData);
       }
     }
   };
@@ -145,18 +133,7 @@ const FriendProfile = ({
     setCommentText("");
   };
 
-  // Function to handle removing a friend
-  //   const handleRemoveFriend = (friendId) => {
-  //     removeFriendMutation({
-  //       variables: { friendId },
-  //     })
-  //       .then(() => {
-  //         console.log("Friend removed successfully");
-  //       })
-  //       .catch((error) => {
-  //         console.error("Failed to remove friend:", error.message);
-  //       });
-  //   };
+
 
   return (
     <>
@@ -528,7 +505,7 @@ const FriendProfile = ({
                     >
                       <IconButton
                         variant="solid"
-                        color="danger"
+                        color="primary"
                         // onClick={() => handleRemoveFriend(friend._id)}
                         sx={{
                           marginRight: "10px",
@@ -536,7 +513,7 @@ const FriendProfile = ({
                           paddingRight: "20px",
                         }}
                       >
-                        <PersonRemoveIcon />
+                        <PersonAddIcon />
                       </IconButton>
                     </CardActions>
                   </Box>

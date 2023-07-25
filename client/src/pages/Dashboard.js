@@ -35,6 +35,7 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 // import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 // import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import PersonIcon from "@mui/icons-material/Person";
+import GroupIcon from '@mui/icons-material/Group';
 
 import InfoIcon from "@mui/icons-material/Info";
 import MessageIcon from "@mui/icons-material/Message";
@@ -65,19 +66,20 @@ const capitalizeFirstLetter = (string) => {
 export const Dashboard = () => {
   //declare functions from postlist
   const { userId: userIdFromContext } = useUser();
-  console.log(userIdFromContext); //gives you user id
-
   const [removeComment] = useMutation(REMOVE_COMMENT);
   const [showLogin, setShowLogin] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [showConnect, setShowConnect] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [showFriendsProfile, setShowFriendsProfile] = useState(false);
   const [showPostList, setShowPostList] = useState(true);
   const [showFriendProfile, setShowFriendProfile] = useState(true);
   const [selectedUser, setSelectedUser] = useState(null);
   const [postAndCommentsData, setPostAndCommentsData] = useState(null);
   const [activityPostAndCommentsData, setActivityPostAndCommentsData] =
+    useState(null);
+  const [profilePostAndCommentsData, setProfilePostAndCommentsData] =
     useState(null);
   const [showFriends, setShowFriends] = useState(false); // Initialize showFriends state to false
   const [selectedItem, setSelectedItem] = useState("post");
@@ -135,6 +137,9 @@ export const Dashboard = () => {
     }
   };
 
+  const updateProfilePostAndCommentsData = (dataUser ) =>{ 
+    setProfilePostAndCommentsData(dataUser);
+  }
   // const handleShowLogin = () => {
   //   setShowLogin(true);
   // };
@@ -158,7 +163,14 @@ export const Dashboard = () => {
     setShowProfile(false);
     setShowFriendProfile(false);
   };
-
+ const handleShowFriendsProfile = (event) => {
+    event.preventDefault();
+    setShowPostList(false);
+    setShowConnect(false);
+    setShowProfile(false);
+    setShowFriendProfile(false);
+    setShowFriendsProfile(true);
+  };
   const handleShowProfile = (event) => {
     event.preventDefault();
     setShowProfile(true);
@@ -334,16 +346,9 @@ export const Dashboard = () => {
                           }}
                         >
                           <ListItemDecorator sx={{ color: "neutral.500" }}>
-                            <ContactSupportIcon />
+                            <GroupIcon />
                           </ListItemDecorator>
                           <ListItemContent
-                            component={Link}
-                            to={
-                              userIdFromContext
-                                ? `/FriendProfile/${userIdFromContext}`
-                                : `/`
-                            }
-                            // onClick={() => handleItemClick("Friends")}
                             selected={selectedItem === "Friends"}
                             onClick={handleShowFriendProfile}
                           >
@@ -389,10 +394,7 @@ export const Dashboard = () => {
                   friends={meData.me.friends}
                   updatePostAndCommentsData={updatePostAndCommentsData}
                   showPostList={showPostList}
-                  activityPostAndCommentsData={activityPostAndCommentsData}
-                  updateActivityPostAndCommentsData={
-                    updateActivityPostAndCommentsData
-                  }
+                  updateProfilePostAndCommentsData={updateProfilePostAndCommentsData}
                 />
               )}
             </Layout.Main>
@@ -587,6 +589,211 @@ export const Dashboard = () => {
                           onClick={() =>
                             handleDeleteComment(
                               postAndCommentsData.post._id,
+                              comment._id
+                            )
+                          }
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </div>
+                    ))}
+                  </>
+                )}
+              </Sheet>
+            )}
+
+
+            {/* for FriendsProfileList */}
+             {showFriendsProfile && profilePostAndCommentsData && (
+              <Sheet
+                sx={{
+                  display: { xs: "none", sm: "initial" },
+                  position: "fixed",
+                  top: 60,
+                  right: 0,
+                  bottom: 0,
+                  width: "415px", // Set the desired width for the right panel
+                  borderLeft: "1px solid",
+                  borderColor: "neutral.outlinedBorder",
+                  overflowY: "auto", // Add scrollbar if content exceeds the panel height
+                }}
+              >
+                <div key={profilePostAndCommentsData.post._id}>
+                  <Box sx={{ p: 2, display: "flex", alignItems: "center" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: "10px",
+                      }}
+                    >
+                      <Avatar
+                        src={profilePostAndCommentsData.user.image}
+                        size="lg"
+                        sx={{
+                          "--Avatar-size": "50px",
+                          border: "solid",
+                          borderColor: "#2ACAEA",
+                        }}
+                      />
+                    </Box>
+                    <Typography
+                      sx={{
+                        flex: 1,
+                        color: "#2ACAEA",
+                        fontFamily: "monospace",
+                      }}
+                    >
+                      {profilePostAndCommentsData.post.postAuthor}
+                    </Typography>
+                  </Box>
+                  {/* Add other components and details related to the selected post */}
+                </div>
+
+                <Box
+                  sx={{
+                    padding: "10px",
+                    border: "solid",
+                    borderRadius: "10px",
+                    borderColor: "#006EB3",
+                    width: "98%",
+                    margin: "auto",
+                    marginBottom: "15px",
+                  }}
+                >
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontSize: "12px",
+                      padding: "15px",
+                      fontFamily: "monospace",
+                    }}
+                  >
+                    Posted:{" "}
+                    {new Date(
+                      parseInt(profilePostAndCommentsData.post.createdAt)
+                    ).toLocaleDateString()}
+                  </Typography>
+                  <Box
+                    sx={{
+                      gap: 2,
+                      p: 2,
+                      display: "grid",
+                      gridTemplateColumns: "auto 1fr",
+                      "& > *:nth-of-ty(odd)": { color: "text.secondary" },
+                    }}
+                  >
+                    <Typography
+                      level="h6"
+                      fontWeight="lg"
+                      color="primary"
+                      sx={{ width: "100%" }}
+                    >
+                      {profilePostAndCommentsData.post.postText}
+                    </Typography>
+                  </Box>
+                </Box>
+                <hr />
+                <Typography
+                  level="h1"
+                  fontWeight="m"
+                  fontSize="clamp(1rem, 1rem + 2.1818vw, 1rem)"
+                  style={{
+                    textAlign: "center",
+                  }}
+                >
+                  Comments
+                </Typography>
+                <hr />
+                {profilePostAndCommentsData.post.comments?.length === 0 ? (
+                  <Typography
+                    sx={{
+                      textAlign: "center",
+                      margin: "auto",
+                      mt: 3,
+                    }}
+                  >
+                    No Comments Yet!
+                  </Typography>
+                ) : (
+                  <>
+                    {profilePostAndCommentsData.post.comments.map((comment) => (
+                      <div
+                        key={comment._id}
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          padding: "10px",
+                          border: "solid",
+                          borderRadius: "10px",
+                          borderColor: "#2ACAEA",
+                          width: "80%",
+                          margin: "auto",
+                          marginTop: "15px",
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            padding: "10px",
+                          }}
+                        >
+                          <Avatar
+                            src={profilePostAndCommentsData.user.image}
+                            size="lg"
+                            sx={{
+                              "--Avatar-size": "35px",
+                              border: "solid",
+                              borderColor: "#2ACAEA",
+                            }}
+                          />
+                        </Box>
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            mt: "10px",
+                            fontFamily: "monospace",
+                            width: "85%",
+                          }}
+                          color="primary"
+                        >
+                          <span
+                            style={{ fontWeight: "bold", fontStyle: "italic" }}
+                          >
+                            {comment.commentAuthor}
+                          </span>{" "}
+                          -{" "}
+                          <span style={{ color: "white" }}>
+                            {comment.commentText}
+                          </span>
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              marginRight: "auto",
+                              display: "flex",
+                              fontSize: "12px",
+                            }}
+                          >
+                            Posted:{" "}
+                            {new Date(
+                              parseInt(comment.createdAt)
+                            ).toLocaleDateString()}
+                          </Typography>
+                        </Typography>
+                        <IconButton
+                          variant="outlined"
+                          color="danger"
+                          sx={{
+                            padding: "2px",
+                            height: "10px",
+                            border: "none",
+                          }}
+                          onClick={() =>
+                            handleDeleteComment(
+                              profilePostAndCommentsData.post._id,
                               comment._id
                             )
                           }
