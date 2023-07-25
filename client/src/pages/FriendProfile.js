@@ -36,13 +36,7 @@ const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-const FriendProfile = ({
-  updatePostAndCommentsData,
-  userId,
-  showPostList,
-  activityPostAndCommentsData,
-  updateActivityPostAndCommentsData,
-}) => {
+const FriendProfile = ({ updateProfilePostAndCommentsData, userId }) => {
   const { loading: loadingMe, error: errorMe, data: dataMe } = useQuery(GET_ME);
   // const { userId } = useParams();
   const {
@@ -103,7 +97,7 @@ const FriendProfile = ({
         // Fetch comments data for the specific post
         const commentsData = post.comments;
 
-        const postAndCommentsData = {
+        const profilePostAndCommentsData = {
           // Create the postAndCommentsData objec
           user: dataUser.user,
           postId: postId,
@@ -111,7 +105,7 @@ const FriendProfile = ({
           comments: commentsData,
         };
         // Pass the data to the Dashboard.js component by calling the function
-        updatePostAndCommentsData(postAndCommentsData);
+        updateProfilePostAndCommentsData(profilePostAndCommentsData);
       }
     }
   };
