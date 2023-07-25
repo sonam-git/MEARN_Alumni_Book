@@ -302,7 +302,7 @@ export const Signup = () => {
                 />
               </FormControl>
                 <Button type="submit" style={{ width: "100%" }}>
-                {loading ? <CircularProgress size={24} /> : "Sign Up"}
+                {loading ? <CircularProgress size={"24"} /> : "Sign Up"}
                 </Button>
                 <Link to="/login"><Button style={{ width: "100%" }}>← Go to Login</Button></Link>
               </form>
