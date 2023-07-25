@@ -3,17 +3,18 @@ import { Link } from 'react-router-dom';
 import Box from '@mui/joy/Box';
 import { useColorScheme } from '@mui/joy/styles';
 import Typography from '@mui/joy/Typography';
-import Input from '@mui/joy/Input';
+import { Grid } from "@mui/material";
 import IconButton from '@mui/joy/IconButton';
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 
 // Icons import
-import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
+
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import HomeIcon from '@mui/icons-material/Home';
 import Auth from '../utils/auth'
+import DrawerContent from "./DrawerContent";
 
 // custom
 import Layout from '../containers/Layout';
@@ -52,168 +53,65 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
   );
 };
 
-export const Header = () => {
+const Header = () => {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+
+  const handleDrawerToggle = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
   const handleLogout = (event) => {
     event.preventDefault();
     Auth.logout();
   };
-
-  // const handleHome = (event) => {
-  //   event.preventDefault();
-  //   window.location.reload();
-  // }
 
   // Get the login status using Auth.loggedIn()
   const isLoggedIn = Auth.loggedIn();
 
   return (
     <Layout.Header>
-        {isLoggedIn ? (
-          <>
-           <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 1.5,
-              }}
-            >
+      <Grid container justifyContent="space-between" alignItems="center">
+        {/* Left side */}
+        <Grid item>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            {/* Hamburger menu icon */}
             <IconButton
               variant="outlined"
               size="sm"
-              onClick={() => setDrawerOpen(true)}
+              onClick={handleDrawerToggle}
               sx={{ display: { sm: 'none' } }}
             >
               <MenuIcon />
             </IconButton>
+
+            {/* ColorSchemeToggle */}
             <ColorSchemeToggle />
 
+            {/* Heading */}
             <Typography component="h1" fontWeight="xl">
-              Dashboard
+              Alumni Book
             </Typography>
-            {/* <Input
-          size="sm"
-          placeholder="Search anything…"
-          startDecorator={<SearchRoundedIcon color="primary" />}
-          endDecorator={
-            <IconButton variant="outlined" color="neutral">
-              <Typography fontWeight="lg" fontSize="sm" textColor="text.tertiary">
-                Find
-              </Typography>
-            </IconButton>
-          }
-          sx={{
-            flexBasis: '500px',
-            display: {
-              xs: 'none',
-              sm: 'flex',
-            },
-          }}
-        /> */}
-            </Box>
-          </>
-        ) : (
-          <>
-          <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 1.5,
-              }}
-            >
-            <IconButton
-              variant="outlined"
-              size="sm"
-              onClick={() => setDrawerOpen(true)}
-              sx={{ display: { sm: 'none' } }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <IconButton
-              size="sm"
-              sx={{ display: { xs: 'none', sm: 'inline-flex' } }}
-            >
-              <ColorSchemeToggle />
-            </IconButton>
-            <Typography component="h1" fontWeight="xl">
-              Home : Sign Up For Free!
-            </Typography>
-            </Box>
-          </>
-        )}
-        <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1.5 }}>
-          <IconButton
-            size="sm"
-            variant="outlined"
-            color="primary"
-            sx={{ display: { xs: 'inline-flex', sm: 'none' } }}
-          >
-            <SearchRoundedIcon />
-          </IconButton>
-          {isLoggedIn ? (
-            <>
-            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1.5 }}>
-            {/* <Link to="/dashboard" >
-             <IconButton
-                size="sm"
-                variant="outlined"
-                color="primary"
-                onClick={handleHome}
-                style={{
-                  padding: '10px',
-                }}
-              >
-                <HomeIcon style={{ marginRight: '5px' }} />
-                Home
-              </IconButton>
-              </Link> */}
+          </Box>
+        </Grid>
+
+        {/* Right side */}
+        <Grid item>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            {isLoggedIn && (
               <IconButton
                 size="sm"
                 variant="outlined"
                 color="primary"
-                style={{
-                  padding: '10px',
-                }}
+                style={{ padding: '10px' }}
                 onClick={handleLogout}
               >
                 <LogoutIcon style={{ marginRight: '5px' }} />
                 Log Out
               </IconButton>
-              </Box>
-            </>
-          ) : (
-            <>
-            <IconButton
-                size="sm"
-                variant="outlined"
-                color="primary"
-                aria-label="Apps"
-                style={{
-                  padding: '10px',
-                }}
-                component={Link}
-                to="/Login" // Link to the user's profile page
-              >
-                Login
-              </IconButton>
-              <IconButton
-                size="sm"
-                variant="outlined"
-                color="primary"
-                style={{
-                  padding: '10px',
-                }}
-                component={Link}
-                to="/Signup"
-              >
-                Sign Up
-              </IconButton>
-              
-            </>
-          )}
-        </Box>
+            )}
+          </Box>
+        </Grid>
+      </Grid>
     </Layout.Header>
   );
 };

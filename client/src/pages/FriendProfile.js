@@ -146,7 +146,7 @@ const FriendProfile = ({ updateProfilePostAndCommentsData, userId }) => {
         }}
         startDecorator={<AccountBoxIcon />}
       >
-        Profile
+       {`${dataUser.user.firstname}'s Profile`}
       </Typography>
       <hr />
       <CardOverflow
@@ -197,7 +197,7 @@ const FriendProfile = ({ updateProfilePostAndCommentsData, userId }) => {
               backgroundColor: "transparent",
             }}
           >
-            My Post
+            <Typography> {`${dataUser.user.firstname}'s Post`}</Typography>
           </Tab>
           <Tab
             value={2}
@@ -212,7 +212,7 @@ const FriendProfile = ({ updateProfilePostAndCommentsData, userId }) => {
               backgroundColor: "transparent",
             }}
           >
-            Friends
+            <Typography> {`${dataUser.user.firstname}'s Friends`}</Typography>
           </Tab>
         </TabList>
       </Tabs>

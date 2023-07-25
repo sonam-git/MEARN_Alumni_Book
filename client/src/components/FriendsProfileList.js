@@ -9,6 +9,7 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PersonIcon from "@mui/icons-material/Person";
 import { Link } from "react-router-dom";
 import FriendProfile from "../pages/FriendProfile";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
 
 // Makes the first letter of firstname and lastname to always be capital
 const capitalizeFirstLetter = (string) => {
@@ -41,7 +42,18 @@ const FriendProfileList = ({
   }
   return (
     <div>
-      <h2>`${friends.firstname}Friends`</h2>
+       <Typography
+        level="h1"
+        fontWeight="xl"
+        fontSize="clamp(1.875rem, 1.3636rem + 2.1818vw, 3rem)"
+        style={{
+          textAlign: "left",
+          marginBottom: "20px",
+        }}
+        startDecorator={<AccountBoxIcon />}
+      >
+        Profile
+      </Typography>
       {/* Render the list of friends */}
       <Grid container spacing={2}>
       {friends.map((friend) => (
