@@ -363,6 +363,7 @@ const FriendProfile = ({ updateProfilePostAndCommentsData, userId }) => {
                           color="neutral"
                           badgeContent={post.comments.length}
                           size="sm"
+                          overlap="rectangular"
                         >
                           <CommentIcon />
                         </Badge>

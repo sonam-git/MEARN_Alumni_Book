@@ -547,6 +547,7 @@ const Profile = ({ updatePostAndCommentsData }) => {
                           color="neutral"
                           badgeContent={post.comments.length}
                           size="sm"
+                          overlap="rectangular"
                         >
                           <CommentIcon />
                         </Badge>

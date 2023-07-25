@@ -9,7 +9,7 @@ const LikeDislike = ({ postId, onLikeToggle }) => {
   const { likeCount, userLiked, handleLikeToggle } = useHeartCounter(postId);
   return (
     <IconButton onClick={() => handleLikeToggle(onLikeToggle)}>
-      <Badge badgeContent={likeCount} color="primary">
+      <Badge badgeContent={likeCount} color="primary" overlap="rectangular">
         {userLiked ? <FavoriteBorder color="primary" /> : <FavoriteBorder />}
       </Badge>
     </IconButton>
