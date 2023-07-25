@@ -1,15 +1,14 @@
 import { Typography, Grid, Box } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { ADD_FRIEND } from "../utils/mutations";
 
 import AuthService from "../utils/auth";
 import Auth from "../utils/auth";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PersonIcon from "@mui/icons-material/Person";
-import { Link } from "react-router-dom";
 import FriendProfile from "../pages/FriendProfile";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import IconButton from '@mui/joy/IconButton';
 
 // Makes the first letter of firstname and lastname to always be capital
 const capitalizeFirstLetter = (string) => {
@@ -41,19 +40,20 @@ const FriendProfileList = ({
     );
   }
   return (
-    <div>
-       <Typography
-        level="h1"
-        fontWeight="xl"
-        fontSize="clamp(1.875rem, 1.3636rem + 2.1818vw, 3rem)"
-        style={{
-          textAlign: "left",
-          marginBottom: "20px",
-        }}
-        startDecorator={<AccountBoxIcon />}
-      >
-        Profile
-      </Typography>
+    <Box>  
+      <>
+        <Typography
+            level="h1"
+            fontWeight="xl"
+            fontSize="clamp(1.875rem, 1.3636rem + 2.1818vw, 3rem)"
+            style={{
+              textAlign: "left",
+              marginBottom: "20px",
+            }}
+            // startDecorator={<AccountBoxIcon />}
+          >
+            Friends Profile
+          </Typography>
       {/* Render the list of friends */}
       <Grid container spacing={2}>
       {friends.map((friend) => (
@@ -84,7 +84,8 @@ const FriendProfileList = ({
         </Grid>
       ))}
       </Grid>
-    </div>
+      </>
+    </Box>
   );
 };
 

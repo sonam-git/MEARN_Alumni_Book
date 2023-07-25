@@ -16,7 +16,7 @@ import { ADD_COMMENT } from "../utils/mutations";
 import { UPDATE_POST } from "../utils/mutations";
 import { REMOVE_FRIEND } from "../utils/mutations";
 import { GET_USERS } from "../utils/queries";
-import { GET_POST_WITH_COMMENTS } from "../utils/queries"
+import { GET_POST_WITH_COMMENTS } from "../utils/queries";
 import CardOverflow from "@mui/joy/CardOverflow";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import { Card } from "@mui/joy";
@@ -32,7 +32,7 @@ import IconButton from "@mui/joy/IconButton";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import CommentIcon from "@mui/icons-material/Comment";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import PersonAddIcon from "@mui/icons-material/PersonAdd"
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
@@ -45,11 +45,17 @@ const capitalizeFirstLetter = (string) => {
 const Profile = ({ updatePostAndCommentsData }) => {
   const { loading, data, error } = useQuery(GET_ME);
   const [postText, setPostText] = useState("");
-  const [addPost] = useMutation(ADD_POST,{ refetchQueries: [{ query: GET_ME }],});
+  const [addPost] = useMutation(ADD_POST, {
+    refetchQueries: [{ query: GET_ME }],
+  });
   const [commentText, setCommentText] = useState("");
   const [commentBoxStates, setCommentBoxStates] = useState({});
-  const [removePost] = useMutation(REMOVE_POST,{ refetchQueries: [{ query: GET_ME }],});
-  const [addComment] = useMutation(ADD_COMMENT,{ refetchQueries: [{ query: GET_POST_WITH_COMMENTS }],});
+  const [removePost] = useMutation(REMOVE_POST, {
+    refetchQueries: [{ query: GET_ME }],
+  });
+  const [addComment] = useMutation(ADD_COMMENT, {
+    refetchQueries: [{ query: GET_POST_WITH_COMMENTS }],
+  });
   const [updatePost] = useMutation(UPDATE_POST, {
     update: (cache, { data: { updatePost } }) => {
       // Update the cached data for the specific post after successful update
@@ -109,31 +115,27 @@ const Profile = ({ updatePostAndCommentsData }) => {
     setShowFriendsList(true);
   };
   const handleCommentsIconClick = (postId) => {
-      if (!loading && data) {
-        // Find the specific post using postId
-        const me = data.me;
-        const post = data.me.posts.find((post) => post._id === postId);
-    
-        if (post) {
-          // Fetch comments data for the specific post
-          const commentsData = post.comments;
+    if (!loading && data) {
+      // Find the specific post using postId
+      const me = data.me;
+      const post = data.me.posts.find((post) => post._id === postId);
 
-       
-    
-          const postAndCommentsData = {
+      if (post) {
+        // Fetch comments data for the specific post
+        const commentsData = post.comments;
+
+        const postAndCommentsData = {
           // Create the postAndCommentsData objec
-            me: me,
-            postId: postId,
-            post: post,
-            comments: commentsData,
-
-          };
-          // Pass the data to the Dashboard.js component by calling the function
-          updatePostAndCommentsData(postAndCommentsData);
-        }
+          me: me,
+          postId: postId,
+          post: post,
+          comments: commentsData,
+        };
+        // Pass the data to the Dashboard.js component by calling the function
+        updatePostAndCommentsData(postAndCommentsData);
       }
-    };
-  
+    }
+  };
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -151,9 +153,9 @@ const Profile = ({ updatePostAndCommentsData }) => {
         //     cache.writeQuery({
         //       query: GET_POSTS,
         //       data: { posts: [...existingPosts, newPost] },
-              
+
         //     });
-           
+
         //   } catch (error) {
         //     console.error("Error updating cache:", error);
         //   }
@@ -161,8 +163,8 @@ const Profile = ({ updatePostAndCommentsData }) => {
       });
       setPostText("");
       console.log("Post added successfully");
-        // Call handleShowMyPost to display the posts after adding a new one
-     handleShowMyPost();
+      // Call handleShowMyPost to display the posts after adding a new one
+      handleShowMyPost();
     } catch (err) {
       console.error(err);
     }
@@ -226,7 +228,6 @@ const Profile = ({ updatePostAndCommentsData }) => {
       });
 
       console.log("Comment added successfully");
-      
     } catch (err) {
       console.error("Error adding comment:", err);
     }
@@ -262,7 +263,7 @@ const Profile = ({ updatePostAndCommentsData }) => {
         console.error("Failed to remove friend:", error.message);
       });
   };
-  
+
   return (
     <>
       <Typography
@@ -394,7 +395,6 @@ const Profile = ({ updatePostAndCommentsData }) => {
                     border: "solid",
                     borderRadius: "10px",
                     borderColor: "#006EB3",
-                    resize: "none",
                   }}
                 >
                   <Box
@@ -450,7 +450,6 @@ const Profile = ({ updatePostAndCommentsData }) => {
                             }}
                           >
                             <DeleteForeverIcon />
-                            Delete
                           </IconButton>
                           <IconButton
                             variant="solid"
@@ -465,7 +464,6 @@ const Profile = ({ updatePostAndCommentsData }) => {
                             }}
                           >
                             <EditIcon />
-                            Edit
                           </IconButton>
                         </>
                       )}
@@ -473,7 +471,7 @@ const Profile = ({ updatePostAndCommentsData }) => {
                   </Box>
                   <hr style={{ borderColor: "#006EB3", width: "100%" }} />
                   <CardContent sx={{ padding: "20px", height: "150px" }}>
-                    <Typography level="h4" fontWeight="lg" color="primary">
+                    <Typography level="h6" fontWeight="500" color="primary">
                       {post.postText}
                     </Typography>
                   </CardContent>
@@ -694,7 +692,7 @@ const Profile = ({ updatePostAndCommentsData }) => {
           </Box>
         </Sheet>
       )}
-{/* displaying friends list  */}
+      {/* displaying friends list  */}
       {showFriendsList && (
         <Sheet
           style={{
@@ -775,24 +773,23 @@ const Profile = ({ updatePostAndCommentsData }) => {
                       {/* Check if the friend._id exists in the logged-in user's friends array */}
                       {data.me.friends.find((f) => f._id === friend._id) ? (
                         // If exists, show PersonRemoveIcon
-                      <IconButton
-                        variant="solid"
-                        color="danger"
-                        onClick={() => handleRemoveFriend(friend._id)}
-                        sx={{
-                          marginRight: "10px",
-                          paddingLeft: "20px",
-                          paddingRight: "20px",
-                        }}
-                      >
-                        <PersonRemoveIcon /> 
-                      </IconButton>
-                       ) : (
+                        <IconButton
+                          variant="solid"
+                          color="danger"
+                          onClick={() => handleRemoveFriend(friend._id)}
+                          sx={{
+                            marginRight: "10px",
+                            paddingLeft: "20px",
+                            paddingRight: "20px",
+                          }}
+                        >
+                          <PersonRemoveIcon />
+                        </IconButton>
+                      ) : (
                         // If not exists, show PersonAddIcon
                         <IconButton
                           variant="solid"
                           color="danger"
-                         
                           sx={{
                             marginRight: "10px",
                             paddingLeft: "20px",
