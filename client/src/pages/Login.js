@@ -257,7 +257,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
                 </Link> */}
               </Box>
 
-              <Button type="submit" fullWidth>
+              <Button type="submit" style={{ width: "100%" }}>
                 Log In
               </Button>
               <Link to="/signup">

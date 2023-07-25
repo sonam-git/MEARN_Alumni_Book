@@ -35,6 +35,7 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 // import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 // import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import PersonIcon from "@mui/icons-material/Person";
+import GroupIcon from '@mui/icons-material/Group';
 
 import InfoIcon from "@mui/icons-material/Info";
 import MessageIcon from "@mui/icons-material/Message";
@@ -345,16 +346,9 @@ export const Dashboard = () => {
                           }}
                         >
                           <ListItemDecorator sx={{ color: "neutral.500" }}>
-                            <ContactSupportIcon />
+                            <GroupIcon />
                           </ListItemDecorator>
                           <ListItemContent
-                            component={Link}
-                            to={
-                              userIdFromContext
-                                ? `/FriendProfile/${userIdFromContext}`
-                                : `/`
-                            }
-                            // onClick={() => handleItemClick("Friends")}
                             selected={selectedItem === "Friends"}
                             onClick={handleShowFriendProfile}
                           >

@@ -32,6 +32,7 @@ import IconButton from "@mui/joy/IconButton";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import CommentIcon from "@mui/icons-material/Comment";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import PersonAddIcon from "@mui/icons-material/PersonAdd"
 
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
@@ -771,6 +772,9 @@ const Profile = ({ updatePostAndCommentsData }) => {
                       buttonFlex="0 1 120px"
                       sx={{ padding: "15px" }}
                     >
+                      {/* Check if the friend._id exists in the logged-in user's friends array */}
+                      {data.me.friends.find((f) => f._id === friend._id) ? (
+                        // If exists, show PersonRemoveIcon
                       <IconButton
                         variant="solid"
                         color="danger"
@@ -783,6 +787,21 @@ const Profile = ({ updatePostAndCommentsData }) => {
                       >
                         <PersonRemoveIcon /> 
                       </IconButton>
+                       ) : (
+                        // If not exists, show PersonAddIcon
+                        <IconButton
+                          variant="solid"
+                          color="danger"
+                         
+                          sx={{
+                            marginRight: "10px",
+                            paddingLeft: "20px",
+                            paddingRight: "20px",
+                          }}
+                        >
+                          <PersonAddIcon />
+                        </IconButton>
+                      )}
                     </CardActions>
                   </Box>
                 </Card>

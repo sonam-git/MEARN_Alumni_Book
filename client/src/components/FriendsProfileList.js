@@ -6,6 +6,7 @@ import { ADD_FRIEND } from "../utils/mutations";
 import AuthService from "../utils/auth";
 import Auth from "../utils/auth";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import PersonIcon from "@mui/icons-material/Person";
 import { Link } from "react-router-dom";
 import FriendProfile from "../pages/FriendProfile";
 
@@ -40,15 +41,37 @@ const FriendProfileList = ({
   }
   return (
     <div>
-      <h2>Friends</h2>
+      <h2>`${friends.firstname}Friends`</h2>
       {/* Render the list of friends */}
+      <Grid container spacing={2}>
       {friends.map((friend) => (
-        <div key={friend._id}>
-          <h3 onClick={handleFriendClick} id={friend._id}>
-            {friend.username}
-          </h3>
-        </div>
+        <Grid item xs={12} key={friend._id}>
+        <Box
+                sx={{
+                  p: 2,
+                  bgcolor: "none",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  gap: 2,
+                  borderRadius: 15,
+                  border: 1,
+                  borderColor: '#006EB3'
+                }}
+              >
+               
+                <Typography>
+                  {capitalizeFirstLetter(friend.firstname)}{" "}
+                  {capitalizeFirstLetter(friend.lastname)}
+                </Typography>
+              <PersonIcon
+                  onClick={handleFriendClick} id={friend._id}
+                  style={{ cursor: "pointer" }}
+                />
+          </Box>
+        </Grid>
       ))}
+      </Grid>
     </div>
   );
 };
