@@ -66,6 +66,10 @@ function App() {
             <Route path="/signup" element={<Signup />} />
 
             <Route path="/Dashboard" element={<Dashboard />} />
+              {/* <Route path = "FriendProfile">
+                <Route path=":userId" element={<FriendProfile/>}/>
+              </Route>
+            </Route> */}
             
             <Route path="/Dashboard/PostList" element={PostList} />
 

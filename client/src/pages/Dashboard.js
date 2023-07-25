@@ -1,8 +1,14 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import {
+  Link,
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useParams,
+  useMatch,
+} from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { GET_USERS,GET_ME } from "../utils/queries";
+import { GET_POST_WITH_COMMENTS, GET_USERS, GET_ME } from "../utils/queries";
 import { REMOVE_COMMENT } from "../utils/mutations";
 import { useMutation } from "@apollo/client";
 import { CssVarsProvider } from "@mui/joy/styles";
@@ -45,6 +51,7 @@ import Layout from "../containers/Layout";
 import Connect from "../components/Connect";
 import PostList from "../components/PostList";
 import Profile from "./Profile";
+import FriendProfile from "./FriendProfile";
 import FriendList from "../components/FriendList";
 import FriendProfileList from "../components/FriendsProfileList";
 // import FriendProfile from "./FriendProfile";
@@ -56,6 +63,7 @@ const capitalizeFirstLetter = (string) => {
 };
 
 export const Dashboard = () => {
+  //declare functions from postlist
   const { userId: userIdFromContext } = useUser();
   console.log(userIdFromContext); //gives you user id
 
@@ -78,16 +86,18 @@ export const Dashboard = () => {
   const loggedInUser = Auth.loggedIn() ? Auth.getProfile().data._id : null;
 
   const { username } = useParams();
-  const {loading:loadingMe,error:errorMe,data:dataMe}=useQuery(GET_ME);
+  const { loading: loadingMe, error: errorMe, data: dataMe } = useQuery(GET_ME);
   const meData = dataMe;
   console.log(meData);
-  const { loading, data } = useQuery(GET_USERS, { 
+  const { loading, data } = useQuery(GET_USERS, {
     variables: { username },
   });
 
   const users = data?.users || [];
 
   const filteredUsers = users.filter((user) => user._id !== loggedInUser);
+
+  // let { path, url } = useMatch();
 
   if (loading) {
     return <div>Loading...</div>;
@@ -179,529 +189,259 @@ export const Dashboard = () => {
   };
 
   return (
-    <CssVarsProvider disableTransitionOnChange theme={filesTheme}>
-      <CssBaseline />
-      {loggedInUser ? (
-        // If user is logged In
-        <Layout.Root
-          sx={{
-            gridTemplateColumns: {
-              xs: "1fr",
-              sm: "minmax(64px, 200px) minmax(450px, 1fr)",
-              md: "minmax(160px, 300px) minmax(600px, 1fr) minmax(300px, 420px)",
-            },
-            ...(drawerOpen && {
-              height: "100vh",
-              overflow: "hidden",
-            }),
-          }}
-        >
-          <Header />
-          {/* Side Bar Navigations */}
-          <Layout.SideNav>
-            <Sheet
-              sx={{
-                display: { xs: "none", sm: "initial" },
-                position: "fixed",
-                top: 60,
-                left: 0,
-                bottom: 0,
-                width: "15%", // Set the desired width for the right panel
-                borderLeft: "1px solid",
-                borderColor: "neutral.outlinedBorder",
-                overflowY: "auto", // Add scrollbar if content exceeds the panel height
-                padding: "15px",
-              }}
-            >
-              <List
-                size="sm"
-                sx={{ "--ListItem-radius": "8px", "--List-gap": "4px" }}
-              >
-                <ListItem nested>
-                  <ListSubheader>Browse</ListSubheader>
-                  <List
-                    aria-labelledby="nav-list-browse"
-                    sx={{
-                      "& .JoyListItemButton-root": { p: "8px" },
-                    }}
-                  >
-                    <ListItem>
-                      <ListItemButton
-                        onClick={() => handleItemClick("post")}
-                        sx={{
-                          color:
-                            selectedItem === "post" ? "#2ACAEA" : "#009DFF",
-                          border: selectedItem === "post" ? "solid" : "",
-                          borderRadius: selectedItem === "post" ? "10px" : "",
-                          borderColor: selectedItem === "post" ? "#006EB3" : "",
-                        }}
-                      >
-                        <ListItemDecorator>
-                          <MessageIcon />
-                        </ListItemDecorator>
-                        <ListItemContent
-                          selected={selectedItem === "post"}
-                          onClick={handleShowPostList}
-                        >
-                          Activity Post
-                        </ListItemContent>
-                      </ListItemButton>
-                    </ListItem>
-                    <ListItem>
-                      <ListItemButton
-                        onClick={() => handleItemClick("connect")}
-                        sx={{
-                          color:
-                            selectedItem === "connect" ? "#2ACAEA" : "#009DFF",
-                          border: selectedItem === "connect" ? "solid" : "",
-                          borderRadius:
-                            selectedItem === "connect" ? "10px" : "",
-                          borderColor:
-                            selectedItem === "connect" ? "#006EB3" : "",
-                        }}
-                      >
-                        <ListItemDecorator>
-                          <ViewCompactAltIcon />
-                        </ListItemDecorator>
-                        <ListItemContent
-                          selected={selectedItem === "connect"}
-                          onClick={handleShowConnect}
-                        >
-                          Connect With Alumnis
-                        </ListItemContent>
-                      </ListItemButton>
-                    </ListItem>
-                    <ListItem>
-                      <ListItemButton
-                        onClick={() => handleItemClick("aboutus")}
-                        sx={{
-                          color:
-                            selectedItem === "aboutus" ? "#2ACAEA" : "#009DFF",
-                          border: selectedItem === "aboutus" ? "solid" : "",
-                          borderRadius:
-                            selectedItem === "aboutus" ? "10px" : "",
-                          borderColor:
-                            selectedItem === "aboutus" ? "#006EB3" : "",
-                        }}
-                      >
-                        <ListItemDecorator sx={{ color: "neutral.500" }}>
-                          <PersonIcon />
-                        </ListItemDecorator>
-                        <ListItemContent
-                          selected={selectedItem === "aboutus"}
-                          onClick={handleShowProfile}
-                        >
-                          Profile
-                        </ListItemContent>
-                      </ListItemButton>
-                    </ListItem>
-                    {/* Friends */}
-                    <ListItem>
-                      <ListItemButton
-                        component={Link}
-                        to={
-                          userIdFromContext
-                            ? `/Profile/${userIdFromContext}`
-                            : `/`
-                        }
-                        onClick={() => handleItemClick("Friends")}
-                        sx={{
-                          color:
-                            selectedItem === "Friends" ? "#2ACAEA" : "#009DFF",
-                          border: selectedItem === "Friends" ? "solid" : "",
-                          borderRadius:
-                            selectedItem === "Friends" ? "10px" : "",
-                          borderColor:
-                            selectedItem === "Friends" ? "#006EB3" : "",
-                        }}
-                      >
-                        <ListItemDecorator sx={{ color: "neutral.500" }}>
-                          <ContactSupportIcon />
-                        </ListItemDecorator>
-                        <ListItemContent 
-                        component={Link}
-                        to={
-                          userIdFromContext
-                            ? `/FriendProfile/${userIdFromContext}`
-                            : `/`
-                        }
-                        // onClick={() => handleItemClick("Friends")}
-                          selected={selectedItem === "Friends"}
-                          onClick={handleShowFriendProfile}
-                        >
-                          Friends Profile
-                        </ListItemContent>
-                      </ListItemButton>
-                    </ListItem>
-                  </List>
-                </ListItem>
-              </List>
-            </Sheet>
-          </Layout.SideNav>
-
-          {/* Main Page */}
-          {/* where all the re-renders happens */}
-          <Layout.Main>
-            {showConnect &&
-              (loading ? (
-                <div>Loading....</div>
-              ) : (
-                <Connect
-                  users={filteredUsers}
-                  handlePersonIconClick={handlePersonIconClick}
-                  loggedInUser={loggedInUser} // Pass the loggedInUser prop here
-                  title="Some Users"
-                />
-              ))}
-            {showPostList && (
-              <PostList
-                updateActivityPostAndCommentsData={
-                  updateActivityPostAndCommentsData
-                }
-              />
-            )}
-            {showProfile && (
-              <Profile updatePostAndCommentsData={updatePostAndCommentsData} />
-              
-            )}
-            {showFriendProfile && (
-              <FriendProfileList friends={meData.me.friends} />
-            )}
-          </Layout.Main>
-
-          {showProfile && postAndCommentsData && (
-            <Sheet
-              sx={{
-                display: { xs: "none", sm: "initial" },
-                position: "fixed",
-                top: 60,
-                right: 0,
-                bottom: 0,
-                width: "415px", // Set the desired width for the right panel
-                borderLeft: "1px solid",
-                borderColor: "neutral.outlinedBorder",
-                overflowY: "auto", // Add scrollbar if content exceeds the panel height
-              }}
-            >
-              <div key={postAndCommentsData.post._id}>
-                <Box sx={{ p: 2, display: "flex", alignItems: "center" }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      padding: "10px",
-                    }}
-                  >
-                    <Avatar
-                      src={postAndCommentsData.user.image}
-                      size="lg"
-                      sx={{
-                        "--Avatar-size": "50px",
-                        border: "solid",
-                        borderColor: "#2ACAEA",
-                      }}
-                    />
-                  </Box>
-                  <Typography
-                    sx={{ flex: 1, color: "#2ACAEA", fontFamily: "monospace" }}
-                  >
-                    {postAndCommentsData.post.postAuthor}
-                  </Typography>
-                </Box>
-                {/* Add other components and details related to the selected post */}
-              </div>
-
-              <Box
+    <>
+      <CssVarsProvider disableTransitionOnChange theme={filesTheme}>
+        <CssBaseline />
+        {loggedInUser ? (
+          // If user is logged In
+          <Layout.Root
+            sx={{
+              gridTemplateColumns: {
+                xs: "1fr",
+                sm: "minmax(64px, 200px) minmax(450px, 1fr)",
+                md: "minmax(160px, 300px) minmax(600px, 1fr) minmax(300px, 420px)",
+              },
+              ...(drawerOpen && {
+                height: "100vh",
+                overflow: "hidden",
+              }),
+            }}
+          >
+            <Header />
+            {/* Side Bar Navigations */}
+            <Layout.SideNav>
+              <Sheet
                 sx={{
-                  padding: "10px",
-                  border: "solid",
-                  borderRadius: "10px",
-                  borderColor: "#006EB3",
-                  width: "98%",
-                  margin: "auto",
-                  marginBottom: "15px",
+                  display: { xs: "none", sm: "initial" },
+                  position: "fixed",
+                  top: 60,
+                  left: 0,
+                  bottom: 0,
+                  width: "15%", // Set the desired width for the right panel
+                  borderLeft: "1px solid",
+                  borderColor: "neutral.outlinedBorder",
+                  overflowY: "auto", // Add scrollbar if content exceeds the panel height
+                  padding: "15px",
                 }}
               >
-                <Typography
-                  variant="body2"
-                  sx={{
-                    fontSize: "12px",
-                    padding: "15px",
-                    fontFamily: "monospace",
-                  }}
+                <List
+                  size="sm"
+                  sx={{ "--ListItem-radius": "8px", "--List-gap": "4px" }}
                 >
-                  Posted:{" "}
-                  {new Date(
-                    parseInt(postAndCommentsData.post.createdAt)
-                  ).toLocaleDateString()}
-                </Typography>
-                <Box
-                  sx={{
-                    gap: 2,
-                    p: 2,
-                    display: "grid",
-                    gridTemplateColumns: "auto 1fr",
-                    "& > *:nth-of-ty(odd)": { color: "text.secondary" },
-                  }}
-                >
-                  <Typography
-                    level="h6"
-                    fontWeight="lg"
-                    color="primary"
-                    sx={{ width: "100%" }}
-                  >
-                    {postAndCommentsData.post.postText}
-                  </Typography>
-                </Box>
-              </Box>
-              <hr />
-              <Typography
-                level="h1"
-                fontWeight="m"
-                fontSize="clamp(1rem, 1rem + 2.1818vw, 1rem)"
-                style={{
-                  textAlign: "center",
-                }}
-              >
-                Comments
-              </Typography>
-              <hr />
-              {postAndCommentsData.post.comments?.length === 0 ? (
-                <Typography
-                  sx={{
-                    textAlign: "center",
-                    margin: "auto",
-                    mt: 3,
-                  }}
-                >
-                  No Comments Yet!
-                </Typography>
-              ) : (
-                <>
-                  {postAndCommentsData.post.comments.map((comment) => (
-                    <div
-                      key={comment._id}
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        padding: "10px",
-                        border: "solid",
-                        borderRadius: "10px",
-                        borderColor: "#2ACAEA",
-                        width: "80%",
-                        margin: "auto",
-                        marginTop: "15px",
+                  <ListItem nested>
+                    <ListSubheader>Browse</ListSubheader>
+                    <List
+                      aria-labelledby="nav-list-browse"
+                      sx={{
+                        "& .JoyListItemButton-root": { p: "8px" },
                       }}
                     >
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          padding: "10px",
-                        }}
-                      >
-                        <Avatar
-                          src={postAndCommentsData.me.image}
-                          size="lg"
+                      <ListItem>
+                        <ListItemButton
+                          onClick={() => handleItemClick("post")}
                           sx={{
-                            "--Avatar-size": "35px",
-                            border: "solid",
-                            borderColor: "#2ACAEA",
-                          }}
-                        />
-                      </Box>
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          mt: "10px",
-                          fontFamily: "monospace",
-                          width: "85%",
-                        }}
-                        color="primary"
-                      >
-                        <span
-                          style={{ fontWeight: "bold", fontStyle: "italic" }}
-                        >
-                          {comment.commentAuthor}
-                        </span>{" "}
-                        -{" "}
-                        <span style={{ color: "white" }}>
-                          {comment.commentText}
-                        </span>
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            marginRight: "auto",
-                            display: "flex",
-                            fontSize: "12px",
+                            color:
+                              selectedItem === "post" ? "#2ACAEA" : "#009DFF",
+                            border: selectedItem === "post" ? "solid" : "",
+                            borderRadius: selectedItem === "post" ? "10px" : "",
+                            borderColor:
+                              selectedItem === "post" ? "#006EB3" : "",
                           }}
                         >
-                          Posted:{" "}
-                          {new Date(
-                            parseInt(comment.createdAt)
-                          ).toLocaleDateString()}
-                        </Typography>
-                      </Typography>
-                      <IconButton
-                        variant="outlined"
-                        color="danger"
-                        sx={{ padding: "2px", height: "10px", border: "none" }}
-                        onClick={() =>
-                          handleDeleteComment(
-                            postAndCommentsData.post._id,
-                            comment._id
-                          )
-                        }
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </div>
-                  ))}
-                </>
-              )}
-            </Sheet>
-          )}
+                          <ListItemDecorator>
+                            <MessageIcon />
+                          </ListItemDecorator>
+                          <ListItemContent
+                            selected={selectedItem === "post"}
+                            onClick={handleShowPostList}
+                          >
+                            Activity Post
+                          </ListItemContent>
+                        </ListItemButton>
+                      </ListItem>
+                      <ListItem>
+                        <ListItemButton
+                          onClick={() => handleItemClick("connect")}
+                          sx={{
+                            color:
+                              selectedItem === "connect"
+                                ? "#2ACAEA"
+                                : "#009DFF",
+                            border: selectedItem === "connect" ? "solid" : "",
+                            borderRadius:
+                              selectedItem === "connect" ? "10px" : "",
+                            borderColor:
+                              selectedItem === "connect" ? "#006EB3" : "",
+                          }}
+                        >
+                          <ListItemDecorator>
+                            <ViewCompactAltIcon />
+                          </ListItemDecorator>
+                          <ListItemContent
+                            selected={selectedItem === "connect"}
+                            onClick={handleShowConnect}
+                          >
+                            Connect With Alumnis
+                          </ListItemContent>
+                        </ListItemButton>
+                      </ListItem>
+                      <ListItem>
+                        <ListItemButton
+                          onClick={() => handleItemClick("aboutus")}
+                          sx={{
+                            color:
+                              selectedItem === "aboutus"
+                                ? "#2ACAEA"
+                                : "#009DFF",
+                            border: selectedItem === "aboutus" ? "solid" : "",
+                            borderRadius:
+                              selectedItem === "aboutus" ? "10px" : "",
+                            borderColor:
+                              selectedItem === "aboutus" ? "#006EB3" : "",
+                          }}
+                        >
+                          <ListItemDecorator sx={{ color: "neutral.500" }}>
+                            <PersonIcon />
+                          </ListItemDecorator>
+                          <ListItemContent
+                            selected={selectedItem === "aboutus"}
+                            onClick={handleShowProfile}
+                          >
+                            Profile
+                          </ListItemContent>
+                        </ListItemButton>
+                      </ListItem>
+                      {/* Friends */}
+                      <ListItem>
+                        <ListItemButton
+                          component={Link}
+                          to={
+                            userIdFromContext
+                              ? `/Profile/${userIdFromContext}`
+                              : `/`
+                          }
+                          onClick={() => handleItemClick("Friends")}
+                          sx={{
+                            color:
+                              selectedItem === "Friends"
+                                ? "#2ACAEA"
+                                : "#009DFF",
+                            border: selectedItem === "Friends" ? "solid" : "",
+                            borderRadius:
+                              selectedItem === "Friends" ? "10px" : "",
+                            borderColor:
+                              selectedItem === "Friends" ? "#006EB3" : "",
+                          }}
+                        >
+                          <ListItemDecorator sx={{ color: "neutral.500" }}>
+                            <ContactSupportIcon />
+                          </ListItemDecorator>
+                          <ListItemContent
+                            component={Link}
+                            to={
+                              userIdFromContext
+                                ? `/FriendProfile/${userIdFromContext}`
+                                : `/`
+                            }
+                            // onClick={() => handleItemClick("Friends")}
+                            selected={selectedItem === "Friends"}
+                            onClick={handleShowFriendProfile}
+                          >
+                            Friends Profile
+                          </ListItemContent>
+                        </ListItemButton>
+                      </ListItem>
+                    </List>
+                  </ListItem>
+                </List>
+              </Sheet>
+            </Layout.SideNav>
 
-          {/* Right Side Profile View for Connect Page */}
-          {showConnect && selectedUser && (
-            <Sheet
-              sx={{
-                display: { xs: "none", sm: "initial" },
-                position: "fixed",
-                top: 65,
-                right: 0,
-                bottom: 0,
-                width: "400px", // Set the desired width for the right panel
-                borderLeft: "1px solid",
-                borderColor: "neutral.outlinedBorder",
-                overflowY: "auto", // Add scrollbar if content exceeds the panel height
-              }}
-            >
-              <Box sx={{ p: 2, display: "flex", alignItems: "center" }}>
-                <Typography
-                  sx={{
-                    display: "flex",
-                    alignItems: "center", // Align flex items vertically in the center
-                    fontWeight: "bold",
-                    fontFamily: "monospace",
-                    fontSize: "20px",
-                  }}
-                  key={users._id}
-                >
-                  <AccountBoxIcon sx={{ marginRight: "8px" }} />{" "}
-                  {/* Add margin to create space between the icon and the name */}
-                  {capitalizeFirstLetter(selectedUser.firstname)}{" "}
-                  {capitalizeFirstLetter(selectedUser.lastname)}
-                </Typography>
-              </Box>
-              <Divider />
-              <AspectRatio ratio="21/18">
-                <img src={selectedUser.image} alt="User Avatar" />
-              </AspectRatio>
-              <Box sx={{ p: 2, display: "flex", gap: 1, alignItems: "center" }}>
-                <Typography
-                  level="body2"
-                  mr={1}
-                  sx={{ fontFamily: "monospace", fontSize: "15px" }}
-                >
-                  Profile Description
-                </Typography>
-              </Box>
-              <Divider />
-              <Box
+            {/* Main Page */}
+            {/* where all the re-renders happens */}
+            <Layout.Main>
+              {showConnect &&
+                (loading ? (
+                  <div>Loading....</div>
+                ) : (
+                  <Connect
+                    users={filteredUsers}
+                    handlePersonIconClick={handlePersonIconClick}
+                    loggedInUser={loggedInUser} // Pass the loggedInUser prop here
+                    title="Some Users"
+                  />
+                ))}
+              {/* pass functions and states to postlist component  */}
+              {showPostList && (
+                <PostList
+                  updateActivityPostAndCommentsData={
+                    updateActivityPostAndCommentsData
+                  }
+                />
+              )}
+              {showProfile && (
+                <Profile
+                  updatePostAndCommentsData={updatePostAndCommentsData}
+                />
+              )}
+              {showFriendProfile && (
+                <FriendProfileList
+                  friends={meData.me.friends}
+                  updatePostAndCommentsData={updatePostAndCommentsData}
+                  showPostList={showPostList}
+                  activityPostAndCommentsData={activityPostAndCommentsData}
+                  updateActivityPostAndCommentsData={updateActivityPostAndCommentsData}
+                />
+              )}
+            </Layout.Main>
+
+            {showProfile && postAndCommentsData && (
+              <Sheet
                 sx={{
-                  gap: 2,
-                  p: 2,
-                  display: "grid",
-                  gridTemplateColumns: "auto 1fr",
-                  "& > *:nth-of-ty(odd)": { color: "text.secondary" },
+                  display: { xs: "none", sm: "initial" },
+                  position: "fixed",
+                  top: 60,
+                  right: 0,
+                  bottom: 0,
+                  width: "415px", // Set the desired width for the right panel
+                  borderLeft: "1px solid",
+                  borderColor: "neutral.outlinedBorder",
+                  overflowY: "auto", // Add scrollbar if content exceeds the panel height
                 }}
               >
-                <Typography level="body2" sx={{ fontWeight: "bold" }}>
-                  Username:
-                </Typography>
-                <Typography
-                  level="body2"
-                  textColor="text.primary"
-                  sx={{ fontFamily: "monospace", fontSize: "15px" }}
-                >
-                  {selectedUser.username}
-                </Typography>
-
-                <Typography level="body2" sx={{ fontWeight: "bold" }}>
-                  Email:
-                </Typography>
-                <Typography
-                  level="body2"
-                  textColor="text.primary"
-                  sx={{ fontFamily: "monospace", fontSize: "15px" }}
-                >
-                  {selectedUser.email}
-                </Typography>
-              </Box>
-              <Divider />
-              <Box sx={{ py: 2, px: 1 }}>
-                <Button
-                  variant="plain"
-                  size="sm"
-                  startDecorator={<PersonIcon />}
-                  onClick={handleShowFriends}
-                >
-                  {showFriends ? "Close Friends List" : "View Friends List"}
-                </Button>
-                <Divider sx={{ marginBottom: 2, marginTop: 2 }}></Divider>
-                {showFriends && <FriendList friends={selectedUser.friends} />}
-              </Box>
-            </Sheet>
-          )}
-
-          {/* Right Side Profile View for PostList Page*/}
-          {showPostList && activityPostAndCommentsData && (
-            <Sheet
-              sx={{
-                display: { xs: "none", sm: "initial" },
-                position: "fixed",
-                top: 60,
-                right: 0,
-                bottom: 0,
-                width: "415px", // Set the desired width for the right panel
-                borderLeft: "1px solid",
-                borderColor: "neutral.outlinedBorder",
-                overflowY: "auto", // Add scrollbar if content exceeds the panel height
-              }}
-            >
-              {/* Render the selected post */}
-
-              <div key={activityPostAndCommentsData.post._id}>
-                <Box sx={{ p: 2, display: "flex", alignItems: "center" }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      padding: "10px",
-                    }}
-                  >
-                    <Avatar
-                      src={activityPostAndCommentsData.postAuthorUser.image}
-                      size="lg"
+                <div key={postAndCommentsData.post._id}>
+                  <Box sx={{ p: 2, display: "flex", alignItems: "center" }}>
+                    <Box
                       sx={{
-                        "--Avatar-size": "50px",
-                        border: "solid",
-                        borderColor: "#2ACAEA",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: "10px",
                       }}
-                    />
+                    >
+                      <Avatar
+                        src={postAndCommentsData.user.image}
+                        size="lg"
+                        sx={{
+                          "--Avatar-size": "50px",
+                          border: "solid",
+                          borderColor: "#2ACAEA",
+                        }}
+                      />
+                    </Box>
+                    <Typography
+                      sx={{
+                        flex: 1,
+                        color: "#2ACAEA",
+                        fontFamily: "monospace",
+                      }}
+                    >
+                      {postAndCommentsData.post.postAuthor}
+                    </Typography>
                   </Box>
+                  {/* Add other components and details related to the selected post */}
+                </div>
 
-                  <Typography
-                    sx={{ flex: 1, color: "#2ACAEA", fontFamily: "monospace" }}
-                  >
-                    {activityPostAndCommentsData.post.postAuthor}
-                  </Typography>
-                </Box>
-                {/* Add other components and details related to the selected post */}
                 <Box
                   sx={{
                     padding: "10px",
@@ -723,7 +463,7 @@ export const Dashboard = () => {
                   >
                     Posted:{" "}
                     {new Date(
-                      parseInt(activityPostAndCommentsData.post.createdAt)
+                      parseInt(postAndCommentsData.post.createdAt)
                     ).toLocaleDateString()}
                   </Typography>
                   <Box
@@ -741,12 +481,10 @@ export const Dashboard = () => {
                       color="primary"
                       sx={{ width: "100%" }}
                     >
-                      {activityPostAndCommentsData.post.postText}
+                      {postAndCommentsData.post.postText}
                     </Typography>
                   </Box>
                 </Box>
-
-                {/* Comments */}
                 <hr />
                 <Typography
                   level="h1"
@@ -759,8 +497,7 @@ export const Dashboard = () => {
                   Comments
                 </Typography>
                 <hr />
-
-                {activityPostAndCommentsData.post.comments?.length === 0 ? (
+                {postAndCommentsData.post.comments?.length === 0 ? (
                   <Typography
                     sx={{
                       textAlign: "center",
@@ -772,110 +509,417 @@ export const Dashboard = () => {
                   </Typography>
                 ) : (
                   <>
-                    {activityPostAndCommentsData.post.comments.map(
-                      (comment) => (
-                        <div
-                          key={comment._id}
-                          style={{
+                    {postAndCommentsData.post.comments.map((comment) => (
+                      <div
+                        key={comment._id}
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          padding: "10px",
+                          border: "solid",
+                          borderRadius: "10px",
+                          borderColor: "#2ACAEA",
+                          width: "80%",
+                          margin: "auto",
+                          marginTop: "15px",
+                        }}
+                      >
+                        <Box
+                          sx={{
                             display: "flex",
                             justifyContent: "space-between",
+                            alignItems: "center",
                             padding: "10px",
-                            border: "solid",
-                            borderRadius: "10px",
-                            borderColor: "#2ACAEA",
-                            width: "80%",
-                            margin: "auto",
-                            marginTop: "15px",
                           }}
                         >
-                          <Box
+                          <Avatar
+                            src={postAndCommentsData.me.image}
+                            size="lg"
                             sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              alignItems: "center",
-                              padding: "10px",
+                              "--Avatar-size": "35px",
+                              border: "solid",
+                              borderColor: "#2ACAEA",
                             }}
+                          />
+                        </Box>
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            mt: "10px",
+                            fontFamily: "monospace",
+                            width: "85%",
+                          }}
+                          color="primary"
+                        >
+                          <span
+                            style={{ fontWeight: "bold", fontStyle: "italic" }}
                           >
-                            <Avatar
-                              src={
-                                activityPostAndCommentsData.commentAuthorUsers.find(
-                                  (user) =>
-                                    user.username === comment.commentAuthor
-                                ).image
-                              }
-                              size="lg"
-                              sx={{
-                                "--Avatar-size": "35px",
-                                border: "solid",
-                                borderColor: "#2ACAEA",
-                              }}
-                            />
-                          </Box>
+                            {comment.commentAuthor}
+                          </span>{" "}
+                          -{" "}
+                          <span style={{ color: "white" }}>
+                            {comment.commentText}
+                          </span>
                           <Typography
-                            variant="body1"
+                            variant="body2"
                             sx={{
-                              mt: "10px",
-                              fontFamily: "monospace",
-                              width: "85%",
+                              marginRight: "auto",
+                              display: "flex",
+                              fontSize: "12px",
                             }}
-                            color="primary"
                           >
-                            <span
-                              style={{
-                                fontWeight: "bold",
-                                fontStyle: "italic",
-                              }}
-                            >
-                              {comment.commentAuthor}
-                            </span>{" "}
-                            -{" "}
-                            <span style={{ color: "white" }}>
-                              {comment.commentText}
-                            </span>
-                            <Typography
-                              variant="body2"
-                              sx={{
-                                marginRight: "auto",
-                                display: "flex",
-                                fontSize: "12px",
-                              }}
-                            >
-                              Posted:{" "}
-                              {new Date(
-                                parseInt(comment.createdAt)
-                              ).toLocaleDateString()}
-                            </Typography>
+                            Posted:{" "}
+                            {new Date(
+                              parseInt(comment.createdAt)
+                            ).toLocaleDateString()}
                           </Typography>
-                        </div>
-                      )
-                    )}
+                        </Typography>
+                        <IconButton
+                          variant="outlined"
+                          color="danger"
+                          sx={{
+                            padding: "2px",
+                            height: "10px",
+                            border: "none",
+                          }}
+                          onClick={() =>
+                            handleDeleteComment(
+                              postAndCommentsData.post._id,
+                              comment._id
+                            )
+                          }
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </div>
+                    ))}
                   </>
                 )}
-              </div>
-            </Sheet>
-          )}
-        </Layout.Root>
-      ) : (
+              </Sheet>
+            )}
 
+            {/* Right Side Profile View for Connect Page */}
+            {showConnect && selectedUser && (
+              <Sheet
+                sx={{
+                  display: { xs: "none", sm: "initial" },
+                  position: "fixed",
+                  top: 65,
+                  right: 0,
+                  bottom: 0,
+                  width: "400px", // Set the desired width for the right panel
+                  borderLeft: "1px solid",
+                  borderColor: "neutral.outlinedBorder",
+                  overflowY: "auto", // Add scrollbar if content exceeds the panel height
+                }}
+              >
+                <Box sx={{ p: 2, display: "flex", alignItems: "center" }}>
+                  <Typography
+                    sx={{
+                      display: "flex",
+                      alignItems: "center", // Align flex items vertically in the center
+                      fontWeight: "bold",
+                      fontFamily: "monospace",
+                      fontSize: "20px",
+                    }}
+                    key={users._id}
+                  >
+                    <AccountBoxIcon sx={{ marginRight: "8px" }} />{" "}
+                    {/* Add margin to create space between the icon and the name */}
+                    {capitalizeFirstLetter(selectedUser.firstname)}{" "}
+                    {capitalizeFirstLetter(selectedUser.lastname)}
+                  </Typography>
+                </Box>
+                <Divider />
+                <AspectRatio ratio="21/18">
+                  <img src={selectedUser.image} alt="User Avatar" />
+                </AspectRatio>
+                <Box
+                  sx={{ p: 2, display: "flex", gap: 1, alignItems: "center" }}
+                >
+                  <Typography
+                    level="body2"
+                    mr={1}
+                    sx={{ fontFamily: "monospace", fontSize: "15px" }}
+                  >
+                    Profile Description
+                  </Typography>
+                </Box>
+                <Divider />
+                <Box
+                  sx={{
+                    gap: 2,
+                    p: 2,
+                    display: "grid",
+                    gridTemplateColumns: "auto 1fr",
+                    "& > *:nth-of-ty(odd)": { color: "text.secondary" },
+                  }}
+                >
+                  <Typography level="body2" sx={{ fontWeight: "bold" }}>
+                    Username:
+                  </Typography>
+                  <Typography
+                    level="body2"
+                    textColor="text.primary"
+                    sx={{ fontFamily: "monospace", fontSize: "15px" }}
+                  >
+                    {selectedUser.username}
+                  </Typography>
 
-        // If user is not logged In
-        <Layout.Root
-          sx={{
-            gridTemplateColumns: {
-              xs: "1fr",
-              sm: "minmax(64px, 200px) minmax(450px, 1fr)",
-              md: "minmax(160px, 300px) minmax(600px, 1fr) minmax(300px, 420px)",
-            },
-            ...(drawerOpen && {
-              height: "100vh",
-              overflow: "hidden",
-            }),
-          }}
-        >
-          <Home />
-        </Layout.Root>
-      )}
-    </CssVarsProvider>
+                  <Typography level="body2" sx={{ fontWeight: "bold" }}>
+                    Email:
+                  </Typography>
+                  <Typography
+                    level="body2"
+                    textColor="text.primary"
+                    sx={{ fontFamily: "monospace", fontSize: "15px" }}
+                  >
+                    {selectedUser.email}
+                  </Typography>
+                </Box>
+                <Divider />
+                <Box sx={{ py: 2, px: 1 }}>
+                  <Button
+                    variant="plain"
+                    size="sm"
+                    startDecorator={<PersonIcon />}
+                    onClick={handleShowFriends}
+                  >
+                    {showFriends ? "Close Friends List" : "View Friends List"}
+                  </Button>
+                  <Divider sx={{ marginBottom: 2, marginTop: 2 }}></Divider>
+                  {showFriends && <FriendList friends={selectedUser.friends} />}
+                </Box>
+              </Sheet>
+            )}
+
+            {/* Right Side Profile View for PostList Page*/}
+            {showPostList && activityPostAndCommentsData && (
+              <Sheet
+                sx={{
+                  display: { xs: "none", sm: "initial" },
+                  position: "fixed",
+                  top: 60,
+                  right: 0,
+                  bottom: 0,
+                  width: "415px", // Set the desired width for the right panel
+                  borderLeft: "1px solid",
+                  borderColor: "neutral.outlinedBorder",
+                  overflowY: "auto", // Add scrollbar if content exceeds the panel height
+                }}
+              >
+                {/* Render the selected post */}
+
+                <div key={activityPostAndCommentsData.post._id}>
+                  <Box sx={{ p: 2, display: "flex", alignItems: "center" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: "10px",
+                      }}
+                    >
+                      <Avatar
+                        src={activityPostAndCommentsData.postAuthorUser.image}
+                        size="lg"
+                        sx={{
+                          "--Avatar-size": "50px",
+                          border: "solid",
+                          borderColor: "#2ACAEA",
+                        }}
+                      />
+                    </Box>
+
+                    <Typography
+                      sx={{
+                        flex: 1,
+                        color: "#2ACAEA",
+                        fontFamily: "monospace",
+                      }}
+                    >
+                      {activityPostAndCommentsData.post.postAuthor}
+                    </Typography>
+                  </Box>
+                  {/* Add other components and details related to the selected post */}
+                  <Box
+                    sx={{
+                      padding: "10px",
+                      border: "solid",
+                      borderRadius: "10px",
+                      borderColor: "#006EB3",
+                      width: "98%",
+                      margin: "auto",
+                      marginBottom: "15px",
+                    }}
+                  >
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontSize: "12px",
+                        padding: "15px",
+                        fontFamily: "monospace",
+                      }}
+                    >
+                      Posted:{" "}
+                      {new Date(
+                        parseInt(activityPostAndCommentsData.post.createdAt)
+                      ).toLocaleDateString()}
+                    </Typography>
+                    <Box
+                      sx={{
+                        gap: 2,
+                        p: 2,
+                        display: "grid",
+                        gridTemplateColumns: "auto 1fr",
+                        "& > *:nth-of-ty(odd)": { color: "text.secondary" },
+                      }}
+                    >
+                      <Typography
+                        level="h6"
+                        fontWeight="lg"
+                        color="primary"
+                        sx={{ width: "100%" }}
+                      >
+                        {activityPostAndCommentsData.post.postText}
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  {/* Comments */}
+                  <hr />
+                  <Typography
+                    level="h1"
+                    fontWeight="m"
+                    fontSize="clamp(1rem, 1rem + 2.1818vw, 1rem)"
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    Comments
+                  </Typography>
+                  <hr />
+
+                  {activityPostAndCommentsData.post.comments?.length === 0 ? (
+                    <Typography
+                      sx={{
+                        textAlign: "center",
+                        margin: "auto",
+                        mt: 3,
+                      }}
+                    >
+                      No Comments Yet!
+                    </Typography>
+                  ) : (
+                    <>
+                      {activityPostAndCommentsData.post.comments.map(
+                        (comment) => (
+                          <div
+                            key={comment._id}
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              padding: "10px",
+                              border: "solid",
+                              borderRadius: "10px",
+                              borderColor: "#2ACAEA",
+                              width: "80%",
+                              margin: "auto",
+                              marginTop: "15px",
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                padding: "10px",
+                              }}
+                            >
+                              <Avatar
+                                src={
+                                  activityPostAndCommentsData.commentAuthorUsers.find(
+                                    (user) =>
+                                      user.username === comment.commentAuthor
+                                  ).image
+                                }
+                                size="lg"
+                                sx={{
+                                  "--Avatar-size": "35px",
+                                  border: "solid",
+                                  borderColor: "#2ACAEA",
+                                }}
+                              />
+                            </Box>
+                            <Typography
+                              variant="body1"
+                              sx={{
+                                mt: "10px",
+                                fontFamily: "monospace",
+                                width: "85%",
+                              }}
+                              color="primary"
+                            >
+                              <span
+                                style={{
+                                  fontWeight: "bold",
+                                  fontStyle: "italic",
+                                }}
+                              >
+                                {comment.commentAuthor}
+                              </span>{" "}
+                              -{" "}
+                              <span style={{ color: "white" }}>
+                                {comment.commentText}
+                              </span>
+                              <Typography
+                                variant="body2"
+                                sx={{
+                                  marginRight: "auto",
+                                  display: "flex",
+                                  fontSize: "12px",
+                                }}
+                              >
+                                Posted:{" "}
+                                {new Date(
+                                  parseInt(comment.createdAt)
+                                ).toLocaleDateString()}
+                              </Typography>
+                            </Typography>
+                          </div>
+                        )
+                      )}
+                    </>
+                  )}
+                </div>
+              </Sheet>
+            )}
+          </Layout.Root>
+        ) : (
+          // If user is not logged In
+          <Layout.Root
+            sx={{
+              gridTemplateColumns: {
+                xs: "1fr",
+                sm: "minmax(64px, 200px) minmax(450px, 1fr)",
+                md: "minmax(160px, 300px) minmax(600px, 1fr) minmax(300px, 420px)",
+              },
+              ...(drawerOpen && {
+                height: "100vh",
+                overflow: "hidden",
+              }),
+            }}
+          >
+            <Home />
+          </Layout.Root>
+        )}
+      </CssVarsProvider>
+      {/* <Routes>
+        <Route path={`${path}/FriendProfile/:userId`}>
+          <FriendProfile />
+        </Route>
+      </Routes> */}
+    </>
   );
 };
 

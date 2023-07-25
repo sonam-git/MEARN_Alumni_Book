@@ -23,7 +23,7 @@ import CheckIcon from '@mui/icons-material/Check';
 const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
-
+//pass props decunstructed from dashboard commentText commentBoxStates and two functions
 export const PostList = ({ updateActivityPostAndCommentsData }) => {
   
   // Define the GET_POSTS query to retrieve posts from all users
@@ -75,13 +75,14 @@ export const PostList = ({ updateActivityPostAndCommentsData }) => {
   const posts = data.users.flatMap((user) => user.posts);
   posts.sort((a, b) => parseInt(b.createdAt) - parseInt(a.createdAt));
 
+  //functions put them in dashboard parent 
   const toggleCommentBox = (postId) => {
     setCommentBoxStates((prevState) => ({
       ...prevState,
       [postId]: !prevState[postId],
     }));
   };
-
+ //functions put them in dashboard parent 
   const handleCommentSubmit = async (postId) => {
     // Perform any necessary actions with the comment text for the specific post
     console.log(`Comment submitted for post ${postId}:`, commentText);
