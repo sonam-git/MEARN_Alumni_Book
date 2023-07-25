@@ -281,7 +281,7 @@ export const PostList = ({ updateActivityPostAndCommentsData }) => {
               textAlign: "center",
               marginBottom: "20px",
             }}
-            startDecorator={<MessageIcon />}
+            startdecorator={<MessageIcon />}
           >
             Recent Post
           </Typography>

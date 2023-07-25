@@ -414,7 +414,6 @@ const Profile = ({ updatePostAndCommentsData }) => {
                     border: "solid",
                     borderRadius: "10px",
                     borderColor: "#006EB3",
-                    resize: "none",
                   }}
                 >
                   <Box
@@ -470,7 +469,6 @@ const Profile = ({ updatePostAndCommentsData }) => {
                             }}
                           >
                             <DeleteForeverIcon />
-                            Delete
                           </IconButton>
                           <IconButton
                             variant="solid"
@@ -485,7 +483,6 @@ const Profile = ({ updatePostAndCommentsData }) => {
                             }}
                           >
                             <EditIcon />
-                            Edit
                           </IconButton>
                         </>
                       )}
@@ -493,7 +490,7 @@ const Profile = ({ updatePostAndCommentsData }) => {
                   </Box>
                   <hr style={{ borderColor: "#006EB3", width: "100%" }} />
                   <CardContent sx={{ padding: "20px", height: "150px" }}>
-                    <Typography level="h4" fontWeight="lg" color="primary">
+                    <Typography level="h6" fontWeight="500" color="primary">
                       {post.postText}
                     </Typography>
                   </CardContent>

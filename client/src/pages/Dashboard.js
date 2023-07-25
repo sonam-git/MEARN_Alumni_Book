@@ -31,18 +31,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useUser } from "../utils/UserProvider";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 
-// Icons import
-// import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
-// import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import PersonIcon from "@mui/icons-material/Person";
 import GroupIcon from '@mui/icons-material/Group';
-
-import InfoIcon from "@mui/icons-material/Info";
 import MessageIcon from "@mui/icons-material/Message";
-import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 import ViewCompactAltIcon from "@mui/icons-material/ViewCompactAlt";
-import sideImage from "../assets/images/importance.jpg";
-import sideImage1 from "../assets/images/opportunities.jpg";
 
 // custom
 import filesTheme from "../containers/Theme";
@@ -52,11 +44,10 @@ import Layout from "../containers/Layout";
 import Connect from "../components/Connect";
 import PostList from "../components/PostList";
 import Profile from "./Profile";
-import FriendProfile from "./FriendProfile";
 import FriendList from "../components/FriendList";
 import FriendProfileList from "../components/FriendsProfileList";
-// import FriendProfile from "./FriendProfile";
 import Auth from "../utils/auth";
+
 
 // Makes the first letter of firstname and lastname to always be capital
 const capitalizeFirstLetter = (string) => {
@@ -67,7 +58,6 @@ export const Dashboard = () => {
   //declare functions from postlist
   const { userId: userIdFromContext } = useUser();
   const [removeComment] = useMutation(REMOVE_COMMENT);
-  const [showLogin, setShowLogin] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [showConnect, setShowConnect] = useState(false);
@@ -140,10 +130,7 @@ export const Dashboard = () => {
   const updateProfilePostAndCommentsData = (dataUser ) =>{ 
     setProfilePostAndCommentsData(dataUser);
   }
-  // const handleShowLogin = () => {
-  //   setShowLogin(true);
-  // };
-
+ 
   const handleItemClick = (item) => {
     setSelectedItem(item);
   };
@@ -163,14 +150,7 @@ export const Dashboard = () => {
     setShowProfile(false);
     setShowFriendProfile(false);
   };
- const handleShowFriendsProfile = (event) => {
-    event.preventDefault();
-    setShowPostList(false);
-    setShowConnect(false);
-    setShowProfile(false);
-    setShowFriendProfile(false);
-    setShowFriendsProfile(true);
-  };
+
   const handleShowProfile = (event) => {
     event.preventDefault();
     setShowProfile(true);
@@ -199,6 +179,7 @@ export const Dashboard = () => {
     event.preventDefault();
     setIsSheetOpen(!isSheetOpen);
   };
+  
 
   return (
     <>
@@ -215,27 +196,14 @@ export const Dashboard = () => {
               },
               ...(drawerOpen && {
                 height: "100vh",
-                overflow: "hidden",
+                overflow: "auto",
               }),
             }}
           >
             <Header />
             {/* Side Bar Navigations */}
+           
             <Layout.SideNav>
-              <Sheet
-                sx={{
-                  display: { xs: "none", sm: "initial" },
-                  position: "fixed",
-                  top: 60,
-                  left: 0,
-                  bottom: 0,
-                  width: "15%", // Set the desired width for the right panel
-                  borderLeft: "1px solid",
-                  borderColor: "neutral.outlinedBorder",
-                  overflowY: "auto", // Add scrollbar if content exceeds the panel height
-                  padding: "15px",
-                }}
-              >
                 <List
                   size="sm"
                   sx={{ "--ListItem-radius": "8px", "--List-gap": "4px" }}
@@ -359,7 +327,7 @@ export const Dashboard = () => {
                     </List>
                   </ListItem>
                 </List>
-              </Sheet>
+             
             </Layout.SideNav>
 
             {/* Main Page */}
@@ -1123,11 +1091,6 @@ export const Dashboard = () => {
           </Layout.Root>
         )}
       </CssVarsProvider>
-      {/* <Routes>
-        <Route path={`${path}/FriendProfile/:userId`}>
-          <FriendProfile />
-        </Route>
-      </Routes> */}
     </>
   );
 };

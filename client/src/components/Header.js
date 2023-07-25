@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from 'react-router-dom';
+import  { useState } from 'react';
 import Box from '@mui/joy/Box';
 import { useColorScheme } from '@mui/joy/styles';
 import Typography from '@mui/joy/Typography';
@@ -14,9 +14,6 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import HomeIcon from '@mui/icons-material/Home';
 import Auth from '../utils/auth'
-import DrawerContent from "./DrawerContent";
-
-// custom
 import Layout from '../containers/Layout';
 
 const ColorSchemeToggle = ({ onClick, ...props }) => {
@@ -54,7 +51,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
 };
 
 const Header = () => {
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);
@@ -69,8 +66,8 @@ const Header = () => {
   const isLoggedIn = Auth.loggedIn();
 
   return (
-    <Layout.Header>
-      <Grid container justifyContent="space-between" alignItems="center">
+    <Layout.Header >
+      <Grid container justifyContent="space-between" alignItems="center" >
         {/* Left side */}
         <Grid item>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
@@ -112,6 +109,11 @@ const Header = () => {
           </Box>
         </Grid>
       </Grid>
+{/* Conditionally render the SideNav */}
+{drawerOpen && (
+      <>
+      <h1>i am side bar </h1></>
+      )}
     </Layout.Header>
   );
 };
