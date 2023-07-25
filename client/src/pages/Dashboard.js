@@ -390,7 +390,9 @@ export const Dashboard = () => {
                   updatePostAndCommentsData={updatePostAndCommentsData}
                   showPostList={showPostList}
                   activityPostAndCommentsData={activityPostAndCommentsData}
-                  updateActivityPostAndCommentsData={updateActivityPostAndCommentsData}
+                  updateActivityPostAndCommentsData={
+                    updateActivityPostAndCommentsData
+                  }
                 />
               )}
             </Layout.Main>
@@ -420,7 +422,7 @@ export const Dashboard = () => {
                       }}
                     >
                       <Avatar
-                        src={postAndCommentsData.user.image}
+                        src={postAndCommentsData.me.image}
                         size="lg"
                         sx={{
                           "--Avatar-size": "50px",
