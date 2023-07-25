@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import { GET_ME, GET_POSTS } from "../utils/queries";
-import { ADD_POST } from "../utils/mutations";
+import { ADD_POST,LIKE_POST } from "../utils/mutations";
 import { REMOVE_POST } from "../utils/mutations";
 import { ADD_COMMENT } from "../utils/mutations";
 import { UPDATE_POST } from "../utils/mutations";
@@ -44,7 +44,24 @@ const capitalizeFirstLetter = (string) => {
 };
 
 const Profile = ({ updatePostAndCommentsData }) => {
-  const { likeCount, userLiked, handleLikeToggle } = useHeartCounter();
+   const [likePost, { loading:loadinglikepost, error:errorlikepost }] = useMutation(LIKE_POST);
+
+  const handleLikePostToggle = (postId) => {
+    likePost({
+      variables: {
+        postId: postId,
+      },
+    })
+      .then((result) => {
+        // The mutation was successful, and the updated post data can be accessed via result.data.likePost
+        console.log('Post after like:', result.data.likePost);
+      })
+      .catch((error) => {
+        // Handle any errors that occurred during the mutation
+        console.error('Error liking post:', errorlikepost);
+      });
+  };
+  
   const { loading, data, error } = useQuery(GET_ME);
   const [postText, setPostText] = useState("");
   const [addPost] = useMutation(ADD_POST, {
@@ -509,9 +526,11 @@ const Profile = ({ updatePostAndCommentsData }) => {
                           />
                         </Badge> */}
                         <LikeDislike
-                          likeCount={likeCount}
-                          userLiked={userLiked}
-                          onLikeToggle={handleLikeToggle}
+                          postId={post._id}
+                          onLikeToggle={()=> handleLikePostToggle(post._id)}
+                          // likeCount={likeCount}
+                          // userLiked={userLiked}
+                          // onLikeToggle={handleLikeToggle}
                         />
                       </IconButton>
                       <IconButton
@@ -550,6 +569,8 @@ const Profile = ({ updatePostAndCommentsData }) => {
                       </Typography>
                     </CardActions>
                   )}
+
+
                   {commentBoxStates[post._id] && (
                     <div>
                       <FormControl>
@@ -596,6 +617,7 @@ const Profile = ({ updatePostAndCommentsData }) => {
                       </FormControl>
                     </div>
                   )}
+
 
                   {editPostId === post._id && (
                     <div>

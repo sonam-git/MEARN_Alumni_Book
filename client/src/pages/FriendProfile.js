@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import { GET_ME, GET_POSTS, GET_USER } from "../utils/queries";
-import { ADD_COMMENT } from "../utils/mutations";
+import { ADD_COMMENT,LIKE_POST } from "../utils/mutations";
 import { GET_USERS } from "../utils/queries";
 import { useParams } from "react-router-dom";
 import { GET_POST_WITH_COMMENTS } from "../utils/queries";
@@ -38,8 +38,23 @@ const capitalizeFirstLetter = (string) => {
 };
 
 const FriendProfile = ({ updateProfilePostAndCommentsData, userId }) => {
+  const [likePost, { loading, error }] = useMutation(LIKE_POST);
+
+  const handleLikePostToggle = (postId) => {
+    likePost({
+      variables: {
+        postId: postId,
+      },
+    })
+      .then((result) => {
+        console.log('Post after like:', result.data.likePost);
+      })
+      .catch((error) => {
+        console.error('Error liking post:', error);
+      });
+  };
+
   const { loading: loadingMe, error: errorMe, data: dataMe } = useQuery(GET_ME);
-  const { likeCount, userLiked, handleLikeToggle } = useHeartCounter();
   // const { userId } = useParams();
   const {
     loading: loadingUser,
@@ -324,9 +339,11 @@ const FriendProfile = ({ updateProfilePostAndCommentsData, userId }) => {
                           />
                         </Badge> */}
                         <LikeDislike
-                          likeCount={likeCount}
-                          userLiked={userLiked}
-                          onLikeToggle={handleLikeToggle}
+                          postId={post._id}
+                          onLikeToggle={()=> handleLikePostToggle(post._id)}
+                          // likeCount={likeCount}
+                          // userLiked={userLiked}
+                          // onLikeToggle={handleLikeToggle}
                         />
                       </IconButton>
                       <IconButton
