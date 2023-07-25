@@ -16,9 +16,10 @@ import { ADD_COMMENT } from "../utils/mutations";
 import { UPDATE_POST } from "../utils/mutations";
 import { REMOVE_FRIEND } from "../utils/mutations";
 import { GET_USERS } from "../utils/queries";
-import { GET_POST_WITH_COMMENTS } from "../utils/queries"
+import { GET_POST_WITH_COMMENTS } from "../utils/queries";
 import CardOverflow from "@mui/joy/CardOverflow";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
+import useHeartCounter from "../utils/heartCounter";
 import { Card } from "@mui/joy";
 import Badge from "@mui/joy/Badge";
 
@@ -42,13 +43,20 @@ const capitalizeFirstLetter = (string) => {
 };
 
 const Profile = ({ updatePostAndCommentsData }) => {
+  const { likeCount, userLiked, handleLikeToggle } = useHeartCounter();
   const { loading, data, error } = useQuery(GET_ME);
   const [postText, setPostText] = useState("");
-  const [addPost] = useMutation(ADD_POST,{ refetchQueries: [{ query: GET_ME }],});
+  const [addPost] = useMutation(ADD_POST, {
+    refetchQueries: [{ query: GET_ME }],
+  });
   const [commentText, setCommentText] = useState("");
   const [commentBoxStates, setCommentBoxStates] = useState({});
-  const [removePost] = useMutation(REMOVE_POST,{ refetchQueries: [{ query: GET_ME }],});
-  const [addComment] = useMutation(ADD_COMMENT,{ refetchQueries: [{ query: GET_POST_WITH_COMMENTS }],});
+  const [removePost] = useMutation(REMOVE_POST, {
+    refetchQueries: [{ query: GET_ME }],
+  });
+  const [addComment] = useMutation(ADD_COMMENT, {
+    refetchQueries: [{ query: GET_POST_WITH_COMMENTS }],
+  });
   const [updatePost] = useMutation(UPDATE_POST, {
     update: (cache, { data: { updatePost } }) => {
       // Update the cached data for the specific post after successful update
@@ -108,31 +116,27 @@ const Profile = ({ updatePostAndCommentsData }) => {
     setShowFriendsList(true);
   };
   const handleCommentsIconClick = (postId) => {
-      if (!loading && data) {
-        // Find the specific post using postId
-        const me = data.me;
-        const post = data.me.posts.find((post) => post._id === postId);
-    
-        if (post) {
-          // Fetch comments data for the specific post
-          const commentsData = post.comments;
+    if (!loading && data) {
+      // Find the specific post using postId
+      const me = data.me;
+      const post = data.me.posts.find((post) => post._id === postId);
 
-       
-    
-          const postAndCommentsData = {
+      if (post) {
+        // Fetch comments data for the specific post
+        const commentsData = post.comments;
+
+        const postAndCommentsData = {
           // Create the postAndCommentsData objec
-            me: me,
-            postId: postId,
-            post: post,
-            comments: commentsData,
-
-          };
-          // Pass the data to the Dashboard.js component by calling the function
-          updatePostAndCommentsData(postAndCommentsData);
-        }
+          me: me,
+          postId: postId,
+          post: post,
+          comments: commentsData,
+        };
+        // Pass the data to the Dashboard.js component by calling the function
+        updatePostAndCommentsData(postAndCommentsData);
       }
-    };
-  
+    }
+  };
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -150,9 +154,9 @@ const Profile = ({ updatePostAndCommentsData }) => {
         //     cache.writeQuery({
         //       query: GET_POSTS,
         //       data: { posts: [...existingPosts, newPost] },
-              
+
         //     });
-           
+
         //   } catch (error) {
         //     console.error("Error updating cache:", error);
         //   }
@@ -160,8 +164,8 @@ const Profile = ({ updatePostAndCommentsData }) => {
       });
       setPostText("");
       console.log("Post added successfully");
-        // Call handleShowMyPost to display the posts after adding a new one
-     handleShowMyPost();
+      // Call handleShowMyPost to display the posts after adding a new one
+      handleShowMyPost();
     } catch (err) {
       console.error(err);
     }
@@ -225,7 +229,6 @@ const Profile = ({ updatePostAndCommentsData }) => {
       });
 
       console.log("Comment added successfully");
-      
     } catch (err) {
       console.error("Error adding comment:", err);
     }
@@ -261,7 +264,7 @@ const Profile = ({ updatePostAndCommentsData }) => {
         console.error("Failed to remove friend:", error.message);
       });
   };
-  
+
   return (
     <>
       <Typography
@@ -490,12 +493,19 @@ const Profile = ({ updatePostAndCommentsData }) => {
                           color: "gray",
                         }}
                       >
-                        <Badge
-                          color="neutral"
-                          badgeContent={data.me.username.length}
+                        {/* <HeartCounter/> */}
+                        {/* <Badge
+                          color="primary"
+                          badgeContent={likeCount}
                           size="sm"
                         >
-                          <FavoriteBorder />
+                          <FavoriteBorder color={userLiked ? 'primary' : 'action'} onClick={handleLikeToggle}/>
+                        </Badge> */}
+                        <Badge badgeContent={likeCount} color="primary">
+                          <FavoriteBorder
+                            color={userLiked ? "primary" : "action"}
+                            onClick={handleLikeToggle}
+                          />
                         </Badge>
                       </IconButton>
                       <IconButton
@@ -693,7 +703,7 @@ const Profile = ({ updatePostAndCommentsData }) => {
           </Box>
         </Sheet>
       )}
-{/* displaying friends list  */}
+      {/* displaying friends list  */}
       {showFriendsList && (
         <Sheet
           style={{
@@ -781,7 +791,7 @@ const Profile = ({ updatePostAndCommentsData }) => {
                           paddingRight: "20px",
                         }}
                       >
-                        <PersonRemoveIcon /> 
+                        <PersonRemoveIcon />
                       </IconButton>
                     </CardActions>
                   </Box>

@@ -19,6 +19,8 @@ import CardOverflow from "@mui/joy/CardOverflow";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import { Card } from "@mui/joy";
 import Badge from "@mui/joy/Badge";
+import HeartCounter from "../utils/heartCounter";
+import useHeartCounter from "../utils/heartCounter";
 
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
@@ -43,6 +45,7 @@ const FriendProfile = ({
   activityPostAndCommentsData,
   updateActivityPostAndCommentsData,
 }) => {
+  const { likeCount, userLiked, handleLikeToggle } = useHeartCounter();
   const { loading: loadingMe, error: errorMe, data: dataMe } = useQuery(GET_ME);
   // const { userId } = useParams();
   const {
@@ -331,12 +334,18 @@ const FriendProfile = ({
                           color: "gray",
                         }}
                       >
-                        <Badge
+                        {/* <Badge
                           color="neutral"
                           badgeContent={dataUser.user.username.length}
                           size="sm"
-                        >
-                          <FavoriteBorder />
+                        > */}
+                        {/* <HeartCounter /> */}
+                        {/* </Badge> */}
+                        <Badge badgeContent={likeCount} color="primary">
+                          <FavoriteBorder
+                            color={userLiked ? "primary" : "action"}
+                            onClick={handleLikeToggle}
+                          />
                         </Badge>
                       </IconButton>
                       <IconButton
