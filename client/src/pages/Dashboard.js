@@ -13,21 +13,12 @@ import Typography from "@mui/joy/Typography";
 import IconButton from "@mui/joy/IconButton";
 import Divider from "@mui/joy/Divider";
 import Sheet from "@mui/joy/Sheet";
-import List from "@mui/joy/List";
-import ListItem from "@mui/joy/ListItem";
-import ListItemButton from "@mui/joy/ListItemButton";
-import ListItemContent from "@mui/joy/ListItemContent";
-import ListSubheader from "@mui/joy/ListSubheader";
-import ListItemDecorator from "@mui/joy/ListItemDecorator";
 import Avatar from "@mui/joy/Avatar";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useUser } from "../utils/UserProvider";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
-
 import PersonIcon from "@mui/icons-material/Person";
-import GroupIcon from "@mui/icons-material/Group";
-import MessageIcon from "@mui/icons-material/Message";
-import ViewCompactAltIcon from "@mui/icons-material/ViewCompactAlt";
+
 
 // custom
 import filesTheme from "../containers/Theme";
@@ -37,7 +28,7 @@ import Connect from "../components/Connect";
 import PostList from "../components/PostList";
 import Profile from "./Profile";
 import FriendList from "../components/FriendList";
-import FriendProfileList from "../components/FriendsProfileList";
+import SideNav from "../components/SideNav"
 import Auth from "../utils/auth";
 
 // Makes the first letter of firstname and lastname to always be capital
@@ -197,92 +188,15 @@ export const Dashboard = () => {
           }}
         >
           <Header />
-          {/* Side Bar Navigations */}
-          <Layout.SideNav>
-            <List
-              size="sm"
-              sx={{ "--ListItem-radius": "8px", "--List-gap": "4px" }}
-            >
-              <ListItem nested>
-                <ListSubheader>Browse</ListSubheader>
-                <List
-                  aria-labelledby="nav-list-browse"
-                  sx={{
-                    "& .JoyListItemButton-root": { p: "8px" },
-                  }}
-                >
-                  <ListItem>
-                    <ListItemButton
-                      onClick={() => handleItemClick("post")}
-                      sx={{
-                        color: selectedItem === "post" ? "#2ACAEA" : "#009DFF",
-                        border: selectedItem === "post" ? "solid" : "",
-                        borderRadius: selectedItem === "post" ? "10px" : "",
-                        borderColor: selectedItem === "post" ? "#006EB3" : "",
-                      }}
-                    >
-                      <ListItemDecorator>
-                        <MessageIcon />
-                      </ListItemDecorator>
-                      <ListItemContent
-                        selected={selectedItem === "post"}
-                        onClick={handleShowPostList}
-                      >
-                        Activity Post
-                      </ListItemContent>
-                    </ListItemButton>
-                  </ListItem>
-                  <ListItem>
-                    <ListItemButton
-                      onClick={() => handleItemClick("connect")}
-                      sx={{
-                        color:
-                          selectedItem === "connect" ? "#2ACAEA" : "#009DFF",
-                        border: selectedItem === "connect" ? "solid" : "",
-                        borderRadius: selectedItem === "connect" ? "10px" : "",
-                        borderColor:
-                          selectedItem === "connect" ? "#006EB3" : "",
-                      }}
-                    >
-                      <ListItemDecorator>
-                        <ViewCompactAltIcon />
-                      </ListItemDecorator>
-                      <ListItemContent
-                        selected={selectedItem === "connect"}
-                        onClick={handleShowConnect}
-                      >
-                        Connect With Alumnis
-                      </ListItemContent>
-                    </ListItemButton>
-                  </ListItem>
-                  <ListItem>
-                    <ListItemButton
-                      onClick={() => handleItemClick("aboutus")}
-                      sx={{
-                        color:
-                          selectedItem === "aboutus" ? "#2ACAEA" : "#009DFF",
-                        border: selectedItem === "aboutus" ? "solid" : "",
-                        borderRadius: selectedItem === "aboutus" ? "10px" : "",
-                        borderColor:
-                          selectedItem === "aboutus" ? "#006EB3" : "",
-                      }}
-                    >
-                      <ListItemDecorator sx={{ color: "neutral.500" }}>
-                        <PersonIcon />
-                      </ListItemDecorator>
-                      <ListItemContent
-                        selected={selectedItem === "aboutus"}
-                        onClick={handleShowProfile}
-                      >
-                        Profile
-                      </ListItemContent>
-                    </ListItemButton>
-                  </ListItem>
-                </List>
-              </ListItem>
-            </List>
-          </Layout.SideNav>
-
+          {/* display the side nav in large screen and top nav in small screen */}
+          <SideNav
+          selectedItem={selectedItem}
+        handleItemClick={handleItemClick}
+        handleShowConnect={handleShowConnect}
+        handleShowPostList={handleShowPostList}
+        handleShowProfile={handleShowProfile}
+      />
+    
           {/* Main Page */}
           {/* where all the re-renders happens */}
           <Layout.Main>

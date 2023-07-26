@@ -1,5 +1,4 @@
 import React from "react";
-import  { useState } from 'react';
 import Box from '@mui/joy/Box';
 import { useColorScheme } from '@mui/joy/styles';
 import Typography from '@mui/joy/Typography';
@@ -9,7 +8,7 @@ import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 
 import LogoutIcon from '@mui/icons-material/Logout';
-import MenuIcon from '@mui/icons-material/Menu';
+import Logo from '../assets/images/AB_Logo.png';
 import Auth from '../utils/auth';
 import Layout from '../containers/Layout';
 
@@ -49,12 +48,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
 };
 
 const Header = () => {
-  const [drawerOpen, setDrawerOpen] = useState(false);
-
-  const handleDrawerToggle = () => {
-    setDrawerOpen(!drawerOpen);
-  };
-
+  
   const handleLogout = (event) => {
     event.preventDefault();
     Auth.logout();
@@ -73,17 +67,16 @@ const Header = () => {
             <IconButton
               variant="outlined"
               size="sm"
-              onClick={handleDrawerToggle}
               sx={{ display: { sm: 'none' } }}
             >
-              <MenuIcon />
+            <img
+          src={Logo} // Replace this with the actual path to your logo image
+          alt="Logo"
+          width="35" // Adjust the width of the logo as needed
+          height="35" // Adjust the height of the logo as needed
+        />
             </IconButton>
-{/* Conditionally render the SideNav */}
-{drawerOpen && (
-      <>
-      Click
-      </>
-      )}
+
             {/* ColorSchemeToggle */}
             <ColorSchemeToggle />
 

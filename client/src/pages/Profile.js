@@ -9,7 +9,7 @@ import Button from "@mui/joy/Button";
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
-import { GET_ME, GET_POSTS } from "../utils/queries";
+import { GET_ME } from "../utils/queries";
 import { ADD_POST,LIKE_POST } from "../utils/mutations";
 import { REMOVE_POST } from "../utils/mutations";
 import { ADD_COMMENT } from "../utils/mutations";
@@ -18,7 +18,6 @@ import { REMOVE_FRIEND } from "../utils/mutations";
 import { GET_USERS } from "../utils/queries";
 import { GET_POST_WITH_COMMENTS } from "../utils/queries";
 import CardOverflow from "@mui/joy/CardOverflow";
-import useHeartCounter from "../utils/heartCounter";
 import { Card } from "@mui/joy";
 import Badge from "@mui/joy/Badge";
 import FriendProfile from '../pages/FriendProfile'

@@ -9,16 +9,12 @@ import Button from "@mui/joy/Button";
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
-import { GET_ME, GET_POSTS, GET_USER } from "../utils/queries";
+import { GET_ME, GET_USER } from "../utils/queries";
 import { ADD_COMMENT,LIKE_POST } from "../utils/mutations";
-import { GET_USERS } from "../utils/queries";
-import { useParams } from "react-router-dom";
 import { GET_POST_WITH_COMMENTS } from "../utils/queries";
 import CardOverflow from "@mui/joy/CardOverflow";
-import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import { Card } from "@mui/joy";
 import Badge from "@mui/joy/Badge";
-import useHeartCounter from "../utils/heartCounter";
 import LikeDislike from "../components/likedislike";
 
 import Tabs from "@mui/joy/Tabs";

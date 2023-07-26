@@ -1,5 +1,6 @@
 import React, {  useState } from "react";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
+import { useNavigate } from 'react-router-dom';
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import CssBaseline from "@mui/joy/CssBaseline";
 import Box from "@mui/joy/Box";
@@ -22,7 +23,6 @@ import { LOGIN } from '../utils/mutations';
 import Auth from '../utils/auth';
 import { Grid } from '@mui/material';
 import { Link } from "react-router-dom";
-import Dashboard from "./Dashboard";
 
 
 import { useUser } from '../utils/UserProvider';
@@ -80,6 +80,8 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
     });
     const [login, { error }] = useMutation(LOGIN);
 
+    const navigate = useNavigate();
+
     const handleFormSubmit = async (event) => {
       event.preventDefault();
       try {
@@ -92,6 +94,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
         localStorage.setItem("userId", userId);
         setUserId({userId})
         setIsLoggedIn(true);
+        navigate('/Dashboard');
       } catch (e) {
         console.log(e);
       }
@@ -102,7 +105,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
       persistent: false,
     });
     };
-
+    
     const handleChange = (event) => {
       const { name, value, checked,type } = event.target;
       const inputValue = type === 'checkbox' ? checked : value;
@@ -111,11 +114,6 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
         [name]:inputValue,
       });
     };
-
-    // if user is logged in the render dashboard 
-    if (isLoggedIn) {
-      return <Dashboard />;
-    }
 
 
   return (
@@ -212,8 +210,12 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
             }}
           >
            
-            { isLoggedIn ? (
-              <p>Login Success! </p>
+            { Auth.loggedIn() ? (
+              <>
+               <Link to='/Dashboard' >
+               <Button style={{ width: "100%" }} >Login Success! Click here to continue!</Button>
+                </Link>
+              </>
             ) : (
               <form onSubmit={handleFormSubmit}>
               <FormControl required>
@@ -256,10 +258,11 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
                   Forgot your password?
                 </Link> */}
               </Box>
-
-              <Button type="submit" style={{ width: "100%" }}>
-                Log In
-              </Button>
+              
+                <Button type="submit" style={{ width: "100%" }}>
+                  Log In
+                </Button>
+            
               <Link to="/signup">
                 <Button style={{ width: "100%" }} >← Go to Sign Up</Button>
               </Link>

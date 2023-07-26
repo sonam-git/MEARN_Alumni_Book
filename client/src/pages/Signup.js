@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
+import { useNavigate } from "react-router-dom";
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import CssBaseline from "@mui/joy/CssBaseline";
 import CircularProgress from "@mui/joy/CircularProgress";
@@ -79,6 +80,8 @@ export const Signup = () => {
  });
 
   const [addUser, {error, data}] = useMutation(ADD_USER);
+
+  const navigate = useNavigate();
   
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -110,7 +113,7 @@ export const Signup = () => {
   console.log(data);
       const token = data.addUser.token;
       Auth.login(token);
-  
+      navigate('/Dashboard');
     } catch (error) {
       console.log(error);
     } finally {
@@ -232,10 +235,12 @@ export const Signup = () => {
           >
          
             {/* Signup Form */}
-            { data ? (
-              <p>
-              Sign Up Success!
-              </p>
+            { Auth.loggedIn() ? (
+            <>
+              <Link to='/Dashboard' >
+              <Button style={{ width: "100%" }} >Login Success! Click here to continue!</Button>
+                </Link>
+            </>
             ) : (
 
             <form onSubmit={handleFormSubmit}>
@@ -301,9 +306,11 @@ export const Signup = () => {
                   onChange={handleChange}
                 />
               </FormControl>
+           
                 <Button type="submit" style={{ width: "100%" }}>
                 {loading ? <CircularProgress size={"24"} /> : "Sign Up"}
                 </Button>
+             
                 <Link to="/login"><Button style={{ width: "100%" }}>← Go to Login</Button></Link>
               </form>
             )}

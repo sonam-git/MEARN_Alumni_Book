@@ -31,39 +31,39 @@ Our objectives for this challenge were as follows:
 
 ### Figure 1. Home
 
-![](./client/src/assets/images/screenshots/Screenshot%202023-07-24%20at%203.27.57%20PM.png)
+![](./client/src/assets/screenshots/Screenshot%202023-07-24%20at%203.27.57%20PM.png)
 
 ### Figure 2. Sign up
 
-![](./client/src/assets/images/screenshots/signup.png)
+![](./client/src/assets/screenshots/signup.png)
 
 ### Figure 3. Login
 
-![](./client/src/assets/images/screenshots/login.png)
+![](./client/src/assets/screenshots/login.png)
 
 ### Figure 4. Activity / Posts
 
-![](./client/src/assets/images/screenshots/activity.png)
+![](./client/src/assets/screenshots/activity.png)
 
 ### Figure 5. Connect With Alumnis
 
-![](./client/src/assets/images/screenshots/Connect_Alumnis.png)
+![](./client/src/assets/screenshots/Connect_Alumnis.png)
 
 ### Figure 6. Create Post
 
-![](./client/src/assets/images/screenshots/createpost.png)
+![](./client/src/assets/screenshots/createpost.png)
 
 ### Figure 7. Friend List
 
-![](./client/src/assets/images/screenshots/friendlist.png)
+![](./client/src/assets/screenshots/friendlist.png)
 
 ### Figure 8. Light Mode
 
-![](./client/src/assets/images/screenshots/lightmode.png)
+![](./client/src/assets/screenshots/lightmode.png)
 
 ### Figure 9. Comment Post
 
-![](./client/src/assets/images/screenshots/activity_post.png)
+![](./client/src/assets/screenshots/activity_post.png)
 
 ## GIF:
 
