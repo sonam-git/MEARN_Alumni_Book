@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "engines": {
         "node": "12.x"
-      },
+    },
     "description": "",
     "main": "server/server.js",
     "scripts": {
@@ -17,13 +17,5 @@
     "license": "ISC",
     "devDependencies": {
         "concurrently": "^5.1.0"
-    },
-    "dependencies": {
-        "@mui/joy": "^5.0.0-alpha.88",
-        "axios": "^1.4.0",
-        "dotenv": "^16.3.1",
-        "graphql-upload": "^11.0.0",
-        "mongodb": "^5.7.0",
-        "react-router-dom": "^6.14.2"
     }
 }
