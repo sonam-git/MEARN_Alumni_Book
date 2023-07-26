@@ -178,7 +178,7 @@ bear no responsibility for any claims or damages that may arise from its use.
 
 ## Questions
 
-[Deployed Heroku Application](link)
+[Deployed Heroku Application](https://alumni-book-app-cae10c9784e0.herokuapp.com/)
 
 [GitHub Repository](https://github.com/sonam-git/MEARN_Alumni_Book)
 
