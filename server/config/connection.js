@@ -1,13 +1,11 @@
-// import mongoose module, 
-// connection.js
+const mongoose = require("mongoose");
 
-const mongoose = require('mongoose');
-
-const dbURI = process.env.MONGODB_URI;
-mongoose.connect(dbURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(
+  process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/alumni-books", 
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
 
 module.exports = mongoose.connection;
-
