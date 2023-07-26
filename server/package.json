@@ -19,7 +19,7 @@
         "dotenv": "^16.3.1",
         "express": "^4.17.2",
         "graphql": "15.8.0",
-        "graphql-upload": "^11.0.0",
+        "graphql-upload": "^10.0.0",
         "jsonwebtoken": "^8.5.1",
         "mongoose": "^7.0.2"
     },
