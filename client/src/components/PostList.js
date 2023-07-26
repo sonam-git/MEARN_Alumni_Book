@@ -24,6 +24,8 @@ const PostList = ({ updateActivityPostAndCommentsData }) => {
   const [commentBoxStates, setCommentBoxStates] = useState({});
   const [addComment] = useMutation(ADD_COMMENT);
 
+
+
   const handleActivityCommentsIconClick = (postId) => {
     if (!loading && data?.users) {
       // Find the specific post using postId
@@ -66,6 +68,7 @@ const PostList = ({ updateActivityPostAndCommentsData }) => {
   // Sort the posts from all users by createdAt field (newest to oldest)
   const posts = data.users.flatMap((user) => user.posts);
   posts.sort((a, b) => parseInt(b.createdAt) - parseInt(a.createdAt));
+  
 
   //functions put them in dashboard parent
   const toggleCommentBox = (postId) => {

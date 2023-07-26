@@ -29,7 +29,7 @@ const resolvers = {
     user: async (parent, { userId }) => {
       try {
         return await User.findById(userId)
-          .select("firstname lastname username email")
+          .select("firstname lastname username email image")
           .populate("posts")
           .populate("friends");
       } catch (error) {

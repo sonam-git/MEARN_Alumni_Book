@@ -1,10 +1,11 @@
 import { Typography, Grid, Box } from "@mui/material";
-import React from "react";
+import React, {useState} from "react";
 import { useMutation } from "@apollo/client";
 import { ADD_FRIEND } from "../utils/mutations";
 import { GET_USERS } from "../utils/queries";
 import Auth from "../utils/auth";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import PersonIcon from '@mui/icons-material/Person';
 
 
 // Makes the first letter of firstname and lastname to always be capital
@@ -12,12 +13,16 @@ const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-const FriendList = ({ friends }) => {
+const FriendList = ({ friends, handleShowFriendProfile }) => {
   const [addFriendMutation] = useMutation(ADD_FRIEND, {
     refetchQueries: [{ query: GET_USERS }], // Refetch the users after adding a friend
   });
+
+
   // logged in user variable
   const loggedInUserId = Auth.loggedIn() ? Auth.getProfile().data._id : null;
+
+  
 
   // Function to handle adding a friend
   const handleAddFriend = (userId, friendId) => {
