@@ -4,11 +4,14 @@ const cloudinary = require("cloudinary").v2;
 const { User, Post } = require("../models");
 const { signToken } = require("../utils/auth");
 const mongoose = require("mongoose");
+const dotenv = require('dotenv');
+dotenv.config();
 
+// Cloudinary configuration using environment variables
 cloudinary.config({
-  cloud_name: "dnuanxqxg",
-  api_key: "768784817278892",
-  api_secret: "u9P50V-GFNRIGKXjX4GzcQdYSB4",
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 const resolvers = {
