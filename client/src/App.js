@@ -52,17 +52,7 @@ App is one of the requirements
 Thank you ##############################################################*/
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const handleFormSubmit = async (event) => {
-    // ... (your existing code)
 
-    try {
-      // ... (your existing code)
-      setIsLoggedIn(true); // Set isLoggedIn to true upon successful login
-    } catch (e) {
-      console.log(e);
-    }
-  };
   return (
     <UserProvider>
     <ApolloProvider client={client}>
@@ -71,11 +61,11 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
 
-            <Route path="/login" element={<Login handleFormSubmit={handleFormSubmit} />} />
+            <Route path="/login" element={<Login/>} />
 
             <Route path="/signup" element={<Signup />} />
 
-            <Route path="/Dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />} />
+            <Route path="/Dashboard" element={<Dashboard />} />
           
             <Route path="/FriendProfile/:userId" element={<FriendProfile />} />
 
