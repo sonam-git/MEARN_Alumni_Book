@@ -14,10 +14,5 @@
     },
     "keywords": [],
     "author": "",
-    "license": "ISC",
-    "devDependencies": {
-        "@babel/cli": "^7.22.9",
-        "@babel/core": "^7.22.9",
-        "@babel/preset-env": "^7.22.9"
-    }
+    "license": "ISC"
 }
