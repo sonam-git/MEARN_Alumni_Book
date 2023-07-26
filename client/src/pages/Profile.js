@@ -336,7 +336,7 @@ const Profile = ({ updatePostAndCommentsData }) => {
           alignItems: "center", // Center items vertically
           justifyContent: "center", // Center items horizontally
           borderColor: "neutral.outlinedBorder",
-          py: "20px", // Add some padding on the y-axis
+          py: "80px", // Add some padding on the y-axis
         }}
       >
         <Avatar
