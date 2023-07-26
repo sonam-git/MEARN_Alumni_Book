@@ -1,6 +1,9 @@
 {
     "name": "alumni-book",
     "version": "1.0.0",
+    "engines": {
+        "node": "14.x"
+    },
     "description": "",
     "main": "server/server.js",
     "scripts": {
@@ -11,9 +14,5 @@
     },
     "keywords": [],
     "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "concurrently": "^8.2.0",
-        "mongodb": "^5.7.0"
-    }
+    "license": "ISC"
 }
