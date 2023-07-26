@@ -69,7 +69,7 @@ Our objectives for this challenge were as follows:
 
 #### The following animation demonstrates the application functionality:
 
-![]()
+![](./client/src/assets/images/mearn-alumni-gif.gif)
 
 ## User Story:
 
