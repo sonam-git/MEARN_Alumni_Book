@@ -9,9 +9,9 @@ dotenv.config();
 
 // Cloudinary configuration using environment variables
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: 'dnuanxqxg',
+  api_key: '768784817278892',
+  api_secret: 'u9P50V-GFNRIGKXjX4GzcQdYSB4',
 });
 
 const resolvers = {

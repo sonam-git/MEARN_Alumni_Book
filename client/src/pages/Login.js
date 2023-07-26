@@ -91,7 +91,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
         Auth.login(token);
         localStorage.setItem("userId", userId);
         setUserId({userId})
-        setIsLoggedIn(true);
+        setIsLoggedIn(token);
       } catch (e) {
         console.log(e);
       }
@@ -111,11 +111,6 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
         [name]:inputValue,
       });
     };
-
-    // if user is logged in the render dashboard 
-    if (isLoggedIn) {
-      return <Dashboard />;
-    }
 
 
   return (
