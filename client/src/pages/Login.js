@@ -91,7 +91,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
         Auth.login(token);
         localStorage.setItem("userId", userId);
         setUserId({userId})
-        setIsLoggedIn(token);
+        setIsLoggedIn(<Dashboard/>);
       } catch (e) {
         console.log(e);
       }
