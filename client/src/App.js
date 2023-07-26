@@ -13,7 +13,6 @@ import Signup from "./pages/Signup";
 import FriendProfile from "./pages/FriendProfile";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
-import PostList from "./components/PostList";
 import UserProvider from "./utils/UserProvider";
 import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 
@@ -53,6 +52,7 @@ App is one of the requirements
 Thank you ##############################################################*/
 
 function App() {
+
   return (
     <UserProvider>
     <ApolloProvider client={client}>
@@ -66,13 +66,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
 
             <Route path="/Dashboard" element={<Dashboard />} />
-              {/* <Route path = "FriendProfile">
-                <Route path=":userId" element={<FriendProfile/>}/>
-              </Route>
-            </Route> */}
-            
-            <Route path="/Dashboard/PostList" element={PostList} />
-
+          
             <Route path="/FriendProfile/:userId" element={<FriendProfile />} />
 
           </Routes>

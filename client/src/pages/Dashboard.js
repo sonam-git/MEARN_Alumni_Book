@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  Link,
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useParams,
-  useMatch,
-} from "react-router-dom";
+import {Link,useParams} from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_POST_WITH_COMMENTS, GET_USERS, GET_ME } from "../utils/queries";
 import { REMOVE_COMMENT } from "../utils/mutations";
@@ -38,7 +31,6 @@ import ViewCompactAltIcon from "@mui/icons-material/ViewCompactAlt";
 
 // custom
 import filesTheme from "../containers/Theme";
-import Home from "./Home";
 import Header from "../components/Header";
 import Layout from "../containers/Layout";
 import Connect from "../components/Connect";
@@ -206,8 +198,6 @@ export const Dashboard = () => {
         >
           <Header />
           {/* Side Bar Navigations */}
-
-        
           <Layout.SideNav>
             <List
               size="sm"

@@ -3,18 +3,16 @@ import  { useState } from 'react';
 import Box from '@mui/joy/Box';
 import { useColorScheme } from '@mui/joy/styles';
 import Typography from '@mui/joy/Typography';
-import { Grid,Button } from "@mui/material";
+import { Grid } from "@mui/material";
 import IconButton from '@mui/joy/IconButton';
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 
-// Icons import
-
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
-import HomeIcon from '@mui/icons-material/Home';
-import Auth from '../utils/auth'
+import Auth from '../utils/auth';
 import Layout from '../containers/Layout';
+
 
 const ColorSchemeToggle = ({ onClick, ...props }) => {
   const { mode, setMode } = useColorScheme();
@@ -80,7 +78,12 @@ const Header = () => {
             >
               <MenuIcon />
             </IconButton>
-
+{/* Conditionally render the SideNav */}
+{drawerOpen && (
+      <>
+      Click
+      </>
+      )}
             {/* ColorSchemeToggle */}
             <ColorSchemeToggle />
 
@@ -109,13 +112,7 @@ const Header = () => {
           </Box>
         </Grid>
       </Grid>
-{/* Conditionally render the SideNav */}
-{drawerOpen && (
-      <>
-      <Button>1</Button>
-   
-      </>
-      )}
+
     </Layout.Header>
   );
 };
