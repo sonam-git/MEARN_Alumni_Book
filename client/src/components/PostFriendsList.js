@@ -31,7 +31,7 @@ export const PostFriendsList = ({posts}) => {
           textAlign: "center",
           marginBottom: "20px",
         }}
-        startDecorator={<MessageIcon />}
+        startdecorator={<MessageIcon />}
       >
        Posts
       </Typography>
