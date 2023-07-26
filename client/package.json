@@ -50,12 +50,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-<<<<<<< HEAD
-=======
-  },
-  "devDependencies": {
-    "typescript": "^5.2.0-dev.20230714",
-    "@types/react": "18.2.15"
->>>>>>> e2d35057c80194cd2943df681d234e71d1ed9a9b
   }
 }
