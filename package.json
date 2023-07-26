@@ -14,5 +14,9 @@
     },
     "keywords": [],
     "author": "",
-    "license": "ISC"
+    "license": "ISC",
+    "dependencies": {
+        "concurrently": "^8.2.0",
+        "mongodb": "^5.7.0"
+    }
 }
