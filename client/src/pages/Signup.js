@@ -238,6 +238,7 @@ export const Signup = () => {
             { Auth.loggedIn() ? (
             <>
               <Link to='/Dashboard' >
+              <p>Sign Up Sucess! Click here to continue!</p>
                 </Link>
             </>
             ) : (

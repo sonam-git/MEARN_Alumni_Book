@@ -214,6 +214,7 @@ const ColorSchemeToggle = ({ onClick, ...props }) => {
             { Auth.loggedIn() ? (
               <>
                <Link to='/Dashboard' >
+                  <p>Login Success! Click here to continue!</p>
                 </Link>
               </>
             ) : (
