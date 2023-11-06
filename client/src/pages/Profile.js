@@ -269,6 +269,8 @@ const Profile = ({ updatePostAndCommentsData }) => {
   };
 
   const handleCommentSubmit = async (postId) => {
+    console.log("postId:", postId);
+    console.log("commentText:", commentText);
     // Perform any necessary actions with the comment text for the specific post
     console.log(`Comment submitted for post ${postId}:`, commentText);
 
@@ -632,16 +634,20 @@ const Profile = ({ updatePostAndCommentsData }) => {
                                 flex: "auto",
                               }}
                             >
-                              <Button
-                                sx={{ ml: "auto" }}
-                                onClick={() => {
-                                  handleCommentSubmit(post._id);
-                                  handleCommentsIconClick(post._id);
-                                  toggleCommentBox(post._id);
-                                }}
-                              >
-                                Add Comment
-                              </Button>
+                          <IconButton
+                              onClick={() => {
+                                handleCommentSubmit(post._id);
+                                toggleCommentBox(post._id);
+                              }}
+                              variant="outlined"
+                              sx={{
+                                marginLeft: "10px",
+                                padding: "7px",
+                                color: "gray",
+                              }}
+                            >
+                              Add Comment
+                            </IconButton>
                             </Box>
                           }
                         />

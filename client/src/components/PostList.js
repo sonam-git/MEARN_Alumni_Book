@@ -278,6 +278,7 @@ const PostList = ({ updateActivityPostAndCommentsData }) => {
                     </FormControl>
                   </div>
                 )}
+                
               </Box>
             );
           })}

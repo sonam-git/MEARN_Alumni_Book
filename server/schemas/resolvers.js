@@ -201,24 +201,38 @@ const resolvers = {
     //adds a new comment to a post
     addComment: async (parent, { postId, commentText }, context) => {
       if (context.user) {
-        return Post.findOneAndUpdate(
-          { _id: postId },
-          {
-            $addToSet: {
-              comments: {
-                _id: new mongoose.Types.ObjectId(),
-                commentText,
-                commentAuthor: context.user.username,
-              },
-            },
-          },
-          {
-            new: true,
-            runValidators: true,
+        try {
+          // Find the post by postId
+          const post = await Post.findById(postId);
+
+          if (!post) {
+            throw new Error("Post not found");
           }
-        );
+
+          // Create the new comment object
+          const newComment = {
+            _id: new mongoose.Types.ObjectId(),
+            commentText,
+            commentAuthor: context.user.username,
+            createdAt: new Date().toISOString(), // Set the current timestamp for createdAt
+          };
+
+          // Use $addToSet to add the new comment to the comments array
+          await Post.updateOne(
+            { _id: postId },
+            { $addToSet: { comments: newComment } }
+          );
+
+          // Fetch the updated post after the comment is added
+          const updatedPost = await Post.findById(postId);
+
+          return updatedPost;
+        } catch (error) {
+          throw new Error("Error adding comment:", error);
+        }
+      } else {
+        throw new AuthenticationError("You need to be logged in!");
       }
-      throw new AuthenticationError("You need to be logged in!");
     },
 
     updatePost: async (_, { postId, postText }, context) => {

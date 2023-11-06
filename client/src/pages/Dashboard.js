@@ -101,16 +101,11 @@ export const Dashboard = () => {
   };
 
   const handleDeleteComment = async (postId, commentId) => {
+    console.log("postId:", postId);
     try {
       // Execute the removeComment mutation and pass the commentId as a variable
       await removeComment({
         variables: { postId, commentId },
-        refetchQueries: [
-          {
-            query: GET_POST_WITH_COMMENTS,
-            variables: { postId }, // Refetch the post and its comments after deletion
-          },
-        ],
       });
       // Perform any necessary actions after successful deletion, such as updating the UI
       console.log("Comment deleted successfully");
